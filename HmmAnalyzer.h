@@ -26,8 +26,12 @@
 #include "TF1.h"
 #include "TAxis.h"
 
-#ifdef MAKECINT
-#pragma link C++ class vector+;
+
+#ifdef __CINT__
+
+#pragma link C++ class vector<float>+;
+#pragma link C++ class vector<int>+;
+#pragma link C++ class vector<bool>+;
 #endif
 // Header file for the classes stored in the TTree if any.
 
@@ -46,9 +50,9 @@ class HmmAnalyzer : public MainEvent {
   void BookTreeBranches();
   TFile *oFile;
   TTree* tree;
-  UInt_t          t_run;
-  UInt_t          t_luminosityBlock;
-  ULong64_t       t_event;
+  uint          t_run;
+  uint          t_luminosityBlock;
+  ulong       t_event;
   std::vector <int>          *t_El_charge;
   std::vector<float>         *t_El_pt;
   std::vector<float>         *t_El_phi;
@@ -156,6 +160,11 @@ class HmmAnalyzer : public MainEvent {
   std::vector<int>           *t_Jet_nMuons;   
   std::vector<int>           *t_Jet_puId;   
 
+  float t_diJet_pt;
+  float t_diJet_eta;
+  float t_diJet_phi;
+  float t_diJet_mass;
+
 
   std::vector<float>         *t_bJet_area;   
   std::vector<float>         *t_bJet_btagCMVA;   
@@ -184,6 +193,14 @@ class HmmAnalyzer : public MainEvent {
   float      t_PV_z;
   int        t_PV_npvs;
   int        t_PV_npvsGood;
+
+  std::vector<float>         *t_GenPart_eta;
+  std::vector<float>         *t_GenPart_mass;
+  std::vector<float>         *t_GenPart_phi;
+  std::vector<float>         *t_GenPart_pt;
+  std::vector<int>           *t_GenPart_genPartIdxMother;
+  std::vector<int>           *t_GenPart_pdgId;
+  std::vector<int>           *t_GenPart_status;
 };
 
 #endif
@@ -256,6 +273,10 @@ Long64_t HmmAnalyzer::LoadTree(Long64_t entry)
 }
 
 void HmmAnalyzer::clearTreeVectors(){
+  t_run=0;
+  t_luminosityBlock=0;
+  t_event=0;
+  
   
   t_El_charge->clear();
   t_El_pt->clear();
@@ -364,6 +385,11 @@ void HmmAnalyzer::clearTreeVectors(){
   t_Jet_nMuons->clear();   
   t_Jet_puId->clear();   
 
+  t_diJet_pt=-1000;
+  t_diJet_eta=-1000;
+  t_diJet_phi=-1000;
+  t_diJet_mass=-1000;
+
 
   t_bJet_area->clear();   
   t_bJet_btagCMVA->clear();   
@@ -392,6 +418,15 @@ void HmmAnalyzer::clearTreeVectors(){
   t_PV_z-=-1000;
   t_PV_npvs-=-1000;  
   t_PV_npvsGood=-1000;
+
+
+  t_GenPart_eta->clear();
+  t_GenPart_mass->clear();
+  t_GenPart_phi->clear();
+  t_GenPart_pt->clear();
+  t_GenPart_genPartIdxMother->clear();
+  t_GenPart_pdgId->clear();
+  t_GenPart_status->clear();
 }
 
 void HmmAnalyzer::BookTreeBranches(){
@@ -607,6 +642,12 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_Jet_nMuons"    , "vector<int>"         ,&t_Jet_nMuons);   
   tree->Branch("t_Jet_puId"    , "vector<int>"         ,&t_Jet_puId);   
 
+  tree->Branch("t_diJet_pt",   &t_diJet_pt,"t_diJet_pt/F");  
+  tree->Branch("t_diJet_eta",   &t_diJet_eta,"t_diJet_eta/F");
+  tree->Branch("t_diJet_phi",  &t_diJet_phi,"t_diJet_phi/F");
+  tree->Branch("t_diJet_mass",   &t_diJet_mass,"t_diJet_mass/F");
+
+
   t_bJet_area= new std::vector<float>();   
   t_bJet_btagCMVA= new std::vector<float>();   
   t_bJet_btagCSVV2= new std::vector<float>();   
@@ -658,5 +699,24 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_PV_z", &t_PV_z,"t_PV_z/F");
   tree->Branch("t_PV_npvs",&t_PV_npvs,"t_PV_npvs/I");  
   tree->Branch("t_PV_npvsGood",&t_PV_npvsGood,"t_PV_npvsGood/I"); 
+
+  
+  t_GenPart_eta= new std::vector<float>();
+  t_GenPart_mass= new std::vector<float>();
+  t_GenPart_phi= new std::vector<float>();
+  t_GenPart_pt= new std::vector<float>();
+  t_GenPart_genPartIdxMother= new std::vector<int>();
+  t_GenPart_pdgId= new std::vector<int>();
+  t_GenPart_status= new std::vector<int>();
+
+  tree->Branch("t_GenPart_eta",      "vector<float>", &t_GenPart_eta);
+  tree->Branch("t_GenPart_mass",      "vector<float>", &t_GenPart_mass);
+  tree->Branch("t_GenPart_phi",      "vector<float>", &t_GenPart_phi);
+  tree->Branch("t_GenPart_pt",      "vector<float>", &t_GenPart_pt);
+  tree->Branch("t_GenPart_genPartIdxMother",      "vector<int>", &t_GenPart_genPartIdxMother);
+  tree->Branch("t_GenPart_pdgId",      "vector<int>", &t_GenPart_pdgId);
+  tree->Branch("t_GenPart_status",      "vector<int>", &t_GenPart_status);
+  
+
 }
 #endif // #ifdef HmmAnalyzer_cxx

@@ -8,6 +8,16 @@
 #include <cstring>
 #include<string>
 
+#ifdef MAKECINT
+#pragma link C++ class vector<float>+;
+#endif
+#ifdef MAKECINT
+#pragma link C++ class vector<int>+;
+#endif
+#ifdef MAKECINT
+#pragma link C++ class vector<bool>+;
+#endif
+
 int main(int argc, char* argv[])
 {
 
@@ -57,14 +67,14 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 
       bool Event_sel= false;
       if(run_muChecks){
-	if(Muon_charge[0]*Muon_charge[1]== -1 && Muon_pt[0]>30.) Event_sel =true;
+	if(Muon_charge[0]*Muon_charge[1]== -1 && Muon_pt[0]>30. && Muon_pt[1]>20. && Muon_mediumId[0] && Muon_mediumId[1] && abs(Muon_eta[0])<2.4 && abs(Muon_eta[1])<2.4 && nMuon>=2 && Muon_pfRelIso04_all[0]<0.25 && Muon_pfRelIso04_all[1]<0.25) Event_sel =true;
       }
       if(Event_sel){
-
+	//cout<<event<<endl;
 	t_run =run;
 	t_luminosityBlock=luminosityBlock;
 	t_event=event;
-	
+	//cout<<jentry<<" : "<<t_event<<"-------------------\n";
 
 	for(int i=0;i<nMuon;i++){
 	  if(Muon_pt[i]>20. && fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
@@ -90,21 +100,25 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    t_Mu_nTrackerLayers->push_back(Muon_nTrackerLayers[i]);   
 	  }
 	}
+	TLorentzVector dimu, mu1,mu2;
+	mu1.SetPtEtaPhiM((*t_Mu_pt)[0],(*t_Mu_eta)[0],(*t_Mu_phi)[0],(*t_Mu_mass)[0]);
+	mu2.SetPtEtaPhiM((*t_Mu_pt)[1],(*t_Mu_eta)[1],(*t_Mu_phi)[1],(*t_Mu_mass)[1]);
+	dimu=mu1+mu2;
+	t_diMuon_pt = dimu.Pt();
+	t_diMuon_eta= dimu.Eta();
+	t_diMuon_phi= dimu.Phi();
+	t_diMuon_mass= dimu.M();
 
-	if(Muon_pt[1]>20. && fabs(Muon_eta[1])<2.4 && Muon_mediumId[1] && Muon_pfRelIso04_all[1] < 0.25){
-	  if(Muon_pt[0]>30. && fabs(Muon_eta[0])<2.4 && Muon_mediumId[0] && Muon_pfRelIso04_all[0] < 0.25){
-	    TLorentzVector dimu, mu1,mu2;
-	    mu1.SetPtEtaPhiM(Muon_pt[0],Muon_eta[0],Muon_phi[0],Muon_mass[0]);
-	    mu2.SetPtEtaPhiM(Muon_pt[1],Muon_eta[1],Muon_phi[1],Muon_mass[1]);
-	    dimu=mu1+mu2;
-	    t_diMuon_pt = dimu.Pt();
-	    t_diMuon_eta= dimu.Eta();
-	    t_diMuon_phi= dimu.Phi();
-	    t_diMuon_mass= dimu.M();
-	  }
-	}
 	for (int j =0;j<nJet;j++){
-	  if(Jet_muonIdx1[j]==-1 && Jet_muonIdx2[j]==-1 && Jet_pt[j]>30. && fabs(Jet_eta[j])<4.7 && Jet_jetId[j]>=2 && Jet_puId[j]>=1){
+	  bool matched_mu=false;
+	  for(int i=0;i<t_Mu_pt->size();i++){
+	    double dR= DeltaR((*t_Mu_eta)[i],(*t_Mu_phi)[i],Jet_eta[j],Jet_phi[j]);
+	    if(dR<0.4){
+	      matched_mu=true;
+	      break;
+	    }
+	  }
+	  if(!matched_mu && Jet_pt[j]>30. && fabs(Jet_eta[j])<4.7 && Jet_jetId[j]>=2 && Jet_puId[j]>=1){
 	    t_Jet_area->push_back(Jet_area[j]);
 	    t_Jet_btagCMVA->push_back(Jet_btagCMVA[j]);   
 	    t_Jet_btagCSVV2->push_back(Jet_btagCSVV2[j]);   
@@ -153,6 +167,19 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
  
 	  }
 	}
+	if(t_Jet_pt->size()>=2){
+	  TLorentzVector j1,j2, jj;
+	  j1.SetPtEtaPhiM((*t_Jet_pt)[0], (*t_Jet_phi)[0],(*t_Jet_eta)[0],(*t_Jet_mass)[0]);
+	  j2.SetPtEtaPhiM((*t_Jet_pt)[1], (*t_Jet_phi)[1],(*t_Jet_eta)[1],(*t_Jet_mass)[1]);
+
+	  jj=j1+j2;
+	
+	  t_diJet_pt = jj.Pt();
+	  t_diJet_eta=jj.Eta();
+	  t_diJet_phi=jj.Phi();
+	  t_diJet_mass=jj.M();
+	}
+
 
 	for(int i=0;i<nElectron;i++){
 	  t_El_charge->push_back(Electron_charge[i]);
@@ -226,9 +253,24 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	t_PV_z = PV_z;
 	t_PV_npvs = PV_npvs;
 	t_PV_npvs = PV_npvsGood;
-      }
+
+	if(isData=="F"){
+
+	  for(int i=0;i<nGenPart;i++){
+	  
+	    if((abs(GenPart_pdgId[i])>=11 && abs(GenPart_pdgId[i])<=16) || (abs(GenPart_pdgId[i])>=23 && abs(GenPart_pdgId[i])<=25) || (abs(GenPart_genPartIdxMother[i])>=23 && abs(GenPart_genPartIdxMother[i])<=25) || (abs(GenPart_genPartIdxMother[i])>=11 && abs(GenPart_genPartIdxMother[i])<=16) ){
+	      t_GenPart_eta->push_back(GenPart_eta[i]);
+	      t_GenPart_mass->push_back(GenPart_mass[i]);
+	      t_GenPart_phi->push_back(GenPart_phi[i]);
+	      t_GenPart_pt->push_back(GenPart_pt[i]);
+	      t_GenPart_genPartIdxMother->push_back(GenPart_genPartIdxMother[i]);
+	      t_GenPart_pdgId->push_back(GenPart_pdgId[i]);
+	      t_GenPart_status->push_back(GenPart_status[i]);
+	    }
+	  }
+	}
       
-      
+      }      
       tree->Fill();
       clearTreeVectors();
 

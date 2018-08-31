@@ -19,6 +19,12 @@
 #include <vector>
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
+#ifdef __CINT__
+
+#pragma link C++ class vector<float>+;
+#pragma link C++ class vector<int>+;
+#pragma link C++ class vector<bool>+;
+#endif
 
 using namespace std;
 class MainEvent : public TSelector {
