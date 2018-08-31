@@ -141,7 +141,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    t_Jet_nMuons->push_back(Jet_nMuons[j]);   
 	    t_Jet_puId->push_back(Jet_puId[j]);   
 
-	    if(Jet_btagDeepB[j]>0.4941){
+	    if(Jet_btagDeepB[j]>0.1522){
 	      t_nbJet++;
 	      t_bJet_area->push_back(Jet_area[j]);
 	      t_bJet_btagCMVA->push_back(Jet_btagCMVA[j]);   
@@ -171,8 +171,8 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	}
 	if(t_Jet_pt->size()>=2){
 	  TLorentzVector j1,j2, jj;
-	  j1.SetPtEtaPhiM((*t_Jet_pt)[0], (*t_Jet_phi)[0],(*t_Jet_eta)[0],(*t_Jet_mass)[0]);
-	  j2.SetPtEtaPhiM((*t_Jet_pt)[1], (*t_Jet_phi)[1],(*t_Jet_eta)[1],(*t_Jet_mass)[1]);
+	  j1.SetPtEtaPhiM((*t_Jet_pt)[0], (*t_Jet_eta)[0],(*t_Jet_phi)[0],(*t_Jet_mass)[0]);
+	  j2.SetPtEtaPhiM((*t_Jet_pt)[1], (*t_Jet_eta)[1],(*t_Jet_phi)[1],(*t_Jet_mass)[1]);
 
 	  jj=j1+j2;
 	
