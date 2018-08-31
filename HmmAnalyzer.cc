@@ -119,6 +119,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    }
 	  }
 	  if(!matched_mu && Jet_pt[j]>30. && fabs(Jet_eta[j])<4.7 && Jet_jetId[j]>=2 && Jet_puId[j]>=1){
+	    t_nJet++;
 	    t_Jet_area->push_back(Jet_area[j]);
 	    t_Jet_btagCMVA->push_back(Jet_btagCMVA[j]);   
 	    t_Jet_btagCSVV2->push_back(Jet_btagCSVV2[j]);   
@@ -141,6 +142,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    t_Jet_puId->push_back(Jet_puId[j]);   
 
 	    if(Jet_btagDeepB[j]>0.4941){
+	      t_nbJet++;
 	      t_bJet_area->push_back(Jet_area[j]);
 	      t_bJet_btagCMVA->push_back(Jet_btagCMVA[j]);   
 	      t_bJet_btagCSVV2->push_back(Jet_btagCSVV2[j]);   

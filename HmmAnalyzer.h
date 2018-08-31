@@ -139,6 +139,8 @@ class HmmAnalyzer : public MainEvent {
   std::vector<float>         *t_SubJet_tau3;   
   std::vector<float>         *t_SubJet_tau4;   
 
+
+  int t_nJet;
   std::vector<float>         *t_Jet_area;   
   std::vector<float>         *t_Jet_btagCMVA;   
   std::vector<float>         *t_Jet_btagCSVV2;   
@@ -165,7 +167,7 @@ class HmmAnalyzer : public MainEvent {
   float t_diJet_phi;
   float t_diJet_mass;
 
-
+  int t_nbJet;
   std::vector<float>         *t_bJet_area;   
   std::vector<float>         *t_bJet_btagCMVA;   
   std::vector<float>         *t_bJet_btagCSVV2;   
@@ -277,7 +279,8 @@ void HmmAnalyzer::clearTreeVectors(){
   t_luminosityBlock=0;
   t_event=0;
   
-  
+  t_nJet=0;
+  t_nbJet=0;
   t_El_charge->clear();
   t_El_pt->clear();
   t_El_phi->clear();
@@ -621,6 +624,7 @@ void HmmAnalyzer::BookTreeBranches(){
   t_Jet_nMuons= new std::vector<int>();   
   t_Jet_puId= new std::vector<int>();   
 
+  tree->Branch("t_nJet",  &t_nJet,"t_nJet/I");
   tree->Branch("t_Jet_area"    , "vector<float>"         ,&t_Jet_area);   
   tree->Branch("t_Jet_btagCMVA"    , "vector<float>"         ,&t_Jet_btagCMVA);   
   tree->Branch("t_Jet_btagCSVV2"    , "vector<float>"         ,&t_Jet_btagCSVV2);   
@@ -647,7 +651,7 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_diJet_phi",  &t_diJet_phi,"t_diJet_phi/F");
   tree->Branch("t_diJet_mass",   &t_diJet_mass,"t_diJet_mass/F");
 
-
+  tree->Branch("t_nbJet",  &t_nbJet,"t_nbJet/I");
   t_bJet_area= new std::vector<float>();   
   t_bJet_btagCMVA= new std::vector<float>();   
   t_bJet_btagCSVV2= new std::vector<float>();   
