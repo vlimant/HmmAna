@@ -15,8 +15,10 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <math.h>
 // Header file for the classes stored in the TTree if any.
 #include <vector>
+#include "TRandom.h"
 #include "MainEvent.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -25,7 +27,7 @@
 #include<string>
 #include "TF1.h"
 #include "TAxis.h"
-
+#include "RoccoR.h"
 
 #ifdef __CINT__
 
@@ -43,16 +45,22 @@ class HmmAnalyzer : public MainEvent {
    
   Bool_t   FillChain(TChain *chain, const TString &inputFileList);
   Long64_t LoadTree(Long64_t entry);
+  void CorrectPtRoch( const RoccoR _calib, const bool _doSys, const TLorentzVector _mu_vec,
+                    float& _pt, float& _ptErr, float& _pt_sys_up, float& _pt_sys_down,
+                    const int _charge, const int _trk_layers, const float _GEN_pt, const bool _isData );
   void     EventLoop(const char *, const char *);
   //declare any specific function required
-
+  
   void clearTreeVectors();
   void BookTreeBranches();
+  RoccoR _Roch_calib;
   TFile *oFile;
   TTree* tree;
   uint          t_run;
   uint          t_luminosityBlock;
   ulong       t_event;
+  int         t_mu1;
+  int         t_mu2;
   std::vector <int>          *t_El_charge;
   std::vector<float>         *t_El_pt;
   std::vector<float>         *t_El_phi;
@@ -213,6 +221,10 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 
+  std::string path_RochCor = "RoccoR2017v1.txt";
+  std::cout << "Rochester correction files: " << path_RochCor << std::endl;
+  _Roch_calib.init(path_RochCor);
+
   TChain *tree = new TChain("Events");
 
   if( ! FillChain(tree, inputFileList) ) {
@@ -229,6 +241,67 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
   oFile = new TFile(outFileName, "recreate");
   BookTreeBranches();
 }
+
+void HmmAnalyzer::CorrectPtRoch( const RoccoR _calib, const bool _doSys, const TLorentzVector _mu_vec,
+                    float& _pt, float& _ptErr, float& _pt_sys_up, float& _pt_sys_down,
+                    const int _charge, const int _trk_layers, const float _GEN_pt, const bool _isData ) {
+
+  _pt = _mu_vec.Pt();
+  _pt_sys_up = -999;
+  _pt_sys_down = -999;
+  float q_term     = 1.0;
+  float q_term_sys = -99;
+
+  float fRand_1 = gRandom->Rndm();
+  float fRand_2 = gRandom->Rndm();
+
+  if (_isData){
+              q_term = _calib.kScaleDT( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(), 0, 0 );
+  }
+  else if (_GEN_pt > 0) { q_term = _calib.kScaleFromGenMC( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(),
+                                                           _trk_layers, _GEN_pt, fRand_1, 0, 0 );
+  } else {                q_term = _calib.kScaleAndSmearMC( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(),
+                                                            _trk_layers, fRand_1, fRand_2, 0, 0 );
+  }
+  if ( fabs(q_term - 1.0) > 0.4 ) {
+    std::cout << "\n*** BIZZARELY HIGH QTERM ***" << std::endl;
+    std::cout << "GEN pT = " << _GEN_pt << ", RECO pT = " << _mu_vec.Pt() << ", Q term = " << q_term
+              << ", fRand_1 = " << fRand_1 << ", fRand_2 = " << fRand_2 << std::endl;
+    std::cout << "Layers = " << _trk_layers << ", charge = " << _charge
+              << ", eta = " << _mu_vec.Eta() << ", phi = " << _mu_vec.Phi() << std::endl;
+  }
+
+
+  int nUp   = 0;
+  int nDown = 0;
+  double sum_sq_up   = 0;
+  double sum_sq_down = 0;
+
+  for (int i = 0; i < 100; i++) {
+    if (!_doSys) break;
+
+    if (_isData)          q_term_sys = _calib.kScaleDT( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(), 1, i );
+    else if (_GEN_pt > 0) q_term_sys = _calib.kScaleFromGenMC( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(),
+                                                               _trk_layers, _GEN_pt, fRand_1, 1, i );
+    else                  q_term_sys = _calib.kScaleAndSmearMC( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(),
+                                                                _trk_layers, fRand_1, fRand_2, 1, i );
+    if ( q_term_sys >= q_term ) {
+      nUp   += 1;
+      sum_sq_up   += pow( q_term_sys - q_term, 2 );
+    } else {
+      nDown += 1;
+      sum_sq_down += pow( q_term_sys - q_term, 2 );
+    }
+  }
+
+  _pt          = _mu_vec.Pt() * q_term;
+  _ptErr       = _ptErr * q_term; // Account for shift in pT scale
+  if (!_isData)  _ptErr *= std::fmax(q_term, 1./q_term); // Account for smearing in MC
+  _pt_sys_up   = ( _doSys ? _pt * sqrt(sum_sq_up   / nUp)   : -999 );
+  _pt_sys_down = ( _doSys ? _pt * sqrt(sum_sq_down / nDown) : -999 );
+
+}
+
 bool HmmAnalyzer::FillChain(TChain *chain, const TString &inputFileList) {
 
   ifstream infile(inputFileList, ifstream::in);
@@ -278,7 +351,8 @@ void HmmAnalyzer::clearTreeVectors(){
   t_run=0;
   t_luminosityBlock=0;
   t_event=0;
-  
+  t_mu1=-999; 
+  t_mu2=-999;
   t_nJet=0;
   t_nbJet=0;
   t_El_charge->clear();
@@ -439,7 +513,9 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_run", &t_run,"t_run/i");
   tree->Branch("t_luminosityBlock", &t_luminosityBlock,"t_luminosityBlock/i");
   tree->Branch("t_event", &t_event,"t_event/l");
-  
+  tree->Branch("t_mu1", &t_mu1,"t_mu1/i");
+  tree->Branch("t_mu2", &t_mu2,"t_mu2/i");
+ 
   t_El_charge= new std::vector<int>();
   t_El_pt= new std::vector<float>();
   t_El_phi= new std::vector<float>();
