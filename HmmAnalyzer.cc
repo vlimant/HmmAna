@@ -43,12 +43,9 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
   //cout<<"cleared tree vectors\n";
   //BookTreeBranches();
   //cout<<"booked tree branches\n";
+  float muon_mass = 0.1056583745;
   Long64_t nentries = fChain->GetEntriesFast();
-
-  //cout<<"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
-  //cout<<"IDX         Run        Lumi        Event       m1pt          m1eta         m1phi         m2pt       m2eta        m2phi        j1pt         j1eta       j1phi       j2pt        j2eta          j2phi        mjj        nbjets          met"<<endl;
-  //cout<<"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
-
+  
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
@@ -56,36 +53,101 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       // if (Cut(ientry) < 0) continue;
 
+
       bool trig_decision = false;
 
       if( HLT_IsoMu27==1 /* || HLT_IsoTkMu27_v*==1*/) trig_decision =true;
 
-      bool run_muChecks =false; 
-      if(Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_globalTightHalo2016Filter && Flag_globalSuperTightHalo2016Filter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && trig_decision && PV_ndof>4 && fabs(PV_z)<24. && PV_npvsGood>0) run_muChecks =true;
-
-      bool Event_sel= false;
-      if(run_muChecks){
-	if(Muon_charge[0]*Muon_charge[1]== -1 && Muon_pt[0]>30. && Muon_pt[1]>20. && Muon_mediumId[0] && Muon_mediumId[1] && abs(Muon_eta[0])<2.4 && abs(Muon_eta[1])<2.4 && nMuon>=2 && Muon_pfRelIso04_all[0]<0.25 && Muon_pfRelIso04_all[1]<0.25) Event_sel =true;
+      bool goodLumi= false;
+      if (isData=="T"){//figure out good lumi from json
       }
-      if(Event_sel/*event==261190302*/){
-	//cout<<run_muChecks<<" "<<Event_sel<<endl;
-	//cout<<Flag_METFilters<<" ,"<<trig_decision<<endl;
-	//cout<<PV_ndof<<" "<<PV_z<<", "<<PV_npvsGood<<endl;
-	//cout<<Muon_pfRelIso04_all[0]<<" ,"<<Muon_pfRelIso04_all[1]<<endl;
+      else  goodLumi = true;
+     
+      int index_mu1(-999), index_mu2(-999); 
+      bool run_muChecks =false; 
+      if(nMuon>=2 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && trig_decision && goodLumi && PV_npvsGood>0) run_muChecks =true;
+
+      vector<float> mu_pt_Roch_corr, mu_ptErr_Roch_corr, mu_Iso_Roch_corr;
+      mu_pt_Roch_corr.clear(), mu_ptErr_Roch_corr.clear(), mu_Iso_Roch_corr.clear();
+
+      float pt_Roch, ptErr_Roch, pt_Roch_sys_up, pt_Roch_sys_down;
+      pt_Roch = 0, ptErr_Roch = 0, pt_Roch_sys_up = 0, pt_Roch_sys_down =0;
+      bool Event_sel= false;
+      bool trig_match = false;  
+      if(run_muChecks){
+        for(int i=0;i<nMuon;i++){
+            TLorentzVector mu_raw;
+            mu_raw.SetPtEtaPhiM(Muon_pt[i],Muon_eta[i],Muon_phi[i],muon_mass); //Muon_mass[i]);
+            pt_Roch = 0, ptErr_Roch = 0, pt_Roch_sys_up = 0, pt_Roch_sys_down =0;
+            //cout <<"pt "<<Muon_pt[i]<<" Err "<<Muon_ptErr[i] <<endl;
+
+            float gen_pt = Muon_pt[i];
+            if(isData=="F"){ 
+              for(int j=0;j<nGenPart;j++){
+                if(Muon_charge[i]==-1 && GenPart_pdgId[j]==13 && DeltaR(Muon_eta[i], Muon_phi[i], GenPart_eta[j], GenPart_phi[j]) <0.1){ gen_pt = GenPart_pt[j]; break;}
+                else if(Muon_charge[i]==1 && GenPart_pdgId[j]==-13 && DeltaR(Muon_eta[i], Muon_phi[i], GenPart_eta[j], GenPart_phi[j]) <0.1){ gen_pt = GenPart_pt[j]; break;}
+              }
+            }
+            CorrectPtRoch( _Roch_calib, false, mu_raw,
+                   pt_Roch, ptErr_Roch, pt_Roch_sys_up, pt_Roch_sys_down,
+                    Muon_charge[i], Muon_nTrackerLayers[i], gen_pt, true );
+            //cout <<"pt_Roch "<<pt_Roch<<endl;
+            mu_pt_Roch_corr.push_back(pt_Roch);
+            mu_ptErr_Roch_corr.push_back(ptErr_Roch); 
+        }
+        
+        for(int i=0;i<nMuon;i++){
+          if(mu_pt_Roch_corr[i]>30. && Muon_mediumId[i] && abs(Muon_eta[i])<2.4 && Muon_pfRelIso04_all[i]<0.25){
+              for(int j=i+1;j<nMuon;j++){
+                 if(Muon_charge[i]*Muon_charge[j]== -1 && mu_pt_Roch_corr[j]>20. && Muon_mediumId[j] && abs(Muon_eta[j])<2.4 && Muon_pfRelIso04_all[j]<0.25){
+                    Event_sel =true; 
+                    index_mu1 = i; 
+                    index_mu2 = j;
+                    break;
+                 }
+              }
+          }
+       }
+      
+       for(int i=0; i<nTrigObj; i++){
+         float dR_TrigObj = 999.;
+         if(TrigObj_id[i]==13){
+              dR_TrigObj = DeltaR(Muon_eta[index_mu1], Muon_phi[index_mu1], TrigObj_eta[i], TrigObj_phi[i]);
+              if(dR_TrigObj<0.1 && mu_pt_Roch_corr[index_mu1]>30.){ 
+                 trig_match = true;
+                 break;
+              }
+              else{
+                if(mu_pt_Roch_corr[index_mu2]>30.){
+                  dR_TrigObj = DeltaR(Muon_eta[index_mu2], Muon_phi[index_mu2], TrigObj_eta[i], TrigObj_phi[i]);
+                  if(dR_TrigObj<0.1){ 
+                    trig_match = true;
+                    break;
+                  }
+                }
+             } 
+          }
+       }//end of triger match, end of loop over trigger objects
+      
+      }
+      if(Event_sel && trig_match){
+	//cout<<event<<endl;
 	t_run =run;
 	t_luminosityBlock=luminosityBlock;
 	t_event=event;
+        t_mu1 = index_mu1;
+        t_mu2 = index_mu2;
 	//cout<<jentry<<" : "<<t_event<<"-------------------\n";
 
-	//	cout<<"-->"<<jentry<<"\t"<<run<<"\t"<<luminosityBlock<<"\t"<<event<<"\t";
 	for(int i=0;i<nMuon;i++){
-	  if(Muon_pt[i]>20. && fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
+	  //if(Muon_pt[i]>20. && fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
+          if(fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
 	    t_Mu_charge->push_back(Muon_charge[i]);   
-	    t_Mu_pt->push_back(Muon_pt[i]);   
-	    t_Mu_ptErr->push_back(Muon_ptErr[i]);   
+	    t_Mu_pt->push_back(mu_pt_Roch_corr[i]);   
+	    t_Mu_ptErr->push_back(mu_ptErr_Roch_corr[i]);   
 	    t_Mu_phi->push_back(Muon_phi[i]);   
 	    t_Mu_eta->push_back(Muon_eta[i]);   
-	    t_Mu_mass->push_back(Muon_mass[i]);  
+	    t_Mu_mass->push_back(muon_mass); //Muon_mass[i]);  
 	    t_Mu_dxy->push_back(Muon_dxy[i]);   
 	    t_Mu_dxyErr->push_back(Muon_dxyErr[i]);   
 	    t_Mu_dz->push_back(Muon_dz[i]);   
@@ -103,9 +165,8 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  }
 	}
 	TLorentzVector dimu, mu1,mu2;
-	mu1.SetPtEtaPhiM((*t_Mu_pt)[0],(*t_Mu_eta)[0],(*t_Mu_phi)[0],(*t_Mu_mass)[0]);
-	mu2.SetPtEtaPhiM((*t_Mu_pt)[1],(*t_Mu_eta)[1],(*t_Mu_phi)[1],(*t_Mu_mass)[1]);
-	//cout<<mu1.Pt()<<"\t \t "<<mu1.Eta()<<"\t \t"<<mu1.Phi()<<"\t \t"<<mu2.Pt()<<"\t \t"<<mu2.Eta()<<"\t \t"<<mu2.Phi()<<"\t \t";
+	mu1.SetPtEtaPhiM((*t_Mu_pt)[index_mu1],(*t_Mu_eta)[index_mu1],(*t_Mu_phi)[index_mu1],(*t_Mu_mass)[index_mu1]);
+	mu2.SetPtEtaPhiM((*t_Mu_pt)[index_mu2],(*t_Mu_eta)[index_mu2],(*t_Mu_phi)[index_mu2],(*t_Mu_mass)[index_mu2]);
 	dimu=mu1+mu2;
 	t_diMuon_pt = dimu.Pt();
 	t_diMuon_eta= dimu.Eta();
@@ -122,7 +183,6 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    }
 	  }
 	  if(!matched_mu && Jet_pt[j]>30. && fabs(Jet_eta[j])<4.7 && Jet_jetId[j]>=2 && Jet_puId[j]>=1){
-	    
 	    t_nJet++;
 	    t_Jet_area->push_back(Jet_area[j]);
 	    t_Jet_btagCMVA->push_back(Jet_btagCMVA[j]);   
@@ -144,8 +204,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    t_Jet_nElectrons->push_back(Jet_nElectrons[j]);   
 	    t_Jet_nMuons->push_back(Jet_nMuons[j]);   
 	    t_Jet_puId->push_back(Jet_puId[j]);   
-
-	    if(Jet_btagDeepB[j]>0.1522){
+            if(Jet_btagDeepB[j]>0.4941){
 	      t_nbJet++;
 	      t_bJet_area->push_back(Jet_area[j]);
 	      t_bJet_btagCMVA->push_back(Jet_btagCMVA[j]);   
@@ -178,16 +237,14 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  j1.SetPtEtaPhiM((*t_Jet_pt)[0], (*t_Jet_eta)[0],(*t_Jet_phi)[0],(*t_Jet_mass)[0]);
 	  j2.SetPtEtaPhiM((*t_Jet_pt)[1], (*t_Jet_eta)[1],(*t_Jet_phi)[1],(*t_Jet_mass)[1]);
 
-	  //cout<<j1.Pt()<<"\t \t"<<j1.Eta()<<"\t \t"<<j1.Phi()<<"\t \t"<<j2.Pt()<<"\t \t"<<j2.Eta()<<"\t \t"<<j2.Phi()<<"\t \t";
 	  jj=j1+j2;
-	  //cout<<jj.M()<<"\t \t";
+	
 	  t_diJet_pt = jj.Pt();
 	  t_diJet_eta=jj.Eta();
 	  t_diJet_phi=jj.Phi();
 	  t_diJet_mass=jj.M();
 	}
-	else{//cout<<" 0 \t \t 0 \t  \t 0 \t \t 0 \t \t  0 \t \t 0 \t \t 0 \t \t"; 
-	}
+
 
 	for(int i=0;i<nElectron;i++){
 	  t_El_charge->push_back(Electron_charge[i]);
@@ -213,7 +270,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  t_Electron_mvaFall17noIso_WPL->push_back(Electron_mvaFall17noIso_WPL[i]);
   
 	}
-	//cout<<t_nbJet<<"\t \t "<<MET_pt<<endl;
+
 	t_MET_pt = MET_pt;
 	t_MET_phi = MET_phi;
 	t_MET_sumEt  = MET_sumEt;
@@ -277,10 +334,9 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    }
 	  }
 	}
-	 tree->Fill();
-      }      
+      
+      tree->Fill();
+      }
       clearTreeVectors();
-
-
    }
 }
