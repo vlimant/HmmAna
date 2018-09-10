@@ -3,8 +3,8 @@ CXX      = g++
 CXXFLAGS= $(shell root-config --cflags)
 LIBS    = $(shell root-config --libs) 
 
-SOURCES = MainEvent.cc HmmAnalyzer.cc 
-HEADERS = MainEvent.h HmmAnalyzer.h 
+SOURCES = RoccoR.cc MainEvent.cc HmmAnalyzer.cc 
+HEADERS = RoccoR.h MainEvent.h HmmAnalyzer.h 
 OBJECTS = $(SOURCES:.cc=.o)
 
 EXECUTABLE = analyzeHmm
