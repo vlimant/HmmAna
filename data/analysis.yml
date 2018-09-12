@@ -1,0 +1,53 @@
+datasets:
+  #We need to tell ROOT how to access the files
+  global_file_prefix: file:///Volumes/login-1/
+
+  #All the data samples
+  data:
+    SingleMuon:
+      - name: RunB
+        nanoaod: /SingleMuon/Run2017B-31Mar2018-v1/NANOAOD
+        miniaod: #FIXME
+      - name: RunC
+        nanoaod: /SingleMuon/Run2017C-31Mar2018-v1/NANOAOD
+        miniaod:
+      - name: RunD
+        nanoaod: /SingleMuon/Run2017D-31Mar2018-v1/NANOAOD
+        miniaod: 
+      - name: RunE
+        nanoaod: /SingleMuon/Run2017E-31Mar2018-v1/NANOAOD
+        miniaod: 
+      - name: RunF
+        nanoaod: /SingleMuon/Run2017F-31Mar2018-v1/NANOAOD
+        miniaod: 
+
+  #All the MC samples
+  simulation:
+    
+    #gluon fusion Higgs production
+    ggh_hmumu:
+      - name: GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8
+        mass: 125
+        nanoaod: /GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+        miniaod: /GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        xs: 0 #FIXME
+    
+    #vector boson Higgs production
+    vbf_hmumu:
+      
+      - name: VBFHToMuMuG_M125_MLL-0To60_Dalitz_13TeV_amcatnlo_pythia8
+        nanoaod: 
+        miniaod: /VBFHToMuMuG_M125_MLL-0To60_Dalitz_13TeV_amcatnlo_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        xs: 0 #FIXME
+      
+      - name: GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8
+        nanoaod: 
+        miniaod: 
+        xs: 0 #FIXME
+
+    ttjets_sl:
+
+      - name: TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8
+        nanoaod: /TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/NANOAODSIM
+        miniaod: 
+        xs: 0 #FIXME
