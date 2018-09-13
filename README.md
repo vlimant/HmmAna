@@ -22,9 +22,10 @@ OR
 ./analyzeHmm runList.txt out.root data T
 
 
-==================================================================
+============================================
 CONDOR scripts
-==================================================================
+
+===========================================
 
 Before running condor, make sure to change the following items:
 1. give appropriate addresses in the run_myprog.sh, proto_condor_submit and makecondorsubmit.py
