@@ -1,0 +1,13 @@
+executable=/data/idutta/CMSSW_9_4_9/src/condor/run_myprog.sh
+universe=vanilla
+Arguments=/data/idutta/CMSSW_9_4_9/src/condor/condor_submit/runList_2017D_SingleMuon_0.txt 2017D_SingleMuon_job0.root 2017D_SingleMuon T /mnt/hadoop/store/user/idutta/2017D_SingleMuon_11Sep18
+Input =
+Output = condor_output/condor_logs/condor_11Sep20182017D_SingleMuon_job0.out
+Error  = condor_output/condor_logs/condor_11Sep20182017D_SingleMuon_job0.err
+Log    = condor_output/condor_logs/condor_11Sep20182017D_SingleMuon_job0.log
+Requirements=TARGET.OpSysAndVer=="CentOS7"
+notification=never
+should_transfer_files=YES
+when_to_transfer_output = ON_EXIT
+use_x509userproxy = true
+queue

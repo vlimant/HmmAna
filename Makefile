@@ -1,7 +1,7 @@
 CXX      = g++
 
-CXXFLAGS= $(shell root-config --cflags)
-LIBS    = $(shell root-config --libs) 
+CXXFLAGS= $(shell root-config --cflags) -I/cvmfs/cms.cern.ch/slc7_amd64_gcc630/external/boost/1.63.0/include
+LIBS    = $(shell root-config --libs) -L/cvmfs/cms.cern.ch/slc7_amd64_gcc630/external/boost/1.63.0/lib
 
 SOURCES = RoccoR.cc MainEvent.cc HmmAnalyzer.cc 
 HEADERS = RoccoR.h MainEvent.h HmmAnalyzer.h 

@@ -1,0 +1,1 @@
+root://cms-xrd-global.cern.ch///store/data/Run2017D/SingleMuon/NANOAOD/31Mar2018-v1/10000/00098A76-3A45-E811-8F13-FA163E79D857.root
