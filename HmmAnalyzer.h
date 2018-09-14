@@ -98,7 +98,9 @@ class HmmAnalyzer : public MainEvent {
   std::vector<float>         *t_Mu_pfRelIso03_chg;   
   std::vector<float>         *t_Mu_pfRelIso04_all;   
   std::vector<int>           *t_Mu_tightCharge;   
-  std::vector<bool>          *t_Mu_isPFcand;   
+  std::vector<bool>          *t_Mu_isPFcand;  
+  std::vector<bool>          *t_Mu_istracker;
+  std::vector<bool>          *t_Mu_isglobal; 
   std::vector<bool>          *t_Mu_mediumId;   
   std::vector<bool>          *t_Mu_softId;   
   std::vector<bool>          *t_Mu_tightId;    
@@ -174,6 +176,7 @@ class HmmAnalyzer : public MainEvent {
   float t_diJet_eta;
   float t_diJet_phi;
   float t_diJet_mass;
+  float t_diJet_mass_mo;
 
   int t_nbJet;
   std::vector<float>         *t_bJet_area;   
@@ -393,6 +396,8 @@ void HmmAnalyzer::clearTreeVectors(){
   t_Mu_pfRelIso04_all->clear();   
   t_Mu_tightCharge->clear();   
   t_Mu_isPFcand->clear();   
+  t_Mu_isglobal->clear();
+  t_Mu_istracker->clear();
   t_Mu_mediumId->clear();   
   t_Mu_softId->clear();   
   t_Mu_tightId->clear();    
@@ -466,7 +471,7 @@ void HmmAnalyzer::clearTreeVectors(){
   t_diJet_eta=-1000;
   t_diJet_phi=-1000;
   t_diJet_mass=-1000;
-
+  t_diJet_mass_mo=-1000;
 
   t_bJet_area->clear();   
   t_bJet_btagCMVA->clear();   
@@ -575,7 +580,9 @@ void HmmAnalyzer::BookTreeBranches(){
   t_Mu_pfRelIso03_chg= new std::vector<float>();   
   t_Mu_pfRelIso04_all= new std::vector<float>();   
   t_Mu_tightCharge= new std::vector<int>();   
-  t_Mu_isPFcand= new std::vector<bool>();   
+  t_Mu_isPFcand= new std::vector<bool>();  
+  t_Mu_isglobal= new std::vector<bool>();
+  t_Mu_istracker= new std::vector<bool>(); 
   t_Mu_mediumId= new std::vector<bool>();   
   t_Mu_softId= new std::vector<bool>();   
   t_Mu_tightId= new std::vector<bool>();    
@@ -597,6 +604,8 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_Mu_pfRelIso04_all"    , "vector<float>"         ,&t_Mu_pfRelIso04_all );   
   tree->Branch("t_Mu_tightCharge"    , "vector<int>"         ,&t_Mu_tightCharge );   
   tree->Branch("t_Mu_isPFcand"    , "vector<bool>"         ,&t_Mu_isPFcand );   
+  tree->Branch("t_Mu_isglobal"    , "vector<bool>"         ,&t_Mu_isglobal );
+  tree->Branch("t_Mu_istracker"    , "vector<bool>"         ,&t_Mu_istracker );
   tree->Branch("t_Mu_mediumId"    , "vector<bool>"         ,&t_Mu_mediumId );   
   tree->Branch("t_Mu_softId"    , "vector<bool>"         ,&t_Mu_softId );   
   tree->Branch("t_Mu_tightId"    , "vector<bool>"         ,&t_Mu_tightId );    
@@ -726,6 +735,7 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_diJet_eta",   &t_diJet_eta,"t_diJet_eta/F");
   tree->Branch("t_diJet_phi",  &t_diJet_phi,"t_diJet_phi/F");
   tree->Branch("t_diJet_mass",   &t_diJet_mass,"t_diJet_mass/F");
+  tree->Branch("t_diJet_mass_mo",   &t_diJet_mass_mo,"t_diJet_mass_mo/F");
 
   tree->Branch("t_nbJet",  &t_nbJet,"t_nbJet/I");
   t_bJet_area= new std::vector<float>();   

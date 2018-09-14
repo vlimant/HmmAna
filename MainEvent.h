@@ -14,7 +14,6 @@
 #include <TSelector.h>
 #include "TH1F.h"
 #include "TH2F.h"
-
 // Header file for the classes stored in the TTree if any.
 #include <vector>
 
@@ -40,7 +39,6 @@ public :
    int     FindMom(double dau,double mom,int i);
    double  HT (std::vector<TLorentzVector>);
    TLorentzVector MHT(std::vector<TLorentzVector>);
-   
    // void LeptHist(TH1D *h[20],const char *leptype, int Zcut);
    //ClassDef(MainEvent,0);
 
@@ -267,6 +265,8 @@ public :
    Int_t           Muon_tightCharge[50];   //[nMuon]
    UChar_t         Muon_highPtId[50];   //[nMuon]
    Bool_t          Muon_isPFcand[50];   //[nMuon]
+   Bool_t          Muon_isglobal[5];   //[nMuon]
+   Bool_t          Muon_istracker[5];   //[nMuon]
    Bool_t          Muon_mediumId[50];   //[nMuon]
    Bool_t          Muon_softId[50];   //[nMuon]
    Bool_t          Muon_tightId[50];   //[nMuon]
@@ -1253,6 +1253,8 @@ public :
    TBranch        *b_Muon_tightCharge;   //!
    TBranch        *b_Muon_highPtId;   //!
    TBranch        *b_Muon_isPFcand;   //!
+   TBranch        *b_Muon_isglobal;   //!
+   TBranch        *b_Muon_istracker;   //!
    TBranch        *b_Muon_mediumId;   //!
    TBranch        *b_Muon_softId;   //!
    TBranch        *b_Muon_tightId;   //!
@@ -2042,7 +2044,7 @@ void MainEvent::Init(TTree *tree)
    fCurrent = -1;
    fChain->SetMakeClass(1);
 
-      fChain->SetBranchAddress("run", &run, &b_run);
+   fChain->SetBranchAddress("run", &run, &b_run);
    fChain->SetBranchAddress("luminosityBlock", &luminosityBlock, &b_luminosityBlock);
    fChain->SetBranchAddress("event", &event, &b_event);
    fChain->SetBranchAddress("btagWeight_CSVV2", &btagWeight_CSVV2, &b_btagWeight_CSVV2);
@@ -2261,6 +2263,8 @@ void MainEvent::Init(TTree *tree)
    fChain->SetBranchAddress("Muon_tightCharge", Muon_tightCharge, &b_Muon_tightCharge);
    fChain->SetBranchAddress("Muon_highPtId", Muon_highPtId, &b_Muon_highPtId);
    fChain->SetBranchAddress("Muon_isPFcand", Muon_isPFcand, &b_Muon_isPFcand);
+   fChain->SetBranchAddress("Muon_isglobal", Muon_isglobal, &b_Muon_isglobal);
+   fChain->SetBranchAddress("Muon_istracker", Muon_istracker, &b_Muon_istracker);
    fChain->SetBranchAddress("Muon_mediumId", Muon_mediumId, &b_Muon_mediumId);
    fChain->SetBranchAddress("Muon_softId", Muon_softId, &b_Muon_softId);
    fChain->SetBranchAddress("Muon_tightId", Muon_tightId, &b_Muon_tightId);

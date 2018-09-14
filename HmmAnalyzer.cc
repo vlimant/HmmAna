@@ -53,19 +53,18 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       // if (Cut(ientry) < 0) continue;
 
-
       bool trig_decision = false;
 
       if( HLT_IsoMu27==1 /* || HLT_IsoTkMu27_v*==1*/) trig_decision =true;
 
-      bool goodLumi= false;
-      if (isData=="T"){//figure out good lumi from json
-      }
-      else  goodLumi = true;
+      //bool goodLumi= false;
+      //if (isData=="T"){//figure out good lumi from json
+      //}
+      //else  goodLumi = true;
      
       int index_mu1(-999), index_mu2(-999); 
       bool run_muChecks =false; 
-      if(nMuon>=2 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && trig_decision && goodLumi && PV_npvsGood>0) run_muChecks =true;
+      if(nMuon>=2 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && trig_decision && PV_npvsGood>0) run_muChecks =true;
 
       vector<float> mu_pt_Roch_corr, mu_ptErr_Roch_corr, mu_Iso_Roch_corr;
       mu_pt_Roch_corr.clear(), mu_ptErr_Roch_corr.clear(), mu_Iso_Roch_corr.clear();
@@ -97,9 +96,9 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
         }
         
         for(int i=0;i<nMuon;i++){
-          if(mu_pt_Roch_corr[i]>30. && Muon_mediumId[i] && abs(Muon_eta[i])<2.4 && Muon_pfRelIso04_all[i]<0.25){
+          if(Muon_isglobal[i] && Muon_istracker[i] &&  mu_pt_Roch_corr[i]>30. && Muon_mediumId[i] && abs(Muon_eta[i])<2.4 && Muon_pfRelIso04_all[i]<0.25){
               for(int j=i+1;j<nMuon;j++){
-                 if(Muon_charge[i]*Muon_charge[j]== -1 && mu_pt_Roch_corr[j]>20. && Muon_mediumId[j] && abs(Muon_eta[j])<2.4 && Muon_pfRelIso04_all[j]<0.25){
+                 if(Muon_isglobal[j] && Muon_istracker[j] &&  Muon_charge[i]*Muon_charge[j]== -1 && mu_pt_Roch_corr[j]>20. && Muon_mediumId[j] && abs(Muon_eta[j])<2.4 && Muon_pfRelIso04_all[j]<0.25){
                     Event_sel =true; 
                     index_mu1 = i; 
                     index_mu2 = j;
@@ -156,7 +155,9 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    t_Mu_pfRelIso03_chg->push_back(Muon_pfRelIso03_chg[i]);   
 	    t_Mu_pfRelIso04_all->push_back(Muon_pfRelIso04_all[i]);   
 	    t_Mu_tightCharge->push_back(Muon_tightCharge[i]);   
-	    t_Mu_isPFcand->push_back(Muon_isPFcand[i]);   
+	    t_Mu_isPFcand->push_back(Muon_isPFcand[i]);
+            t_Mu_isglobal->push_back(Muon_isglobal[i]);
+            t_Mu_istracker->push_back(Muon_istracker[i]);   
 	    t_Mu_mediumId->push_back(Muon_mediumId[i]);   
 	    t_Mu_softId->push_back(Muon_softId[i]);   
 	    t_Mu_tightId->push_back(Muon_tightId[i]);    
@@ -233,7 +234,10 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  }
 	}
 	if(t_Jet_pt->size()>=2){
+         for(int k=0;k<t_Jet_pt->size();k++){
+          for(int m=k+1; m<t_Jet_pt->size();m++){
 	  TLorentzVector j1,j2, jj;
+          if(k==0 && m==1){
 	  j1.SetPtEtaPhiM((*t_Jet_pt)[0], (*t_Jet_eta)[0],(*t_Jet_phi)[0],(*t_Jet_mass)[0]);
 	  j2.SetPtEtaPhiM((*t_Jet_pt)[1], (*t_Jet_eta)[1],(*t_Jet_phi)[1],(*t_Jet_mass)[1]);
 
@@ -243,6 +247,19 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  t_diJet_eta=jj.Eta();
 	  t_diJet_phi=jj.Phi();
 	  t_diJet_mass=jj.M();
+          t_diJet_mass_mo=jj.M();
+          }
+          else{
+            j1.SetPtEtaPhiM((*t_Jet_pt)[k], (*t_Jet_eta)[k],(*t_Jet_phi)[k],(*t_Jet_mass)[k]);
+            j2.SetPtEtaPhiM((*t_Jet_pt)[m], (*t_Jet_eta)[m],(*t_Jet_phi)[m],(*t_Jet_mass)[m]);
+
+            jj=j1+j2;
+
+            if(t_diJet_mass_mo<jj.M()) t_diJet_mass_mo=jj.M();
+
+          }
+          }
+         }
 	}
 
 
