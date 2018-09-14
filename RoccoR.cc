@@ -5,7 +5,7 @@
 #include <sstream>
 #include <stdexcept>
 #include "RoccoR.h"
-
+#include<iostream>
 const double CrystalBall::pi = 3.14159;
 const double CrystalBall::sqrtPiOver2 = sqrt(CrystalBall::pi/2.0);
 const double CrystalBall::sqrt2 = sqrt(2.0);

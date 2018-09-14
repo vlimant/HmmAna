@@ -1,13 +1,13 @@
 CXX      = g++
 
-CXXFLAGS= $(shell root-config --cflags) -I/cvmfs/cms.cern.ch/slc7_amd64_gcc630/external/boost/1.63.0/include
-LIBS    = $(shell root-config --libs) -L/cvmfs/cms.cern.ch/slc7_amd64_gcc630/external/boost/1.63.0/lib
+CXXFLAGS= $(shell root-config --cflags)
+LIBS    = $(shell root-config --libs) 
 
-SOURCES = RoccoR.cc MainEvent.cc HmmAnalyzer.cc 
-HEADERS = RoccoR.h MainEvent.h HmmAnalyzer.h 
+SOURCES = NtupleVariables.cc HiggsMuMu.cc 
+HEADERS = NtupleVariables.h HiggsMuMu.h 
 OBJECTS = $(SOURCES:.cc=.o)
 
-EXECUTABLE = analyzeHmm
+EXECUTABLE = analyzeHiggsMuMu
 
 all: $(SOURCES) $(EXECUTABLE)
 
@@ -30,5 +30,5 @@ clean:
 	rm -f $(OBJECTS) $(EXECUTABLE)
 
 ###
-MainEvent.o: MainEvent.h
-AnalyzeHmm.o:MainEvent.h HmmAnalyzer.h
+NtupleVariables.o: NtupleVariables.h
+AnalyzeHiggsMuMu.o:NtupleVariables.h HiggsMuMu.h
