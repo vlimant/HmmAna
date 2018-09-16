@@ -51,3 +51,13 @@ datasets:
         nanoaod: /TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/NANOAODSIM
         miniaod: 
         xs: 0 #FIXME
+        
+    DYJetsToLL:
+       - name: DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8
+       nanoaod: /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/NANOAODSIM
+                /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+       miniaod:
+       xs: 6529.0	
+       
+       
+    
