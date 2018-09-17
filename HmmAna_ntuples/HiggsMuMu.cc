@@ -35,6 +35,12 @@ void HiggsMuMu::EventLoop(const char *data,const char *isData)
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
+
       // if (Cut(ientry) < 0) continue;
+      if(t_diMuon_mass<120. && t_diMuon_mass>130.){
+	h_mu1pt->Fill((*t_Mu_pt)[0]);
+	h_mu2pt->Fill((*t_Mu_pt)[1]);
+	
+      }
    }
 }

@@ -2,8 +2,8 @@ import os,sys,re,fileinput,string,shutil
 
 ##             Dataset        Name   
 datasets = [#["ttbar", "ttbar"]
-            #["DYJetsToLL_M50_PT-100To250","DYJetsToLL_M50_PT-100To250"]
-            #["DYJetsToLL_M50_PT-250To400","DYJetsToLL_M50_PT-250To400"]
+            #["DYJetsToLL_1","DYJetsToLL_1"]
+            #["DYJetsToLL_2","DYJetsToLL_2"]
             #["DYJetsToLL_M50_PT-400To650","DYJetsToLL_M50_PT-400To650"]
             #["DYJetsToLL_M50_PT-650ToInf","DYJetsToLL_M50_PT-650ToInf"]
             #["WW","WW"]
@@ -25,11 +25,11 @@ datasets = [#["ttbar", "ttbar"]
             #["ElData14","ElData14"]
             #["ElData15","ElData15"]
             #["ElData16","ElData16"]
-            ["2017D_SingleMuon","2017D_SingleMuon"]
-            #["MuData2","MuData2"]
-            #["MuData3","MuData3"]
-            #["MuData4","MuData4"]
-            #["MuData5","MuData5"]
+            #["2017D_SingleMuon","2017D_SingleMuon"]
+    #["2017E_SingleMuon","2017E_SingleMuon"]
+            #["2017F_SingleMuon","2017F_SingleMuon"]
+            #["2017B_SingleMuon","2017B_SingleMuon"]
+            ["2017C_SingleMuon","2017C_SingleMuon"]
             #["MuData6","MuData6"]
             #["MuData7","MuData7"]
             #["MuData8","MuData8"]
@@ -57,17 +57,17 @@ for data in datasets:
         NSections = 5
 
     
-    elif ( data[0]=="DYJetsToLL_M50_PT-100To250"):
-        dataname = "DYJetsToLL_M50_PT-100To250"
-        inputfname = "DYJetsToLL_M-50_PT100to250_noDYNLO.txt"
+    elif ( data[0]=="DYJetsToLL_1"):
+        dataname = "DYJetsToLL_1"
+        inputfname = "DYJetsToLL_1.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10    
 
-    elif ( data[0]=="DYJetsToLL_M50_PT-250To400"):
-        dataname = "DYJetsToLL_M50_PT-250To400"
-        inputfname = "DYJetsToLL_M-50_PT250to400_noDYNLO.txt"
+    elif ( data[0]=="DYJetsToLL_2"):
+        dataname = "DYJetsToLL_2"
+        inputfname = "DYJetsToLL_2.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
@@ -260,44 +260,44 @@ for data in datasets:
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
-        NSections = 1
+        NSections = 5
 
         
-    elif ( data[0]=="MuData2"):
-        dataname = "MuData2"
-        inputfname = "Data2_Muon.txt"
+    elif ( data[0]=="2017B_SingleMuon"):
+        dataname = "2017B_SingleMuon"
+        inputfname = "2017B_SingleMuon.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
-        NSections = 10
+        NSections = 5
 
 
 
-    elif ( data[0]=="MuData3"):
-        dataname = "MuData3"
-        inputfname = "Data3_Muon.txt"
+    elif ( data[0]=="2017C_SingleMuon"):
+        dataname = "2017C_SingleMuon"
+        inputfname = "2017C_SingleMuon.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
-        NSections = 10
+        NSections = 5
 
 
-    elif ( data[0]=="MuData4"):
-        dataname = "MuData4"
-        inputfname = "Data4_Muon.txt"
+    elif ( data[0]=="2017E_SingleMuon"):
+        dataname = "2017E_SingleMuon"
+        inputfname = "2017E_SingleMuon.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
-        NSections = 10
+        NSections = 5
 
 
-    elif ( data[0]=="MuData5"):
-        dataname = "MuData5"
-        inputfname = "Data5_Muon.txt"
+    elif ( data[0]=="2017F_SingleMuon"):
+        dataname = "2017F_SingleMuon"
+        inputfname = "2017F_SingleMuon.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
-        NSections = 10
+        NSections = 5
 
 
     elif ( data[0]=="MuData6"):
@@ -402,7 +402,7 @@ for data in datasets:
     print "Dataset ",  data[0], " NFilesTotal ", NFilesTotal
     NFilesDone  = 0
 
-    outDir="/mnt/hadoop/store/user/idutta/"+data[0]+"_11Sep18"
+    outDir="/mnt/hadoop/store/user/idutta/"+data[0]+"_16Sep18"
     print outDir
     if not os.path.exists(outDir):
         os.mkdir(outDir)
@@ -417,9 +417,10 @@ for data in datasets:
             inputRunList.write(line)
 
         condorSubmit = "condor_submit/submitCondor_"+data[0]+"_"+str(jobidx)
-        jobName      = "11Sep2018"+data[0]+"_job"+str(jobidx)
+        jobName      = "16Sep2018"+data[0]+"_job"+str(jobidx)
         outHistFile = data[0]+"_job"+str(jobidx)+".root"
         isData       ="T"
+        #isData       ="F"
         shutil.copyfile("proto_condor_submit",condorSubmit)
         for line in fileinput.FileInput(condorSubmit, inplace=1):
             line=line.replace("JOBNAME", jobName)
