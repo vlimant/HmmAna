@@ -99,6 +99,8 @@ datasets:
        - name: ZZTo4L_13TeV_powheg_pythia8
        nanoaod:               
        miniaod: /ZZTo4L_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+                /ZZTo4L_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/NANOAODSIM
+                /ZZTo4L_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/NANOAODSIM
        xs: 1.256
        nevents:  #re-pro 
        sumOfgenWeight:  #re-pro
