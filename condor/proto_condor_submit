@@ -1,4 +1,4 @@
-executable=/data/idutta/CMSSW_9_4_9/src/condor/run_myprog.sh
+executable=/data/idutta/CMSSW_9_4_9/src/HmmAna/condor/run_myprog.sh
 universe=vanilla
 Arguments=FILELIST ROOTOUT DATANAME ISDATA OUTDIR
 Input =
@@ -9,5 +9,6 @@ Requirements=TARGET.OpSysAndVer=="CentOS7"
 notification=never
 should_transfer_files=YES
 when_to_transfer_output = ON_EXIT
+transfer_input_files = /data/idutta/CMSSW_9_4_9/src/HmmAna/RoccoR2017v1.txt
 use_x509userproxy = true
 queue

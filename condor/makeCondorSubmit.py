@@ -63,7 +63,7 @@ for data in datasets:
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
-        NSections = 10    
+        NSections = 5    
 
     elif ( data[0]=="DYJetsToLL_2"):
         dataname = "DYJetsToLL_2"
@@ -402,7 +402,7 @@ for data in datasets:
     print "Dataset ",  data[0], " NFilesTotal ", NFilesTotal
     NFilesDone  = 0
 
-    outDir="/mnt/hadoop/store/user/idutta/"+data[0]+"_16Sep18"
+    outDir="/mnt/hadoop/store/user/idutta/"+data[0]+"_18Sep18"
     print outDir
     if not os.path.exists(outDir):
         os.mkdir(outDir)
@@ -411,13 +411,13 @@ for data in datasets:
         print "NFilesDone ", NFilesDone, "len(thisList)", len(thisList)
 
         ##you may have to give full path i.e. CurrentDIR/condor_submit/runlist_...
-        inputRunListName = "/data/idutta/CMSSW_9_4_9/src/condor/condor_submit/runList_"+data[0]+"_"+str(jobidx)+".txt"
+        inputRunListName = "/data/idutta/CMSSW_9_4_9/src/HmmAna/condor/condor_submit/runList_"+data[0]+"_"+str(jobidx)+".txt"
         inputRunList = open(inputRunListName, "w")
         for line in thisList:
             inputRunList.write(line)
 
         condorSubmit = "condor_submit/submitCondor_"+data[0]+"_"+str(jobidx)
-        jobName      = "16Sep2018"+data[0]+"_job"+str(jobidx)
+        jobName      = "18Sep2018"+data[0]+"_job"+str(jobidx)
         outHistFile = data[0]+"_job"+str(jobidx)+".root"
         isData       ="T"
         #isData       ="F"

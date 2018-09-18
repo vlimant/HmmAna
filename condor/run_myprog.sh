@@ -13,13 +13,13 @@
 #ulimit -c 0
 #eval `scram runtime -sh`
 #echo `which root`
-cd /data/idutta/CMSSW_9_4_9/src/condor/condor_output/condor_logs
+cd /data/idutta/CMSSW_9_4_9/src/HmmAna/condor/condor_output/condor_logs
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 export SCRAM_ARCH=slc7_amd64_gcc630
 ulimit -c 0
 eval `scram runtime -sh`
 env 
 echo "$TMPDIR/$2"
-/data/idutta/CMSSW_9_4_9/src/condor/analyzeHmm $1 $TMPDIR/$2 $3 $4
+/data/idutta/CMSSW_9_4_9/src/HmmAna/analyzeHmm $1 $TMPDIR/$2 $3 $4
 
 mv $TMPDIR/$2 $5
