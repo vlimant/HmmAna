@@ -15,9 +15,10 @@ CONDOR scripts
 5. For every data[0] name in the makeCondorSubmit, make sure to have the appropriate runlist file in the condor directory and the latest version of analyzeHmm (executable)
 
 6. Also create the following directories before submitting jobs
-a. condor/condor_output/condor_logs
 
-b. condor/condor_submit
+   a. condor/condor_output/condor_logs
+
+   b. condor/condor_submit
 
 7. Make sure to have the RoccoR2017.txt in condor/condor_output/condor_logs directory.
 
