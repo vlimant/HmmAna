@@ -59,6 +59,7 @@ class HmmAnalyzer : public MainEvent {
   uint          t_run;
   uint          t_luminosityBlock;
   ulong       t_event;
+  float       t_genWeight;
   int         t_mu1;
   int         t_mu2;
   std::vector <int>          *t_El_charge;
@@ -256,20 +257,22 @@ void HmmAnalyzer::CorrectPtRoch( const RoccoR _calib, const bool _doSys, const T
   float q_term_sys = -99;
 
   float fRand_1 = gRandom->Rndm();
-  float fRand_2 = gRandom->Rndm();
+  //float fRand_2 = gRandom->Rndm();
 
   if (_isData){
               q_term = _calib.kScaleDT( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(), 0, 0 );
   }
-  else if (_GEN_pt > 0) { q_term = _calib.kScaleFromGenMC( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(),
-                                                           _trk_layers, _GEN_pt, fRand_1, 0, 0 );
-  } else {                q_term = _calib.kScaleAndSmearMC( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(),
-                                                            _trk_layers, fRand_1, fRand_2, 0, 0 );
+  else if (_GEN_pt > 0) { 
+             q_term = _calib.kSpreadMC( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(), _GEN_pt, 0, 0 );
+             //q_term = _calib.kScaleFromGenMC( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(),_trk_layers, _GEN_pt, fRand_1, 0, 0 );
+  } else {      
+            q_term = _calib.kSmearMC( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(), _trk_layers,fRand_1, 0, 0 );
+            //q_term = _calib.kScaleAndSmearMC( _charge, _mu_vec.Pt(), _mu_vec.Eta(), _mu_vec.Phi(), _trk_layers, fRand_1, fRand_2, 0, 0 );
   }
   if ( fabs(q_term - 1.0) > 0.4 ) {
     std::cout << "\n*** BIZZARELY HIGH QTERM ***" << std::endl;
     std::cout << "GEN pT = " << _GEN_pt << ", RECO pT = " << _mu_vec.Pt() << ", Q term = " << q_term
-              << ", fRand_1 = " << fRand_1 << ", fRand_2 = " << fRand_2 << std::endl;
+              << ", fRand_1 = " << fRand_1 << std::endl;
     std::cout << "Layers = " << _trk_layers << ", charge = " << _charge
               << ", eta = " << _mu_vec.Eta() << ", phi = " << _mu_vec.Phi() << std::endl;
   }
@@ -280,6 +283,7 @@ void HmmAnalyzer::CorrectPtRoch( const RoccoR _calib, const bool _doSys, const T
   double sum_sq_up   = 0;
   double sum_sq_down = 0;
 
+  /*
   for (int i = 0; i < 100; i++) {
     if (!_doSys) break;
 
@@ -296,6 +300,7 @@ void HmmAnalyzer::CorrectPtRoch( const RoccoR _calib, const bool _doSys, const T
       sum_sq_down += pow( q_term_sys - q_term, 2 );
     }
   }
+  */
 
   _pt          = _mu_vec.Pt() * q_term;
   _ptErr       = _ptErr * q_term; // Account for shift in pT scale
@@ -354,6 +359,7 @@ void HmmAnalyzer::clearTreeVectors(){
   t_run=0;
   t_luminosityBlock=0;
   t_event=0;
+  t_genWeight = -999.;
   t_mu1=-999; 
   t_mu2=-999;
   t_nJet=0;
@@ -518,6 +524,7 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_run", &t_run,"t_run/i");
   tree->Branch("t_luminosityBlock", &t_luminosityBlock,"t_luminosityBlock/i");
   tree->Branch("t_event", &t_event,"t_event/l");
+  tree->Branch("t_genWeight", &t_genWeight,"t_genWeight/F");
   tree->Branch("t_mu1", &t_mu1,"t_mu1/i");
   tree->Branch("t_mu2", &t_mu2,"t_mu2/i");
  

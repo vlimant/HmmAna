@@ -45,14 +45,15 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
   //cout<<"booked tree branches\n";
   float muon_mass = 0.1056583745;
   Long64_t nentries = fChain->GetEntriesFast();
-  
+
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       // if (Cut(ientry) < 0) continue;
-
+      if(jentry%50000==0) cout <<"entry: "<<jentry<<endl;
+      //if(event!=665332) continue;
       bool trig_decision = false;
 
       if( HLT_IsoMu27==1 /* || HLT_IsoTkMu27_v*==1*/) trig_decision =true;
@@ -80,9 +81,10 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
             pt_Roch = 0, ptErr_Roch = 0, pt_Roch_sys_up = 0, pt_Roch_sys_down =0;
             //cout <<"pt "<<Muon_pt[i]<<" Err "<<Muon_ptErr[i] <<endl;
 
-            float gen_pt = Muon_pt[i];
-            if(*isData=='F'){ 
+            float gen_pt = -999.;
+            if(*isData=='F'){
               for(int j=0;j<nGenPart;j++){
+                //cout <<"nGenPart "<<j<<endl;
                 if(Muon_charge[i]==-1 && GenPart_pdgId[j]==13 && DeltaR(Muon_eta[i], Muon_phi[i], GenPart_eta[j], GenPart_phi[j]) <0.1){ gen_pt = GenPart_pt[j]; break;}
                 else if(Muon_charge[i]==1 && GenPart_pdgId[j]==-13 && DeltaR(Muon_eta[i], Muon_phi[i], GenPart_eta[j], GenPart_phi[j]) <0.1){ gen_pt = GenPart_pt[j]; break;}
               }
@@ -134,8 +136,6 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	t_run =run;
 	t_luminosityBlock=luminosityBlock;
 	t_event=event;
-	t_genWeight=genWeight;
-	//t_btagWeight_CSVV2 = btagWeight_CSVV2;
         t_mu1 = index_mu1;
         t_mu2 = index_mu2;
 	//cout<<jentry<<" : "<<t_event<<"-------------------\n";
@@ -339,7 +339,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	t_PV_npvs = PV_npvsGood;
 
 	if(*isData=='F'){
-
+          t_genWeight = genWeight;
 	  for(int i=0;i<nGenPart;i++){
 	  
 	    if((abs(GenPart_pdgId[i])>=11 && abs(GenPart_pdgId[i])<=16) || (abs(GenPart_pdgId[i])>=23 && abs(GenPart_pdgId[i])<=25) || (abs(GenPart_genPartIdxMother[i])>=23 && abs(GenPart_genPartIdxMother[i])<=25) || (abs(GenPart_genPartIdxMother[i])>=11 && abs(GenPart_genPartIdxMother[i])<=16) ){
