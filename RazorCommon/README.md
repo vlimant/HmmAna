@@ -6,5 +6,5 @@
    To the appropriate branch names in your tree
 2. In Tools/python/loadJSON.py file, add the correct name/location of your JSON input
 
-3. In the processJSON.sh file, makse sure to have the correct input and output directory names
+3. In the processJSON.sh file, make sure to have the correct input and output directory names
 
