@@ -9,7 +9,7 @@ process.inputs = cms.PSet (
 )
 
 # get JSON file correctly parced
-JSONfile = '/data/idutta/CMSSW_9_4_9/src/RazorCommon/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt'
+JSONfile = '/afs/cern.ch/work/i/idutta/public/CMSSW_9_4_9/src/HmmAnalyzer/RazorCommon/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON_v1.txt'
 myList = LumiList.LumiList (filename = JSONfile).getCMSSWString().split(',')
 
 process.inputs.lumisToProcess.extend(myList)

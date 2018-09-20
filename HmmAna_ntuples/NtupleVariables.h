@@ -48,9 +48,12 @@ public :
    Int_t           fCurrent; //!current Tree number in a TChain
    
    // Declaration of leaf types
-      UInt_t          t_run;
+   UInt_t          t_run;
    UInt_t          t_luminosityBlock;
    ULong64_t       t_event;
+   Float_t         t_genWeight;
+   UInt_t          t_mu1;
+   UInt_t          t_mu2;
    vector<int>     *t_El_charge;
    vector<float>   *t_El_pt;
    vector<float>   *t_El_phi;
@@ -87,6 +90,8 @@ public :
    vector<float>   *t_Mu_pfRelIso04_all;
    vector<int>     *t_Mu_tightCharge;
    vector<bool>    *t_Mu_isPFcand;
+   vector<bool>    *t_Mu_isglobal;
+   vector<bool>    *t_Mu_istracker;
    vector<bool>    *t_Mu_mediumId;
    vector<bool>    *t_Mu_softId;
    vector<bool>    *t_Mu_tightId;
@@ -96,6 +101,7 @@ public :
    Float_t         t_diMuon_eta;
    Float_t         t_diMuon_phi;
    Float_t         t_diMuon_mass;
+   Float_t         t_diJet_mass_mo;
    Float_t         t_MET_phi;
    Float_t         t_MET_pt;
    Float_t         t_MET_sumEt;
@@ -191,9 +197,12 @@ public :
    vector<int>     *t_GenPart_status;
 
    // List of branches
-      TBranch        *b_t_run;   //!
+   TBranch        *b_t_run;   //!
    TBranch        *b_t_luminosityBlock;   //!
    TBranch        *b_t_event;   //!
+   TBranch        *b_t_genWeight;   //!
+   TBranch        *b_t_mu1;   //!
+   TBranch        *b_t_mu2;   //!
    TBranch        *b_t_El_charge;   //!
    TBranch        *b_t_El_pt;   //!
    TBranch        *b_t_El_phi;   //!
@@ -230,6 +239,8 @@ public :
    TBranch        *b_t_Mu_pfRelIso04_all;   //!
    TBranch        *b_t_Mu_tightCharge;   //!
    TBranch        *b_t_Mu_isPFcand;   //!
+   TBranch        *b_t_Mu_isglobal;   //!
+   TBranch        *b_t_Mu_istracker;   //!
    TBranch        *b_t_Mu_mediumId;   //!
    TBranch        *b_t_Mu_softId;   //!
    TBranch        *b_t_Mu_tightId;   //!
@@ -239,6 +250,7 @@ public :
    TBranch        *b_t_diMuon_eta;   //!
    TBranch        *b_t_diMuon_phi;   //!
    TBranch        *b_t_diMuon_mass;   //!
+   TBranch        *b_t_diJet_mass_mo;   //!
    TBranch        *b_t_MET_phi;   //!
    TBranch        *b_t_MET_pt;   //!
    TBranch        *b_t_MET_sumEt;   //!
@@ -393,6 +405,8 @@ void NtupleVariables::Init(TTree *tree)
    t_Mu_pfRelIso04_all = 0;
    t_Mu_tightCharge = 0;
    t_Mu_isPFcand = 0;
+   t_Mu_isglobal = 0;
+   t_Mu_istracker = 0;
    t_Mu_mediumId = 0;
    t_Mu_softId = 0;
    t_Mu_tightId = 0;
@@ -485,6 +499,9 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_run", &t_run, &b_t_run);
    fChain->SetBranchAddress("t_luminosityBlock", &t_luminosityBlock, &b_t_luminosityBlock);
    fChain->SetBranchAddress("t_event", &t_event, &b_t_event);
+   fChain->SetBranchAddress("t_genWeight", &t_genWeight, &b_t_genWeight);
+   fChain->SetBranchAddress("t_mu1", &t_mu1, &b_t_mu1);
+   fChain->SetBranchAddress("t_mu2", &t_mu2, &b_t_mu2);
    fChain->SetBranchAddress("t_El_charge", &t_El_charge, &b_t_El_charge);
    fChain->SetBranchAddress("t_El_pt", &t_El_pt, &b_t_El_pt);
    fChain->SetBranchAddress("t_El_phi", &t_El_phi, &b_t_El_phi);
@@ -521,6 +538,8 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_Mu_pfRelIso04_all", &t_Mu_pfRelIso04_all, &b_t_Mu_pfRelIso04_all);
    fChain->SetBranchAddress("t_Mu_tightCharge", &t_Mu_tightCharge, &b_t_Mu_tightCharge);
    fChain->SetBranchAddress("t_Mu_isPFcand", &t_Mu_isPFcand, &b_t_Mu_isPFcand);
+   fChain->SetBranchAddress("t_Mu_isglobal", &t_Mu_isglobal, &b_t_Mu_isglobal);
+   fChain->SetBranchAddress("t_Mu_istracker", &t_Mu_istracker, &b_t_Mu_istracker);
    fChain->SetBranchAddress("t_Mu_mediumId", &t_Mu_mediumId, &b_t_Mu_mediumId);
    fChain->SetBranchAddress("t_Mu_softId", &t_Mu_softId, &b_t_Mu_softId);
    fChain->SetBranchAddress("t_Mu_tightId", &t_Mu_tightId, &b_t_Mu_tightId);
@@ -589,6 +608,7 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_diJet_eta", &t_diJet_eta, &b_t_diJet_eta);
    fChain->SetBranchAddress("t_diJet_phi", &t_diJet_phi, &b_t_diJet_phi);
    fChain->SetBranchAddress("t_diJet_mass", &t_diJet_mass, &b_t_diJet_mass);
+   fChain->SetBranchAddress("t_diJet_mass_mo", &t_diJet_mass_mo, &b_t_diJet_mass_mo);
    fChain->SetBranchAddress("t_nbJet", &t_nbJet, &b_t_nbJet);
    fChain->SetBranchAddress("t_bJet_area", &t_bJet_area, &b_t_bJet_area);
    fChain->SetBranchAddress("t_bJet_btagCMVA", &t_bJet_btagCMVA, &b_t_bJet_btagCMVA);

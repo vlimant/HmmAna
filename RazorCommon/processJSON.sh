@@ -1,6 +1,6 @@
-outDir=/mnt/hadoop/store/user/idutta/ElData16_10Sep18/JSON_processed
+outDir=/eos/user/i/idutta/JSON_processed_20Sep18
 mkdir $outDir
-for i in /mnt/hadoop/store/user/idutta/ElData16_10Sep18/*.root;
+for i in /eos/cms/store/user/nlu/Hmm/ntuple/Data2017*root;
 do
     tempname="${i##*/}"
     filename="${tempname%.*}"

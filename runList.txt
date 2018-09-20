@@ -1,1 +1,1 @@
-root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToMuMu_M-125_13TeV_powheg_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/00000/AA4BF847-3785-E811-B130-001E67DFFF5F.root
+/eos/cms/store/user/nlu/Hmm/nanoAOD/sync/data/0E555487-7241-E811-9209-002481CFC92C.root

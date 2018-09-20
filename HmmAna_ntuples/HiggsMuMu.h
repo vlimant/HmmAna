@@ -38,14 +38,17 @@ public :
  
   TFile *oFile;
   //define histograms
-  TH1F *h_mu1pt;
-  TH1F *h_mu2pt;
-  TH1F *h_mu1eta;
-  TH1F *h_mu2eta;
-  TH1F *h_mu1phi;
-  TH1F *h_mu2phi;
-  TH1F *h_mu1E;
-  TH1F *h_mu2E;
+  TH1D *h_mu1pt;
+  TH1D *h_mu2pt;
+  TH1D *h_mu1eta;
+  TH1D *h_mu2eta;
+  TH1D *h_mu1phi;
+  TH1D *h_mu2phi;
+  
+  TH1D *h_diMuon_pt;
+  TH1D *h_diMuon_eta;
+  TH1D *h_diMuon_phi;
+  TH1D *h_diMuon_mass;
 };
 
 #endif
@@ -63,15 +66,18 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   oFile = new TFile(outFileName, "recreate");
   //oFile->mkdir("Cutflow");
   //oFile->cd("Cutflow");
-  h_mu1pt=new TH1D("mu1pt","P_{T} for leading muon",50,0.0,1000.);
-  h_mu1E=new TH1D("mu1E","E for leading muon",50,0.0,1000.);
+  h_mu1pt=new TH1D("mu1pt","P_{T} for leading muon",100,0.0,1000.);
   h_mu1phi=new TH1D("mu1phi","#phi for leading muon",32,3.2,3.2);
   h_mu1eta=new TH1D("mu1eta","#eta for leading muon",40,-4.,4.);
 
-  h_mu2pt=new TH1D("mu2pt","P_{T} for sub-leading muon",50,0.0,1000.);
-  h_mu2E=new TH1D("mu2E","E for sub-leading muon",50,0.0,1000.);
+  h_mu2pt=new TH1D("mu2pt","P_{T} for sub-leading muon",100,0.0,1000.);
   h_mu2phi=new TH1D("mu2phi","#phi for sub-leading muon",32,3.2,3.2);
   h_mu2eta=new TH1D("mu2eta","#eta for sub-leading muon",40,-4.,4.);
+
+  h_diMuon_pt=new TH1D("diMuon_pt","P_{T} for dimuon system",100,0.0,1000.);
+  h_diMuon_eta=new TH1D("diMuon_phi","#phi for dimuon system",32,3.2,3.2);
+  h_diMuon_phi=new TH1D("diMuon_eta","#eta for dimuon system",40,-4.,4.);
+  h_diMuon_mass=new TH1D("diMuon_mass","Mass for dimuon system",20,0.,200.);
 }
 
 HiggsMuMu::HiggsMuMu(const TString &inputFileList, const char *outFileName, const char* dataset, const char *isData)

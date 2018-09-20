@@ -134,7 +134,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	t_run =run;
 	t_luminosityBlock=luminosityBlock;
 	t_event=event;
-	t_genWeight=genWeight;
+	//t_genWeight=genWeight;
 	//t_btagWeight_CSVV2 = btagWeight_CSVV2;
         t_mu1 = index_mu1;
         t_mu2 = index_mu2;
