@@ -38,7 +38,7 @@ datasets:
     vbf_hmumu:
       
       - name: VBFHToMuMu_M125_13TeV_amcatnlo_pythia8
-        nanoaod: /VBFHToMuMu_M125_13TeV_amcatnlo_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+        nanoaod: /VBFHToMuMu_M125_13TeV_amcatnlo_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
         miniaod: /VBFHToMuMu_M125_13TeV_amcatnlo_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.000823 #YR 0.0008208 #Hmm old twiki
         nevents: 941370 #re-pro 
@@ -47,14 +47,14 @@ datasets:
     #Higgs production in association with a W+ boson
     wph_hmumu:
       - name: WplusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8
-        nanoaod: /WplusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/NANOAODSIM
+        nanoaod: /WplusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/NANOAODSIM
         miniaod: /WplusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM
         xs: 0.000183 #YR 0.0001858 #Hmm old twiki
         
     #Higgs production in association with a W- boson
     wmh_hmumu:
       - name: WminusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8
-        nanoaod: /WminusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+        nanoaod: /WminusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
         miniaod: /WminusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.000116 #YR, 0.0001164 #Hmm old twiki
         nevents: 224468 #re-pro 
@@ -63,7 +63,7 @@ datasets:
     #Higgs production in association with a Z boson
     zh_hmumu:
       - name: ZH_HToMuMu_ZToAll_M125_13TeV_powheg_pythia8
-        nanoaod: /ZH_HToMuMu_ZToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+        nanoaod: /ZH_HToMuMu_ZToAll_M125_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
         miniaod: /ZH_HToMuMu_ZToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.000192 #YR
         nevents: 295184 #re-pro 
@@ -72,7 +72,7 @@ datasets:
     #Higgs production in association with a top quark pair   
     tth_hmumu:
       - name: ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8
-        nanoaod: /ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/NANOAODSIM
+        nanoaod: /ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/NANOAODSIM
         miniaod: /ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM
         xs: 0.000110 #YR, 0.00011034496 #FIXME 
         nevents: 294000 #re-pro 
@@ -97,7 +97,7 @@ datasets:
        
     ZZTo4L:
        - name: ZZTo4L_13TeV_powheg_pythia8
-       nanoaod:   /ZZTo4L_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+       nanoaod:   /ZZTo4L_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
                  /ZZTo4L_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/NANOAODSIM
                 /ZZTo4L_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/NANOAODSIM              
        miniaod: /ZZTo4L_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
