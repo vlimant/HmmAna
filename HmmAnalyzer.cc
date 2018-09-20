@@ -81,7 +81,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
             //cout <<"pt "<<Muon_pt[i]<<" Err "<<Muon_ptErr[i] <<endl;
 
             float gen_pt = Muon_pt[i];
-            if(isData=="F"){ 
+            if(*isData=='F'){ 
               for(int j=0;j<nGenPart;j++){
                 if(Muon_charge[i]==-1 && GenPart_pdgId[j]==13 && DeltaR(Muon_eta[i], Muon_phi[i], GenPart_eta[j], GenPart_phi[j]) <0.1){ gen_pt = GenPart_pt[j]; break;}
                 else if(Muon_charge[i]==1 && GenPart_pdgId[j]==-13 && DeltaR(Muon_eta[i], Muon_phi[i], GenPart_eta[j], GenPart_phi[j]) <0.1){ gen_pt = GenPart_pt[j]; break;}
@@ -96,9 +96,9 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
         }
         
         for(int i=0;i<nMuon;i++){
-          if(Muon_isglobal[i] && Muon_istracker[i] &&  mu_pt_Roch_corr[i]>30. && Muon_mediumId[i] && abs(Muon_eta[i])<2.4 && Muon_pfRelIso04_all[i]<0.25){
+          if(/*Muon_isglobal[i] && Muon_istracker[i] &&  */mu_pt_Roch_corr[i]>30. && Muon_mediumId[i] && abs(Muon_eta[i])<2.4 && Muon_pfRelIso04_all[i]<0.25){
               for(int j=i+1;j<nMuon;j++){
-                 if(Muon_isglobal[j] && Muon_istracker[j] &&  Muon_charge[i]*Muon_charge[j]== -1 && mu_pt_Roch_corr[j]>20. && Muon_mediumId[j] && abs(Muon_eta[j])<2.4 && Muon_pfRelIso04_all[j]<0.25){
+                 if(/*Muon_isglobal[j] && Muon_istracker[j] && */ Muon_charge[i]*Muon_charge[j]== -1 && mu_pt_Roch_corr[j]>20. && Muon_mediumId[j] && abs(Muon_eta[j])<2.4 && Muon_pfRelIso04_all[j]<0.25){
                     Event_sel =true; 
                     index_mu1 = i; 
                     index_mu2 = j;
@@ -134,6 +134,8 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	t_run =run;
 	t_luminosityBlock=luminosityBlock;
 	t_event=event;
+	t_genWeight=genWeight;
+	//t_btagWeight_CSVV2 = btagWeight_CSVV2;
         t_mu1 = index_mu1;
         t_mu2 = index_mu2;
 	//cout<<jentry<<" : "<<t_event<<"-------------------\n";
@@ -156,8 +158,8 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    t_Mu_pfRelIso04_all->push_back(Muon_pfRelIso04_all[i]);   
 	    t_Mu_tightCharge->push_back(Muon_tightCharge[i]);   
 	    t_Mu_isPFcand->push_back(Muon_isPFcand[i]);
-            t_Mu_isglobal->push_back(Muon_isglobal[i]);
-            t_Mu_istracker->push_back(Muon_istracker[i]);   
+            //t_Mu_isglobal->push_back(Muon_isglobal[i]);
+            //t_Mu_istracker->push_back(Muon_istracker[i]);   
 	    t_Mu_mediumId->push_back(Muon_mediumId[i]);   
 	    t_Mu_softId->push_back(Muon_softId[i]);   
 	    t_Mu_tightId->push_back(Muon_tightId[i]);    
@@ -336,7 +338,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	t_PV_npvs = PV_npvs;
 	t_PV_npvs = PV_npvsGood;
 
-	if(isData=="F"){
+	if(*isData=='F'){
 
 	  for(int i=0;i<nGenPart;i++){
 	  
