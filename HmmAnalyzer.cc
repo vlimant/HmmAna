@@ -53,7 +53,13 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       // if (Cut(ientry) < 0) continue;
       if(jentry%50000==0) cout <<"entry: "<<jentry<<endl;
-      //if(event!=665332) continue;
+      //if(event!=296503858) continue;
+
+      //sum of genWeight
+      float value_h_sumOfgw = h_sumOfgw->GetBinContent(1);
+      value_h_sumOfgw = value_h_sumOfgw + genWeight;
+      h_sumOfgw->SetBinContent(1,value_h_sumOfgw);
+
       bool trig_decision = false;
 
       if( HLT_IsoMu27==1 /* || HLT_IsoTkMu27_v*==1*/) trig_decision =true;
@@ -107,6 +113,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
                     break;
                  }
               }
+              if(Event_sel =true) break;
           }
        }
       
@@ -136,13 +143,15 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	t_run =run;
 	t_luminosityBlock=luminosityBlock;
 	t_event=event;
-        t_mu1 = index_mu1;
-        t_mu2 = index_mu2;
 	//cout<<jentry<<" : "<<t_event<<"-------------------\n";
-
+        int t_index_mu1 = -999;
+        int t_index_mu2 = -999;
+        int t_index = 0;
 	for(int i=0;i<nMuon;i++){
 	  //if(Muon_pt[i]>20. && fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
           if(fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
+            if(i==index_mu1) t_index_mu1 = t_index;
+            if(i==index_mu2) t_index_mu2 = t_index;
 	    t_Mu_charge->push_back(Muon_charge[i]);   
 	    t_Mu_pt->push_back(mu_pt_Roch_corr[i]);   
 	    t_Mu_ptErr->push_back(mu_ptErr_Roch_corr[i]);   
@@ -165,11 +174,14 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    t_Mu_tightId->push_back(Muon_tightId[i]);    
 	    t_Mu_nStations->push_back(Muon_nStations[i]);   
 	    t_Mu_nTrackerLayers->push_back(Muon_nTrackerLayers[i]);   
+            t_index++;
 	  }
 	}
+        t_mu1 = t_index_mu1;
+        t_mu2 = t_index_mu2;
 	TLorentzVector dimu, mu1,mu2;
-	mu1.SetPtEtaPhiM((*t_Mu_pt)[index_mu1],(*t_Mu_eta)[index_mu1],(*t_Mu_phi)[index_mu1],(*t_Mu_mass)[index_mu1]);
-	mu2.SetPtEtaPhiM((*t_Mu_pt)[index_mu2],(*t_Mu_eta)[index_mu2],(*t_Mu_phi)[index_mu2],(*t_Mu_mass)[index_mu2]);
+	mu1.SetPtEtaPhiM((Muon_pt)[index_mu1],(Muon_eta)[index_mu1],(Muon_phi)[index_mu1],muon_mass);
+	mu2.SetPtEtaPhiM((Muon_pt)[index_mu2],(Muon_eta)[index_mu2],(Muon_phi)[index_mu2],muon_mass);
 	dimu=mu1+mu2;
 	t_diMuon_pt = dimu.Pt();
 	t_diMuon_eta= dimu.Eta();
