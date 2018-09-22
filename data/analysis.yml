@@ -83,7 +83,7 @@ datasets:
       - name: TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8
         nanoaod: /TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/NANOAODSIM
         miniaod: 
-        xs: 85.656 #FIXME
+       
         nevents:  
         sumOfgenWeight:  
         
@@ -181,4 +181,5 @@ datasets:
        
    TTTo2l2Nu:
    nanoaod: /TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+    xs: 85.656 
    sumOfgenWeight: 623402174.0 #central nanoAOD
