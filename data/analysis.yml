@@ -32,7 +32,7 @@ datasets:
         miniaod: /GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.009605 #YR, 0.009618 #Hmm old twiki #unit is pb
         nevents: 
-        sumOfgenWeight: 
+        sumOfgenWeight: 217554238.5 #central nanoAOD
     
     #vector boson Higgs production
     vbf_hmumu:
@@ -50,6 +50,7 @@ datasets:
         nanoaod: /WplusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/NANOAODSIM
         miniaod: /WplusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM
         xs: 0.000183 #YR 0.0001858 #Hmm old twiki
+        sumOfgenWeight:259992.317749#cental nanoAOD
         
     #Higgs production in association with a W- boson
     wmh_hmumu:
@@ -58,7 +59,7 @@ datasets:
         miniaod: /WminusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.000116 #YR, 0.0001164 #Hmm old twiki
         nevents: 
-        sumOfgenWeight: 
+        sumOfgenWeight: 162196.811523 #central nanoAOD
     
     #Higgs production in association with a Z boson
     zh_hmumu:
@@ -76,21 +77,13 @@ datasets:
         miniaod: /ttHToMuMu_M125_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM
         xs: 0.000110 #YR, 0.00011034496 #FIXME 
         nevents: 
-        sumOfgenWeight: 
-        
-    ttjets_ll:
-      - name: TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8
-        nanoaod: /TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-        miniaod: 
-        xs: 85.656 #FIXME
-        nevents:  
-        sumOfgenWeight:  
+        sumOfgenWeight: 155014.531738
         
     ttjets_sl:
       - name: TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8
         nanoaod: /TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/NANOAODSIM
         miniaod: 
-        xs:  #FIXME
+        xs: 85.656 #FIXME
         nevents:  
         sumOfgenWeight:  
         
@@ -185,3 +178,6 @@ datasets:
        xs: 0.2001 
        nevents:  
        sumOfgenWeight:  
+       
+   TTTo2l2Nu:
+   sumOfgenWeight: 623402174.0 #central nanoAOD
