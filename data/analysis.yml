@@ -135,7 +135,7 @@ datasets:
        - name: WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8
        nanoaod:               
        miniaod: /WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
-       xs: 
+       xs: 1.161e+01 +- 5.392e-02 pb #GenXSecAnalyzer
        nevents: 
        sumOfgenWeight: 352741934.219
         
@@ -159,7 +159,7 @@ datasets:
        - name: WWToLNuQQ_NNPDF31_TuneCP5_13TeV-powheg-pythia8
        nanoaod:               
        miniaod: /WWToLNuQQ_NNPDF31_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-       xs:
+       xs: 4.599e+01 +- 2.930e-02 pb #GenXSecAnalyzer
        nevents:  
        sumOfgenWeight:  405648754.016
         
