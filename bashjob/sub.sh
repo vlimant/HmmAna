@@ -12,7 +12,7 @@ do
    echo "$p"
    count=$((count+1))
    prefix=${i}_${count}
-   echo "root://cms-xrd-global.cern.ch/$p" >> ${prefix}_input_list.txt
+   echo "root://cms-xrd-global.cern.ch/$p" > ${prefix}_input_list.txt
    input=${prefix}_input_list.txt
    data=data
    path=/eos/cms/store/user/nlu/Hmm/ntuple
