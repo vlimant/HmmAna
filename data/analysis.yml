@@ -137,7 +137,7 @@ datasets:
        miniaod: /WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
        xs: 
        nevents: 
-       sumOfgenWeight: 
+       sumOfgenWeight: 352741934.219
         
     WZTo2L2Q:
        - name: WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8
@@ -145,7 +145,7 @@ datasets:
        miniaod: /WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs: 5.595
        nevents: 
-       sumOfgenWeight: 
+       sumOfgenWeight: 255256973.25
         
     WZTo3LNu:
        - name: WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8 
@@ -153,7 +153,7 @@ datasets:
        miniaod: /WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs: 4.42965
        nevents: 
-       sumOfgenWeight: 
+       sumOfgenWeight: 93694769.25
         
     WWToLNuQQ:
        - name: WWToLNuQQ_NNPDF31_TuneCP5_13TeV-powheg-pythia8
@@ -161,7 +161,7 @@ datasets:
        miniaod: /WWToLNuQQ_NNPDF31_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs:
        nevents:  
-       sumOfgenWeight:  
+       sumOfgenWeight:  405648754.016
         
     WWTo2L2Nu:
        - name: WWTo2L2Nu_NNPDF31_TuneCP5Up_13TeV-powheg-pythia8
@@ -169,7 +169,7 @@ datasets:
        miniaod: /WWTo2L2Nu_NNPDF31_TuneCP5Up_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
        xs: 12.46
        nevents: 
-       sumOfgenWeight: 
+       sumOfgenWeight: 177178.179688
         
    TTWJetsToLNu: 
        - name: TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8
@@ -183,3 +183,11 @@ datasets:
    nanoaod: /TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
     xs: 85.656 
    sumOfgenWeight: 623402174.0 #central nanoAOD
+   
+   WWW_4F:
+   nanoaod: /WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM 
+   xs:0.2086
+   
+   WWZ_4F:
+   nanoaod: /WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+   xs:0.1651
