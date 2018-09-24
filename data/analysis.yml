@@ -187,7 +187,9 @@ datasets:
    WWW_4F:
    nanoaod: /WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM 
    xs:0.2086
+   sumOfgenWeight: 50039.244873
    
    WWZ_4F:
    nanoaod: /WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
    xs:0.1651
+   sumOfgenWeight: 41205.3044434
