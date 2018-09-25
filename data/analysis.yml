@@ -68,7 +68,7 @@ datasets:
         miniaod: /ZH_HToMuMu_ZToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.000192 #YR
         nevents: 
-        sumOfgenWeight: 
+        sumOfgenWeight: 13507.2419434
         
     #Higgs production in association with a top quark pair   
     tth_hmumu:
@@ -130,6 +130,7 @@ datasets:
        nanoaod: /ZZ_TuneCP5_13TeV-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
        miniaod: /ZZ_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs: 16.523
+       sumOfgenWeight: 1949768.0
        
     WZTo1L1Nu2Q:
        - name: WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8
