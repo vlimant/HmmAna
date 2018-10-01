@@ -16,10 +16,8 @@
 #include <cmath>
 // Header file for the classes stored in the TTree if any.
 #include "vector"
-#include "vector"
-#include "vector"
 #include "NtupleVariables.h"
-#include "TH1F.h"
+#include "TH1D.h"
 #include "TH2F.h"
 #include "TH3F.h"
 #include "TLorentzVector.h"
@@ -34,10 +32,50 @@ public :
   Bool_t   FillChain(TChain *chain, const TString &inputFileList);
   Long64_t LoadTree(Long64_t entry);
   void     EventLoop(const char *, const char *);
+  void     Categorization(const char *, const char *, float , float);
+  void     GenInfo(const char *, const char *);
   void     BookHistogram(const char *);
  
   TFile *oFile;
+  TTree *cattree;
+  int run = -999;
+  float event = -999.;
+  float genWeight = -999.;
+  int cat_index = -999.;
+  float Higgs_mass = -999.;
+  float Higgs_pt = -999.;
+  float Higgs_eta = -999.;
+  float extralep_pfRelIso03 = -999.;
+  float extralep_pt = -999.;
+  float extralep_eta = -999.;
+  float dRlepHiggs = -999.;
+  float dEtamm = -999.;
+  float dRmm = -999.;
+  float dPhimm = -999.;  
+  float MET_phi = -999.;
+  float MET_pt = -999.;
+  std::vector<int>   *l1_index;
+  std::vector<int>   *l2_index;
+
   //define histograms
+  TH1D *catyield;
+  TH1D *h_diMuon_mass_ggH;
+  TH1D *h_diMuon_mass_VBF;
+  TH1D *h_diMuon_mass_VHHad;
+  TH1D *h_diMuon_mass_ZHll;
+  TH1D *h_diMuon_mass_WHlv;
+  TH1D *h_diMuon_mass_ttHLep;
+  TH1D *h_diMuon_mass_ttHHad;  
+  TH1D *h_dRlepH;
+  TH1D *h_extralep1_pt;
+  TH1D *h_extralep1_eta;
+  
+  TH1D *h_gen_diMuon_m;
+  TH1D *h_gen_extralep;
+  TH1D *h_gen_dRlepH;
+  TH1D *h_gen_extralep1_pt;
+  TH1D *h_gen_extralep1_eta;
+
   TH1D *h_mu1pt;
   TH1D *h_mu2pt;
   TH1D *h_mu1eta;
@@ -91,6 +129,48 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   oFile = new TFile(outFileName, "recreate");
   //oFile->mkdir("Cutflow");
   //oFile->cd("Cutflow");
+  cattree =  new TTree("cattree","cattree");
+  l1_index = new std::vector<int>();
+  l2_index= new std::vector<int>(); 
+  l1_index->clear();
+  l2_index->clear();
+  cattree->Branch("run", &run,"run/i");
+  cattree->Branch("event", &event,"event/l");
+  cattree->Branch("cat_index", &cat_index, "cat_index/i");
+  cattree->Branch("genWeight", &genWeight,"genWeight/F");
+  cattree->Branch("Higgs_mass", &Higgs_mass,"Higgs_mass/F");
+  cattree->Branch("Higgs_pt", &Higgs_pt,"Higgs_pt/F");
+  cattree->Branch("Higgs_eta", &Higgs_eta,"Higgs_eta/F");
+  cattree->Branch("extralep_pfRelIso03", &extralep_pfRelIso03, "extralep_pfRelIso03/F");
+  cattree->Branch("extralep_pt", &extralep_pt,"extralep_pt/F");
+  cattree->Branch("extralep_eta", &extralep_eta,"extralep_eta/F");
+  cattree->Branch("dRlepHiggs", &dRlepHiggs,"dRlepHiggs/F");
+  cattree->Branch("dRmm", &dRmm,"dRmm/F");
+  cattree->Branch("dEtamm", &dEtamm,"dEtamm/F");
+  cattree->Branch("dPhimm", &dPhimm,"dPhimm/F");  
+  cattree->Branch("l1_index", "vector<int>", &l1_index);
+  cattree->Branch("l2_index", "vector<int>", &l2_index);
+  cattree->Branch("MET_phi", &MET_phi, "MET_phi/F");
+  cattree->Branch("MET_pt", &MET_pt, "MET_pt/F");
+
+  catyield = new TH1D("h_category_yield","h_category_yield",10,0,10);
+  h_diMuon_mass_ggH = new TH1D("h_diMuon_mass_ggH","diMuon_mass_ggH",10,120,130);
+  h_diMuon_mass_VBF = new TH1D("h_diMuon_mass_VBF","diMuon_mass_VBF",10,120,130);
+  h_diMuon_mass_VHHad = new TH1D("h_diMuon_mass_VHHad","diMuon_mass_VHHad",10,120,130);
+  h_diMuon_mass_ZHll = new TH1D("h_diMuon_mass_ZHll","diMuon_mass_ZHll",10,120,130);
+  h_diMuon_mass_WHlv = new TH1D("h_diMuon_mass_WHlv","diMuon_mass_WHlv",10,120,130);
+  h_diMuon_mass_ttHLep = new TH1D("h_diMuon_mass_ttHLep","diMuon_mass_ttHLep",10,120,130);
+  h_diMuon_mass_ttHHad = new TH1D("h_diMuon_mass_ttHHad","diMuon_mass_ttHHad",10,120,130);
+  h_dRlepH = new TH1D("h_dRlepH","deltaR(extra lepton and Higgs)",10,0,10);
+  h_extralep1_pt = new TH1D("h_extralep1_pt","extralep1_pt",10,0,100);
+  h_extralep1_eta = new TH1D("h_extralep1_eta","extralep1_eta",10,-5,5);
+
+  h_gen_diMuon_m = new TH1D("h_gen_higgs_mass","Higgs mass",10,110,150);
+  h_gen_extralep = new TH1D("h_gen_extralep","number of extra lepton",5,0,5);
+  h_gen_dRlepH = new TH1D("h_gen_dRlepH","gen_deltaR(extra lepton and Higgs)",10,0,10);
+  h_gen_extralep1_pt = new TH1D("h_gen_extralep1_pt","gen_extralep1_pt",10,0,100);
+  h_gen_extralep1_eta = new TH1D("h_gen_extralep1_eta","gen_extralep1_eta",10,-5,5);
+
   h_mu1pt=new TH1D("mu1pt","P_{T} for leading muon",100,0.0,1000.);
   h_mu1phi=new TH1D("mu1phi","#phi for leading muon",32,-3.2,3.2);
   h_mu1eta=new TH1D("mu1eta","#eta for leading muon",40,-4.,4.);
