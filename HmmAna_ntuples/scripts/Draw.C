@@ -5,7 +5,7 @@
 #include <fstream>
 #include <cmath>
 #include "vector"
-#include "NtupleVariables.h"
+//#include "NtupleVariables.h"
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TH3F.h"
@@ -15,6 +15,9 @@
 #include "TAxis.h"
 
 void Draw(){
+
+  FILE * pFile;
+  pFile = fopen ("category_exp_yields.txt","w");
  
   TFile rtFile_ggH("/eos/cms/store/user/nlu/Hmm/categorization/Sept27/merged/ggH.root");
   TFile rtFile_VBFH("/eos/cms/store/user/nlu/Hmm/categorization/Sept27/merged/VBFH.root");
@@ -97,18 +100,24 @@ void Draw(){
   h_VV->Add(h_WZTo1L1Nu2Q);
   h_VV->Add(h_WZTo3LNu);
 
-  int cat = 3;  
-  TString cat_name[] = {"ttHLep","ttHHad","ttHothers","ZHll","WHlv","VBF","VHHad","ggH"};
+  //int icat = 3;  
+ for(int icat=1; icat<9; icat++){
+  TString icat_name[] = {"ttHLep","ttHHad","ttHothers","ZHll","WHlv","VBF","VHHad","ggH"};
 
-  Float_t vals[] = {(float)h_ggH->GetBinContent(cat),(float)h_VBFH->GetBinContent(cat),(float)h_ZH->GetBinContent(cat), (float)h_WpH->GetBinContent(cat),(float)h_WmH->GetBinContent(cat), (float)h_ttH->GetBinContent(cat),(float)h_DY->GetBinContent(cat), (float)h_ttl->GetBinContent(cat), (float)h_tt2l->GetBinContent(cat), (float)h_VV->GetBinContent(cat), (float)h_VVV->GetBinContent(cat)};
+  Float_t vals[] = {(float)h_ggH->GetBinContent(icat),(float)h_VBFH->GetBinContent(icat),(float)h_ZH->GetBinContent(icat), (float)h_WpH->GetBinContent(icat),(float)h_WmH->GetBinContent(icat), (float)h_ttH->GetBinContent(icat),(float)h_DY->GetBinContent(icat), (float)h_ttl->GetBinContent(icat), (float)h_tt2l->GetBinContent(icat), (float)h_VV->GetBinContent(icat), (float)h_VVV->GetBinContent(icat)};
    Int_t colors[] = {1,2,3,4,5,6,7,8,9,10,11};
    Int_t nvals = sizeof(vals)/sizeof(vals[0]);
 
    TString name[] = {"ggH", "VBFH","ZH","WpH","WmH","ttH","DY","tt-semileptonic","tt2l2v","VV","VVV"};
 
+   fprintf (pFile, "===== Expected number of events in %s =====\n", icat_name[icat-1].Data());
+   cout <<"Expected number of events in "<<icat_name[icat-1]<<endl;
    for(int i=0; i<11; i++){
-      cout <<"expected number of events: "<<name[i]<<": "<<vals[i]<<endl;
+      fprintf (pFile, "%s : %.3f \n", name[i].Data(), vals[i]);
+      cout <<name[i]<<": "<<vals[i]<<endl;
    }
+   fprintf (pFile, "\n");
+   /*
    TCanvas *cpie = new TCanvas("cpie","TPie test",700,700);
    TPie *pie1 = new TPie("pie1",
       "Pie with offset and no colors",nvals,vals,colors);
@@ -118,5 +127,7 @@ void Draw(){
         pie1->GetSlice(i)->SetTitle(name[i]);
    }
    pie1->Draw("rsc");
-   cpie->SaveAs("ttH"+cat_name[cat-1]+".png");
+   cpie->SaveAs("ttH"+icat_name[icat-1]+".png");
+   */
+ }
 }
