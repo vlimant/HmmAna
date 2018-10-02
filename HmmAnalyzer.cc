@@ -45,7 +45,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
   //cout<<"booked tree branches\n";
   float muon_mass = 0.1056583745;
   Long64_t nentries = fChain->GetEntriesFast();
-
+  nentries = 100;
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
@@ -53,12 +53,15 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       // if (Cut(ientry) < 0) continue;
       if(jentry%50000==0) cout <<"entry: "<<jentry<<endl;
-      //if(event!=296503858) continue;
+      clearTreeVectors();
 
       //sum of genWeight
-      float value_h_sumOfgw = h_sumOfgw->GetBinContent(1);
-      value_h_sumOfgw = value_h_sumOfgw + genWeight;
-      h_sumOfgw->SetBinContent(1,value_h_sumOfgw);
+      float value_h_sumOfgw = 0;
+      if (isData!="T"){
+         h_sumOfgw->GetBinContent(1);
+         value_h_sumOfgw = value_h_sumOfgw + genWeight;
+         h_sumOfgw->SetBinContent(1,value_h_sumOfgw);
+      }
 
       bool trig_decision = false;
 
@@ -104,9 +107,9 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
         }
         
         for(int i=0;i<nMuon;i++){
-          if(/*Muon_isglobal[i] && Muon_istracker[i] &&  */mu_pt_Roch_corr[i]>30. && Muon_mediumId[i] && abs(Muon_eta[i])<2.4 && Muon_pfRelIso04_all[i]<0.25){
+          if(/*Muon_isglobal[i] && Muon_istracker[i] &&*/ mu_pt_Roch_corr[i]>30. && Muon_mediumId[i] && abs(Muon_eta[i])<2.4 && Muon_pfRelIso04_all[i]<0.25){
               for(int j=i+1;j<nMuon;j++){
-                 if(/*Muon_isglobal[j] && Muon_istracker[j] && */ Muon_charge[i]*Muon_charge[j]== -1 && mu_pt_Roch_corr[j]>20. && Muon_mediumId[j] && abs(Muon_eta[j])<2.4 && Muon_pfRelIso04_all[j]<0.25){
+                 if(/*Muon_isglobal[j] && Muon_istracker[j] &&*/ Muon_charge[i]*Muon_charge[j]== -1 && mu_pt_Roch_corr[j]>20. && Muon_mediumId[j] && abs(Muon_eta[j])<2.4 && Muon_pfRelIso04_all[j]<0.25){
                     Event_sel =true; 
                     index_mu1 = i; 
                     index_mu2 = j;
@@ -139,7 +142,6 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       
       }
       if(Event_sel && trig_match){
-	//cout<<event<<endl;
 	t_run =run;
 	t_luminosityBlock=luminosityBlock;
 	t_event=event;
@@ -148,10 +150,15 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
         int t_index_mu2 = -999;
         int t_index = 0;
 	for(int i=0;i<nMuon;i++){
-	  //if(Muon_pt[i]>20. && fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
           if(fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
+            /*
+            if(*isData=='F'){
+               cout <<"eff SF: "<<Mu_eff_SF.getSF(13,Muon_pt[i],Muon_eta[i])<<endl;
+            }
+            */
             if(i==index_mu1) t_index_mu1 = t_index;
             if(i==index_mu2) t_index_mu2 = t_index;
+            if(*isData=='F') t_Mu_EffSF->push_back(Mu_eff_SF.getSF(13,Muon_pt[i],Muon_eta[i]));
 	    t_Mu_charge->push_back(Muon_charge[i]);   
 	    t_Mu_pt->push_back(mu_pt_Roch_corr[i]);   
 	    t_Mu_ptErr->push_back(mu_ptErr_Roch_corr[i]);   
@@ -180,8 +187,8 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
         t_mu1 = t_index_mu1;
         t_mu2 = t_index_mu2;
 	TLorentzVector dimu, mu1,mu2;
-	mu1.SetPtEtaPhiM((Muon_pt)[index_mu1],(Muon_eta)[index_mu1],(Muon_phi)[index_mu1],muon_mass);
-	mu2.SetPtEtaPhiM((Muon_pt)[index_mu2],(Muon_eta)[index_mu2],(Muon_phi)[index_mu2],muon_mass);
+	mu1.SetPtEtaPhiM((mu_pt_Roch_corr)[index_mu1],(Muon_eta)[index_mu1],(Muon_phi)[index_mu1],muon_mass);
+	mu2.SetPtEtaPhiM((mu_pt_Roch_corr)[index_mu2],(Muon_eta)[index_mu2],(Muon_phi)[index_mu2],muon_mass);
 	dimu=mu1+mu2;
 	t_diMuon_pt = dimu.Pt();
 	t_diMuon_eta= dimu.Eta();
@@ -278,6 +285,8 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 
 
 	for(int i=0;i<nElectron;i++){
+          t_El_genPartIdx->push_back(Electron_genPartIdx[i]);
+          t_El_genPartFlav->push_back(Electron_genPartFlav[i]);
 	  t_El_charge->push_back(Electron_charge[i]);
 	  t_El_pt->push_back(Electron_pt[i]);
 	  t_El_phi->push_back(Electron_phi[i]);
@@ -293,9 +302,11 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  t_El_dxyErr->push_back(Electron_dxyErr[i]);   
 	  t_El_dz->push_back(Electron_dz[i]);   
 	  t_El_dzErr->push_back(Electron_dzErr[i]);   
+          t_Electron_mvaFall17Iso->push_back(Electron_mvaFall17Iso[i]);
 	  t_Electron_mvaFall17Iso_WP80->push_back(Electron_mvaFall17Iso_WP80[i]);
 	  t_Electron_mvaFall17Iso_WP90->push_back(Electron_mvaFall17Iso_WP90[i]);
 	  t_Electron_mvaFall17Iso_WPL->push_back(Electron_mvaFall17Iso_WPL[i]);
+          t_Electron_mvaFall17noIso->push_back(Electron_mvaFall17noIso[i]);
 	  t_Electron_mvaFall17noIso_WP80->push_back(Electron_mvaFall17noIso_WP80[i]);
 	  t_Electron_mvaFall17noIso_WP90->push_back(Electron_mvaFall17noIso_WP90[i]);
 	  t_Electron_mvaFall17noIso_WPL->push_back(Electron_mvaFall17noIso_WPL[i]);
@@ -366,8 +377,9 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  }
 	}
       
+      //cout <<run<<" "<<luminosityBlock<<" "<<event<<" "<<mu_pt_Roch_corr[t_index_mu1]<<" "<<Muon_eta[t_index_mu1]<<mu_pt_Roch_corr[t_index_mu2]<<" "<<Muon_eta[t_index_mu2]<<" "<<t_diMuon_mass<<" "<<t_nJet<<" "<<t_diJet_mass_mo<<" "<<t_nbJet<<endl;
+
       tree->Fill();
       }
-      clearTreeVectors();
    }
 }

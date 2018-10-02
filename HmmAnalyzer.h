@@ -28,6 +28,7 @@
 #include "TF1.h"
 #include "TAxis.h"
 #include "RoccoR.h"
+#include "LeptonEfficiencyCorrector.h"
 
 #ifdef __CINT__
 
@@ -53,8 +54,14 @@ class HmmAnalyzer : public MainEvent {
   
   void clearTreeVectors();
   void BookTreeBranches();
+  TH1D *h_sumOfgw = new TH1D("h_sumOfgenWeight","h_sumOfgenWeight",2,0,2);
   RoccoR _Roch_calib;
+  std::vector<std::string> muon_effSF_files;
+  std::vector<std::string> histo_names;
+  LeptonEfficiencyCorrector Mu_eff_SF;
+
   TFile *oFile;
+  //TFile *ohistFile;
   TTree* tree;
   uint          t_run;
   uint          t_luminosityBlock;
@@ -62,6 +69,8 @@ class HmmAnalyzer : public MainEvent {
   float       t_genWeight;
   int         t_mu1;
   int         t_mu2;
+  std::vector<int>           *t_El_genPartIdx;
+  std::vector<UChar_t>       *t_El_genPartFlav;
   std::vector <int>          *t_El_charge;
   std::vector<float>         *t_El_pt;
   std::vector<float>         *t_El_phi;
@@ -76,16 +85,20 @@ class HmmAnalyzer : public MainEvent {
   std::vector<float>         *t_El_dxy;   
   std::vector<float>         *t_El_dxyErr;   
   std::vector<float>         *t_El_dz;   
-  std::vector<float>         *t_El_dzErr;   
+  std::vector<float>         *t_El_dzErr;  
+  std::vector<float>         *t_Electron_mvaFall17Iso; 
   std::vector<bool>         *t_Electron_mvaFall17Iso_WP80;   //[nElectron]
   std::vector<bool>         *t_Electron_mvaFall17Iso_WP90;   //[nElectron]
   std::vector<bool>         *t_Electron_mvaFall17Iso_WPL;   //[nElectron]
+  std::vector<float>        *t_Electron_mvaFall17noIso;
   std::vector<bool>         *t_Electron_mvaFall17noIso_WP80;   //[nElectron]
   std::vector<bool>         *t_Electron_mvaFall17noIso_WP90;   //[nElectron]
   std::vector<bool>         *t_Electron_mvaFall17noIso_WPL;   //[nElectron]
   
-
-  std::vector<int>           *t_Mu_charge;   
+  std::vector<int>           *t_Mu_genPartIdx;
+  std::vector<UChar_t>       *t_Mu_genPartFlav;
+  std::vector<int>           *t_Mu_charge;  
+  std::vector<float>         *t_Mu_EffSF; 
   std::vector<float>         *t_Mu_pt;   
   std::vector<float>         *t_Mu_ptErr;   
   std::vector<float>         *t_Mu_phi;   
@@ -229,6 +242,22 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
   std::cout << "Rochester correction files: " << path_RochCor << std::endl;
   _Roch_calib.init(path_RochCor);
 
+  muon_effSF_files.clear();
+  histo_names.clear();
+  std::string Mu_Trg_file = "data/leptonSF/EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
+  std::string Mu_ID_file = "data/leptonSF/RunBCDEF_SF_ID.root";
+  std::string Mu_Iso_file = "data/leptonSF/RunBCDEF_SF_ISO.root";
+  muon_effSF_files.push_back(Mu_Trg_file);
+  muon_effSF_files.push_back(Mu_ID_file);
+  muon_effSF_files.push_back(Mu_Iso_file);
+  std::string Mu_Trg_name = "IsoMu27_PtEtaBins/abseta_pt_ratio";
+  std::string Mu_ID_name = "NUM_MediumID_DEN_genTracks_pt_abseta";
+  std::string Mu_Iso_name = "NUM_LooseRelIso_DEN_MediumID_pt_abseta";
+  histo_names.push_back(Mu_Trg_name);
+  histo_names.push_back(Mu_ID_name);
+  histo_names.push_back(Mu_Iso_name);
+  Mu_eff_SF.init(muon_effSF_files,histo_names);
+
   TChain *tree = new TChain("Events");
 
   if( ! FillChain(tree, inputFileList) ) {
@@ -243,6 +272,8 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
   
   MainEvent::Init(tree);
   oFile = new TFile(outFileName, "recreate");
+  TString histname(outFileName);
+  //ohistFile = new TFile("hist_"+histname, "recreate");
   BookTreeBranches();
 }
 
@@ -337,9 +368,9 @@ bool HmmAnalyzer::FillChain(TChain *chain, const TString &inputFileList) {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
    oFile->cd();
+   h_sumOfgw->Write();
    oFile->Write();
    oFile->Close();
-
 }
 
 Long64_t HmmAnalyzer::LoadTree(Long64_t entry)
@@ -364,6 +395,8 @@ void HmmAnalyzer::clearTreeVectors(){
   t_mu2=-999;
   t_nJet=0;
   t_nbJet=0;
+  t_El_genPartIdx->clear();
+  t_El_genPartFlav->clear();
   t_El_charge->clear();
   t_El_pt->clear();
   t_El_phi->clear();
@@ -378,16 +411,20 @@ void HmmAnalyzer::clearTreeVectors(){
   t_El_dxy->clear();   
   t_El_dxyErr->clear();   
   t_El_dz->clear();   
-  t_El_dzErr->clear();   
+  t_El_dzErr->clear();  
+  t_Electron_mvaFall17Iso->clear(); 
   t_Electron_mvaFall17Iso_WP80->clear();
   t_Electron_mvaFall17Iso_WP90->clear();
   t_Electron_mvaFall17Iso_WPL->clear();
+  t_Electron_mvaFall17noIso->clear();
   t_Electron_mvaFall17noIso_WP80->clear();
   t_Electron_mvaFall17noIso_WP90->clear();
   t_Electron_mvaFall17noIso_WPL->clear();
 
-  
+  t_Mu_genPartIdx->clear();
+  t_Mu_genPartFlav->clear();  
   t_Mu_charge->clear();
+  t_Mu_EffSF->clear();
   t_Mu_pt->clear();   
   t_Mu_ptErr->clear();   
   t_Mu_phi->clear();   
@@ -527,7 +564,9 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_genWeight", &t_genWeight,"t_genWeight/F");
   tree->Branch("t_mu1", &t_mu1,"t_mu1/i");
   tree->Branch("t_mu2", &t_mu2,"t_mu2/i");
- 
+
+  t_El_genPartIdx= new std::vector<int>();
+  t_El_genPartFlav= new std::vector<UChar_t>();
   t_El_charge= new std::vector<int>();
   t_El_pt= new std::vector<float>();
   t_El_phi= new std::vector<float>();
@@ -542,14 +581,18 @@ void HmmAnalyzer::BookTreeBranches(){
   t_El_dxy= new std::vector<float>();   
   t_El_dxyErr= new std::vector<float>();   
   t_El_dz= new std::vector<float>();   
-  t_El_dzErr= new std::vector<float>();   
+  t_El_dzErr= new std::vector<float>();  
+  t_Electron_mvaFall17Iso= new std::vector<float>(); 
   t_Electron_mvaFall17Iso_WP80= new std::vector<bool>();   //[nElectron]
   t_Electron_mvaFall17Iso_WP90= new std::vector<bool>();   //[nElectron]
   t_Electron_mvaFall17Iso_WPL= new std::vector<bool>();   //[nElectron]
+  t_Electron_mvaFall17noIso= new std::vector<float>();
   t_Electron_mvaFall17noIso_WP80= new std::vector<bool>();   //[nElectron]
   t_Electron_mvaFall17noIso_WP90= new std::vector<bool>();   //[nElectron]
   t_Electron_mvaFall17noIso_WPL= new std::vector<bool>();   //[nElectron]
-  
+ 
+  tree->Branch("t_El_genPartIdx",   "vector<int>",        &t_El_genPartIdx);
+  tree->Branch("t_El_genPartFlav",   "vector<UChar_t>",       &t_El_genPartFlav); 
   tree->Branch("t_El_charge",        "vector<int>"         ,&t_El_charge);
   tree->Branch("t_El_pt",        "vector<float>"         ,&t_El_pt);
   tree->Branch("t_El_phi",        "vector<float>"         ,&t_El_phi);
@@ -565,15 +608,19 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_El_dxyErr",        "vector<float>"         ,&t_El_dxyErr);   
   tree->Branch("t_El_dz",        "vector<float>"         ,&t_El_dz);   
   tree->Branch("t_El_dzErr",        "vector<float>"         ,&t_El_dzErr);   
-    
+  tree->Branch("t_Electron_mvaFall17Iso",        "vector<float>",         &t_Electron_mvaFall17Iso); 
   tree->Branch("t_Electron_mvaFall17Iso_WP80",        "vector<bool>",         &t_Electron_mvaFall17Iso_WP80);
   tree->Branch("t_Electron_mvaFall17Iso_WP90",        "vector<bool>",         &t_Electron_mvaFall17Iso_WP90);
   tree->Branch("t_Electron_mvaFall17Iso_WPL",        "vector<bool>",         &t_Electron_mvaFall17Iso_WPL);
+  tree->Branch("t_Electron_mvaFall17noIso",        "vector<float>",         &t_Electron_mvaFall17noIso);
   tree->Branch("t_Electron_mvaFall17noIso_WP80",        "vector<bool>",         &t_Electron_mvaFall17noIso_WP80);
   tree->Branch("t_Electron_mvaFall17noIso_WP90",        "vector<bool>",         &t_Electron_mvaFall17noIso_WP90);
   tree->Branch("t_Electron_mvaFall17noIso_WPL",        "vector<bool>",         &t_Electron_mvaFall17noIso_WPL);
-  
+ 
+  t_Mu_genPartIdx= new std::vector<int>();
+  t_Mu_genPartFlav= new std::vector<UChar_t>(); 
   t_Mu_charge= new std::vector<int>();   
+  t_Mu_EffSF= new std::vector<float>();
   t_Mu_pt= new std::vector<float>();   
   t_Mu_ptErr= new std::vector<float>();   
   t_Mu_phi= new std::vector<float>();   
@@ -596,7 +643,10 @@ void HmmAnalyzer::BookTreeBranches(){
   t_Mu_nStations= new std::vector<int>();   
   t_Mu_nTrackerLayers= new std::vector<int>();   
 
+  tree->Branch("t_Mu_genPartIdx"    , "vector<int>"     ,&t_Mu_genPartIdx);
+  tree->Branch("t_Mu_genPartFlav",  "vector<UChar_t>",   &t_Mu_genPartFlav);
   tree->Branch("t_Mu_charge"    , "vector<int>"         ,&t_Mu_charge );
+  tree->Branch("t_Mu_EffSF",    "vector<float>"   ,&t_Mu_EffSF);
   tree->Branch("t_Mu_pt"    , "vector<float>"         ,&t_Mu_pt );   
   tree->Branch("t_Mu_ptErr"    , "vector<float>"         ,&t_Mu_ptErr );   
   tree->Branch("t_Mu_phi"    , "vector<float>"         ,&t_Mu_phi );   
