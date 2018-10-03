@@ -68,7 +68,7 @@ datasets:
         miniaod: /ZH_HToMuMu_ZToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.000192 #YR
         nevents: 
-        sumOfgenWeight: 
+        sumOfgenWeight: 13507.2419434
         
     #Higgs production in association with a top quark pair   
     tth_hmumu:
@@ -83,7 +83,7 @@ datasets:
       - name: TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8
         nanoaod: /TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/NANOAODSIM
         miniaod: 
-       
+        xs:  6.871e+02 +- 5.174e-01 pb #GenXSecAnalyzer
         nevents:  
         sumOfgenWeight:  
         
@@ -127,15 +127,16 @@ datasets:
         
     ZZ:
        - name: ZZ_TuneCP5_13TeV-pythia8
-       nanoaod:
+       nanoaod: /ZZ_TuneCP5_13TeV-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
        miniaod: /ZZ_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs: 16.523
+       sumOfgenWeight: 1949768.0
        
     WZTo1L1Nu2Q:
        - name: WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8
        nanoaod:               
        miniaod: /WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
-       xs: 
+       xs: 1.161e+01 +- 5.392e-02 pb #GenXSecAnalyzer
        nevents: 
        sumOfgenWeight: 352741934.219
         
@@ -159,7 +160,7 @@ datasets:
        - name: WWToLNuQQ_NNPDF31_TuneCP5_13TeV-powheg-pythia8
        nanoaod:               
        miniaod: /WWToLNuQQ_NNPDF31_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-       xs:
+       xs: 4.599e+01 +- 2.930e-02 pb #GenXSecAnalyzer
        nevents:  
        sumOfgenWeight:  405648754.016
         
@@ -187,7 +188,9 @@ datasets:
    WWW_4F:
    nanoaod: /WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM 
    xs:0.2086
+   sumOfgenWeight: 50039.244873
    
    WWZ_4F:
    nanoaod: /WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
    xs:0.1651
+   sumOfgenWeight: 41205.3044434

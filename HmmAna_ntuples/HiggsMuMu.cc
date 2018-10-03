@@ -20,9 +20,345 @@ int main(int argc, char* argv[])
   const char *isData        = argv[4];
   HiggsMuMu hmm(inputFileList, outFileName, data, isData);
   cout << "dataset " << data << " " << endl;
-  hmm.EventLoop(data, isData);
-
+  //hmm.EventLoop(data, isData);
+  hmm.Categorization(data, isData, 100, 140);
+  //hmm.GenInfo(data, isData);
   return 0;
+}
+
+void HiggsMuMu::GenInfo(const char *data,const char *isData)
+{  
+   
+
+   double muon_mass = 0.1056583745;
+   double el_mass = 0.000511;
+
+   if (fChain == 0) return;
+   Long64_t nentries = fChain->GetEntriesFast();
+   Long64_t nbytes = 0, nb = 0;
+   for (Long64_t jentry=0; jentry<nentries;jentry++) {
+      Long64_t ientry = LoadTree(jentry);
+
+      if (ientry < 0) break;
+      nb = fChain->GetEntry(jentry);   nbytes += nb;
+
+      int index_mu1 =0, index_mu2=1;
+      vector<int> el;
+      vector<int> mu;
+      vector<int> extralep;
+      el.clear();
+      mu.clear();
+      extralep.clear();
+      TLorentzVector dimu, mu1,mu2;
+      
+      double evt_wt;
+      if(*isData=='T'){evt_wt=1.;}
+      else evt_wt=t_genWeight;
+
+      
+      int n_GenPart = t_GenPart_pdgId->size();
+      for( int i=0; i<n_GenPart; i++){
+        for( int j=i+1; j<n_GenPart; j++){
+         if(abs((*t_GenPart_pdgId)[i]) == 13 && (*t_GenPart_status)[i] ==1 && abs((*t_GenPart_pdgId)[j]) == 13 && (*t_GenPart_status)[j] ==1){
+             mu1.SetPtEtaPhiM((*t_Mu_pt)[index_mu1],(*t_Mu_eta)[index_mu1],(*t_Mu_phi)[index_mu1],muon_mass);
+             mu2.SetPtEtaPhiM((*t_Mu_pt)[index_mu2],(*t_Mu_eta)[index_mu2],(*t_Mu_phi)[index_mu2],muon_mass);
+             double diMuon_mass = (mu1 + mu2).M();
+             if(fabs(diMuon_mass-125.0)<0.5){index_mu1 = i; index_mu2 = j;} 
+         }
+        }
+      }
+      /*
+      h_gen_mu1mu2dR->Fill(dR,evt_wt);
+      h_gen_mu1mu2dPhi->Fill(dPhi,evt_wt);
+      h_gen_diMuon_pt->Fill(diMuon_pt,evt_wt);
+      h_gen_diMuon_eta->Fill(diMuon_eta,evt_wt);
+      */
+      for( int i=0; i<n_GenPart; i++){
+        if(i!=index_mu1 && i!=index_mu2 && (*t_GenPart_pt)[i] > 10. &&( abs((*t_GenPart_pdgId)[i])== 13 || abs((*t_GenPart_pdgId)[i]) == 11) && (*t_GenPart_status)[i] ==1 ){
+        bool overlap=false;
+        for(int j=0; j<extralep.size();j++){
+           double dRlepH = DeltaR(t_GenPart_eta->at(i),t_GenPart_phi->at(i),t_GenPart_eta->at(extralep.at(j)), t_GenPart_phi->at(extralep.at(j)));
+           if(dRlepH<0.1){
+              overlap = true;
+              break;
+           }
+           if(overlap) break;
+           else extralep.push_back(i);
+        }
+
+       
+        h_gen_extralep1_pt->Fill(t_GenPart_pt->at(i),evt_wt);
+        h_gen_extralep1_eta->Fill(t_GenPart_eta->at(i),evt_wt);
+        double dRlepH = DeltaR(t_GenPart_eta->at(i),t_GenPart_phi->at(i),(mu1+mu2).Eta(), (mu1+mu2).Phi());
+        h_gen_dRlepH->Fill(dRlepH,evt_wt);
+  
+      }
+     }
+     h_gen_extralep->Fill(extralep.size(),evt_wt);
+     h_gen_diMuon_m->Fill((mu1 + mu2).M());
+  }
+}
+
+void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, float mhi)
+{  if (fChain == 0) return;
+   cout <<"mass window: "<<mlo<<" - "<<mhi<<endl;
+   //TH1F *catyield = new TH1F("h_category_yield","h_category_yield",10,0,10);
+   double muon_mass = 0.1056583745;
+   double el_mass = 0.000511;
+   Long64_t nentries = fChain->GetEntriesFast();
+   //Long64_t nentries = 2;
+
+   Long64_t nbytes = 0, nb = 0;
+   for (Long64_t jentry=0; jentry<nentries;jentry++) {
+      Long64_t ientry = LoadTree(jentry);
+
+      if (ientry < 0) break;
+      nb = fChain->GetEntry(jentry);   nbytes += nb;
+      clearTreeVectors();
+      double evt_wt;
+      if(*isData=='T'){evt_wt=1.;}
+      else evt_wt=t_genWeight;
+      int index_mu1 =0, index_mu2=1;
+      vector<int> el;
+      vector<int> mu;
+      el.clear();
+      mu.clear();
+
+      if(t_Mu_pt->size() > 2){
+         bool Event_sel =  false;
+         for(int i=0; i<t_Mu_pt->size(); i++){
+            if((*t_Mu_pt)[i]>30.){
+              for(int j=i+1; j<t_Mu_pt->size(); j++){
+                if((*t_Mu_charge)[i]*(*t_Mu_charge)[j]== -1 && (*t_Mu_pt)[j]>20.){
+                    Event_sel =true;
+                    index_mu1 = i;
+                    index_mu2 = j;
+                    break;
+                 }
+              }
+            }
+            if(Event_sel) break;
+         }
+      }
+
+      if(t_Mu_pt->size() > 2){
+         for(int i=0; i<t_Mu_pt->size(); i++){
+             if(i!=index_mu1 && i!=index_mu2){
+                 if(t_Mu_pt->at(i)>10.) mu.push_back(i);
+             }
+         }  
+      }
+
+      if(t_El_pt->size() > 0){
+         for(int i=0; i<t_El_pt->size(); i++){
+            if(/*t_El_pfRelIso03_all->at(i)<0.15 && */ t_El_pt->at(i)>5 && fabs(t_El_eta->at(i))<2.5 && t_Electron_mvaFall17Iso_WP90->at(i)){ //remove the MVA cut after including the MVA score??
+                el.push_back(i);
+            }
+         }  
+      }
+
+      //if(index_mu1!=0 || index_mu2!=1) cout <<"dimuon pair index: "<<index_mu1<<" "<<index_mu2<<endl;
+
+      TLorentzVector dimu, mu1,mu2;
+      mu1.SetPtEtaPhiM((*t_Mu_pt)[index_mu1],(*t_Mu_eta)[index_mu1],(*t_Mu_phi)[index_mu1],muon_mass);
+      mu2.SetPtEtaPhiM((*t_Mu_pt)[index_mu2],(*t_Mu_eta)[index_mu2],(*t_Mu_phi)[index_mu2],muon_mass);
+      double diMuon_mass = (mu1 + mu2).M(); 
+      double diMuon_pt = (mu1 + mu2).Pt();
+      double diMuon_eta = (mu1 + mu2).Eta();
+      double dR= DeltaR((*t_Mu_eta)[index_mu1],(*t_Mu_phi)[index_mu1],(*t_Mu_eta)[index_mu2],(*t_Mu_phi)[index_mu2]);
+      double dEta = (*t_Mu_eta)[index_mu1] - (*t_Mu_eta)[index_mu2];
+      double dPhi= DeltaPhi((*t_Mu_phi)[index_mu2],(*t_Mu_phi)[index_mu1]);
+      //SR: 120-130, sideband: 110-120, 130-150
+      if(diMuon_mass>mlo && diMuon_mass<mhi){
+          double binv = catyield->GetBinContent(10);
+          binv = binv + t_genWeight;
+          catyield->SetBinContent(10,binv);
+          h_diMuon_mass->Fill(diMuon_mass,evt_wt);
+        
+          run  =  t_run;
+          event = t_event;
+          lumi = t_luminosityBlock;
+          genWeight = evt_wt;
+          Higgs_mass = diMuon_mass;
+          Higgs_pt = diMuon_pt;
+          Higgs_eta = diMuon_eta; 
+          //ttH
+          if(t_nbJet>0){
+              if(el.size()> 0  || mu.size()>0){
+                  cat_index = 1;
+                  double binv = catyield->GetBinContent(1);
+                  binv = binv + t_genWeight;
+                  catyield->SetBinContent(1,binv);
+                  h_diMuon_mass_ttHLep->Fill(diMuon_mass,evt_wt);
+              }
+              else if(t_nJet>4){
+                  cat_index = 2;
+                  double binv = catyield->GetBinContent(2);
+                  binv = binv + t_genWeight;
+                  catyield->SetBinContent(2,binv);
+                  h_diMuon_mass_ttHHad->Fill(diMuon_mass,evt_wt);
+              }
+              else{
+                  cat_index = 3;
+                  double binv = catyield->GetBinContent(3);
+                  binv = binv + t_genWeight;
+                  catyield->SetBinContent(3,binv);
+                  h_diMuon_mass_ZHll->Fill(diMuon_mass,evt_wt);
+              }
+              cattree->Fill();
+          }
+          //ZH mm
+          else if(mu.size()>1){
+              bool isOS=false;
+              for(int k=0; k<mu.size(); k++){
+                   int m1_chg = t_Mu_charge->at(mu.at(k));
+                   for(int j=k+1; j<mu.size(); j++){
+                       int m2_chg = t_Mu_charge->at(mu.at(j));
+                       if(m1_chg*m2_chg==-1){
+                              TLorentzVector extra_m1, extra_m2;
+                              extra_m1.SetPtEtaPhiM((*t_Mu_pt)[mu.at(k)],(*t_Mu_eta)[mu.at(k)],(*t_Mu_phi)[mu.at(k)],muon_mass);             
+                              extra_m2.SetPtEtaPhiM((*t_Mu_pt)[mu.at(j)],(*t_Mu_eta)[mu.at(j)],(*t_Mu_phi)[mu.at(j)],muon_mass);             
+                              double dimu_mass = (extra_m1+extra_m2).M();
+                              if(fabs(dimu_mass-91.1876) < 20.){
+                                    isOS=true;
+                                    l1_index->push_back(mu.at(k));
+                                    l2_index->push_back(mu.at(j));
+                              }
+                       }
+                   }
+              }
+
+              if(isOS){
+                  cat_index = 4;
+                  double binv = catyield->GetBinContent(4);
+                  binv = binv + t_genWeight;
+                  catyield->SetBinContent(4,binv);
+                  h_diMuon_mass_ZHll->Fill(diMuon_mass,evt_wt);
+                  cattree->Fill();
+              }
+          }
+          //ZH ee
+          else if(t_El_pt->size()>1){
+              bool isOS=false; 
+              for(int k=0; k<el.size(); k++){
+                   int e1_chg = t_El_charge->at(el.at(k));
+                   for(int j=k+1; j<el.size(); j++){
+                       int e2_chg = t_El_charge->at(el.at(j));
+                       if(e1_chg*e2_chg==-1){
+                              TLorentzVector extra_e1, extra_e2;
+                              extra_e1.SetPtEtaPhiM((*t_El_pt)[el.at(k)],(*t_El_eta)[el.at(k)],(*t_El_phi)[el.at(k)],el_mass);
+                              extra_e2.SetPtEtaPhiM((*t_El_pt)[el.at(j)],(*t_El_eta)[el.at(j)],(*t_El_phi)[el.at(j)],el_mass);
+                              double diel_mass = (extra_e1+extra_e2).M();
+                              if(fabs(diel_mass-91.1876) < 20.){
+                                    isOS=true;
+                                    l1_index->push_back(el.at(k));
+                                    l2_index->push_back(el.at(j));
+                              }
+                       }
+                   }
+              }
+         
+              if(isOS){
+                  cat_index = 4;
+                  double binv = catyield->GetBinContent(4);
+                  binv = binv + t_genWeight;
+                  catyield->SetBinContent(4,binv);
+                  h_diMuon_mass_ZHll->Fill(diMuon_mass,evt_wt);
+                  cattree->Fill();
+              }
+          }
+          //WH, W->ev
+          else if(el.size()>0){
+              double binv = catyield->GetBinContent(5);
+              binv = binv + t_genWeight;
+              catyield->SetBinContent(5,binv);
+              h_diMuon_mass_WHlv->Fill(diMuon_mass,evt_wt);
+             
+              //h_mu1mu2dEta->Fill(dEta,evt_wt); 
+              h_mu1mu2dR->Fill(dR,evt_wt);
+              h_mu1mu2dPhi->Fill(dPhi,evt_wt);
+              h_diMuon_pt->Fill(diMuon_pt,evt_wt);
+              h_diMuon_eta->Fill(diMuon_eta,evt_wt);
+
+              h_extralep1_pt->Fill(t_El_pt->at(el.at(0)),evt_wt);
+              h_extralep1_eta->Fill(t_El_eta->at(el.at(0)),evt_wt);
+              double dRlepH = DeltaR(t_El_eta->at(el.at(0)),t_El_phi->at(el.at(0)),(mu1+mu2).Eta(), (mu1+mu2).Phi());
+              h_dRlepH->Fill(dRlepH,evt_wt); 
+
+              cat_index = 5;
+              MET_pt = t_MET_pt;
+              MET_phi = t_MET_phi;
+              extralep_pfRelIso03 = t_El_pfRelIso03_all->at(el.at(0));
+              extralep_pt = t_El_pt->at(el.at(0));
+              extralep_eta = t_El_eta->at(el.at(0)); 
+              dRlepHiggs = dRlepH;
+              dRmm = dR;
+              dEtamm = dEta;
+              dPhimm = dPhi;
+              cattree->Fill();
+          }
+          //WH, W->mv
+          else if(mu.size()>0){
+          //else if(t_Mu_pt->size()==3 && t_Mu_pt->at(2)>10. && fabs(t_Mu_eta->at(2))<2.4){
+              double binv = catyield->GetBinContent(6);
+              binv = binv + t_genWeight;
+              catyield->SetBinContent(6,binv);
+              h_diMuon_mass_WHlv->Fill(diMuon_mass,evt_wt);
+              /*
+              h_mu1mu2dR->Fill(dR,evt_wt);
+              h_mu1mu2dPhi->Fill(dPhi,evt_wt);
+              h_diMuon_pt->Fill(diMuon_pt,evt_wt);
+              h_diMuon_eta->Fill(diMuon_eta,evt_wt);
+              */
+              h_extralep1_pt->Fill(t_Mu_pt->at(mu.at(0)),evt_wt);
+              h_extralep1_eta->Fill(t_Mu_eta->at(mu.at(0)),evt_wt);
+              double dRlepH = DeltaR(t_Mu_eta->at(mu.at(0)),t_Mu_phi->at(mu.at(0)),(mu1+mu2).Eta(), (mu1+mu2).Phi());
+              h_dRlepH->Fill(dRlepH,evt_wt);
+
+              //run  =  t_run;
+              //event =  t_event;
+              //genWeight = evt_wt;
+              cat_index = 6;
+              MET_pt = t_MET_pt;
+              MET_phi = t_MET_phi;
+              extralep_pt = t_Mu_pt->at(mu.at(0));
+              extralep_eta = t_Mu_eta->at(mu.at(0));
+              dRlepHiggs = dRlepH;
+              dRmm = dR;
+              dEtamm = dEta;
+              dPhimm = dPhi;
+              cattree->Fill();
+
+          }
+          //VBF
+          else if(t_diJet_mass>400.){
+              cat_index = 7;
+              double binv = catyield->GetBinContent(7);
+              binv = binv + t_genWeight;
+              catyield->SetBinContent(7,binv);
+              h_diMuon_mass_VBF->Fill(diMuon_mass,evt_wt);
+              cattree->Fill();
+          }
+          //VH, had
+          else if(t_diJet_mass>60. && t_diJet_mass<110){
+              cat_index = 8;
+              double binv = catyield->GetBinContent(8);
+              binv = binv + t_genWeight;
+              catyield->SetBinContent(8,binv);
+              h_diMuon_mass_VHHad->Fill(diMuon_mass,evt_wt);
+              cattree->Fill();
+          }
+          //ggH
+          else{
+              cat_index = 9;
+              double binv = catyield->GetBinContent(9);
+              binv = binv + t_genWeight;
+              catyield->SetBinContent(9,binv);
+              h_diMuon_mass_ggH->Fill(diMuon_mass,evt_wt);
+              cattree->Fill();
+          }
+      }
+   }
 }
 
 void HiggsMuMu::EventLoop(const char *data,const char *isData)

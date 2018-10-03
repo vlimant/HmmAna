@@ -1,10 +1,11 @@
 CXX      = g++
 
-CXXFLAGS= $(shell root-config --cflags) -I/cvmfs/cms.cern.ch/slc7_amd64_gcc630/external/boost/1.63.0/include
-LIBS    = $(shell root-config --libs) -L/cvmfs/cms.cern.ch/slc7_amd64_gcc630/external/boost/1.63.0/lib
+CXXFLAGS= $(shell root-config --cflags) -I/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/boost/1.63.0/include
+LIBS    = $(shell root-config --libs) -L/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/boost/1.63.0/lib
 
-SOURCES = RoccoR.cc MainEvent.cc HmmAnalyzer.cc 
-HEADERS = RoccoR.h MainEvent.h HmmAnalyzer.h 
+SOURCES = WeightCalculatorFromHistogram.cc LeptonEfficiencyCorrector.cc RoccoR.cc MainEvent.cc HmmAnalyzer.cc
+HEADERS = WeightCalculatorFromHistogram.h LeptonEfficiencyCorrector.h RoccoR.h MainEvent.h HmmAnalyzer.h
+
 OBJECTS = $(SOURCES:.cc=.o)
 
 EXECUTABLE = analyzeHmm
