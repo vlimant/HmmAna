@@ -50,7 +50,7 @@ public :
   TH1D *h_diMuon_eta;
   TH1D *h_diMuon_phi;
   TH1D *h_diMuon_mass;
-
+  TH1D *h_diMuon_mass_SR;
   TH1D *h_diMuon_mass_110To120;
   TH1D *h_diMuon_mass_130To150;
   TH1D *h_diMuon_mass_110To150;
@@ -63,6 +63,7 @@ public :
   TH1D *h_j2eta;
 
   TH1D *h_Njet;
+  TH1D *h_Nbjet;
   TH1D *h_j1j2dR;
   TH1D *h_j1j2dPhi;
 
@@ -104,8 +105,8 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   h_diMuon_eta=new TH1D("diMuon_phi","#phi for dimuon system",32,-3.2,3.2);
   h_diMuon_phi=new TH1D("diMuon_eta","#eta for dimuon system",40,-4.,4.);
   h_diMuon_mass=new TH1D("diMuon_mass","Mass for dimuon system",70,60.,200.);
-
-  h_diMuon_mass_110To120=new TH1D("diMuon_mass_110To120","Mass for dimuon system",10,110.,120.);
+  h_diMuon_mass_SR=new TH1D("diMuon_mass_SR","Mass for dimuon system",70,60.,200.);
+  h_diMuon_mass_110To120=new TH1D("diMuon_mass_110To120","Mass for dimuon system",5,110.,120.);
   h_diMuon_mass_130To150=new TH1D("diMuon_mass_130To150","Mass for dimuon system",10,130.,150.);
   h_diMuon_mass_110To150=new TH1D("diMuon_mass_110To150","Mass for dimuon system",20,110.,150.);
 
@@ -118,6 +119,7 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   h_j2eta=new TH1D("j2eta","#eta for sub-leading jet",40,-4.,4.);
 
   h_Njet=new TH1D("Njet","Number of jets",11,0.0,11.);
+  h_Nbjet=new TH1D("Nbjet","Number of b-jets",11,0.0,11.);
   h_j1j2dR=new TH1D("j1j2dR","#Delta R between two leading jets",15,0.,4.);
   h_j1j2dPhi=new TH1D("j1j2dPhi","#Delta #phi for two leading jets",32,-3.2,3.2);
 

@@ -2,20 +2,21 @@ import os,sys,re,fileinput,string,shutil
 import numpy as np
 import ROOT as rt
 
-datasets = ["ttTo2l2v",
+datasets = [#"ttTo2l2v",
 #            "ttTosemileptonic",
-            "ggH",
-            "ttH",
-            "WplusH",
-            "WminusH",
-            "WZTo1L1Nu2Q",
+#            "ggH",
+  #          "ttH",
+   #         "WplusH",
+    #        "WminusH",
+     #       "WZTo1L1Nu2Q",
 #            "ZZ",
-            "WZTo3LNu",
-            "WZTo2L2Q",
-            "WWTo2L2Nu",
-            "WWToLNuQQ",
-            "WWW_4F",
-            "WWZ_4F"
+       #     "WZTo3LNu",
+        #    "WZTo2L2Q",
+         #   "WWTo2L2Nu",
+            #"WWToLNuQQ",
+          #  "WWW_4F",
+           # "WWZ_4F",
+ #          "ZH",
 ]
 
 for data in datasets:
