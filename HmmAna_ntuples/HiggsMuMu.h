@@ -35,25 +35,28 @@ public :
   void     Categorization(const char *, const char *, float , float);
   void     GenInfo(const char *, const char *);
   void     BookHistogram(const char *);
+  void     clearTreeVectors();
  
   TFile *oFile;
   TTree *cattree;
-  int run = -999;
-  float event = -999.;
-  float genWeight = -999.;
-  int cat_index = -999.;
-  float Higgs_mass = -999.;
-  float Higgs_pt = -999.;
-  float Higgs_eta = -999.;
-  float extralep_pfRelIso03 = -999.;
-  float extralep_pt = -999.;
-  float extralep_eta = -999.;
-  float dRlepHiggs = -999.;
-  float dEtamm = -999.;
-  float dRmm = -999.;
-  float dPhimm = -999.;  
-  float MET_phi = -999.;
-  float MET_pt = -999.;
+
+  UInt_t    run;
+  UInt_t    lumi;
+  ULong64_t event;
+  float genWeight = -9999.;
+  int cat_index = -9999.;
+  float Higgs_mass = -9999.;
+  float Higgs_pt = -9999.;
+  float Higgs_eta = -9999.;
+  float extralep_pfRelIso03 = -9999.;
+  float extralep_pt = -9999.;
+  float extralep_eta = -9999.;
+  float dRlepHiggs = -9999.;
+  float dEtamm = -9999.;
+  float dRmm = -9999.;
+  float dPhimm = -9999.;  
+  float MET_phi = -9999.;
+  float MET_pt = -9999.;
   std::vector<int>   *l1_index;
   std::vector<int>   *l2_index;
 
@@ -132,9 +135,8 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   cattree =  new TTree("cattree","cattree");
   l1_index = new std::vector<int>();
   l2_index= new std::vector<int>(); 
-  l1_index->clear();
-  l2_index->clear();
   cattree->Branch("run", &run,"run/i");
+  cattree->Branch("lumi", &lumi, "lumi/i");
   cattree->Branch("event", &event,"event/l");
   cattree->Branch("cat_index", &cat_index, "cat_index/i");
   cattree->Branch("genWeight", &genWeight,"genWeight/F");
@@ -209,6 +211,28 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   h_MET_pt=new TH1D("MET_pt","MET P_{T}",100,0.0,1000.);
   h_METphi=new TH1D("MET_phi","MET #phi",32,-3.2,3.2);
   h_MET_sumEt=new TH1D("MET_sumEt","MET Sum E_{T}",100,0.,1000.);
+}
+
+void HiggsMuMu::clearTreeVectors(){
+   run = -9999;
+   lumi = -9999;
+   event = -9999;
+   genWeight = -9999.;
+   cat_index = -9999.;
+   Higgs_mass = -9999.;
+   Higgs_pt = -9999.;
+   Higgs_eta = -9999.;
+   extralep_pfRelIso03 = -9999.;
+   extralep_pt = -9999.;
+   extralep_eta = -9999.;
+   dRlepHiggs = -9999.;
+   dEtamm = -9999.;
+   dRmm = -9999.;
+   dPhimm = -9999.;
+   MET_phi = -9999.;
+   MET_pt = -9999.;
+   l1_index->clear();
+   l2_index->clear();
 }
 
 HiggsMuMu::HiggsMuMu(const TString &inputFileList, const char *outFileName, const char* dataset, const char *isData)

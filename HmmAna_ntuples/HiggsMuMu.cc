@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
   HiggsMuMu hmm(inputFileList, outFileName, data, isData);
   cout << "dataset " << data << " " << endl;
   //hmm.EventLoop(data, isData);
-  hmm.Categorization(data, isData, 110, 130);
+  hmm.Categorization(data, isData, 100, 140);
   //hmm.GenInfo(data, isData);
   return 0;
 }
@@ -106,6 +106,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
    double muon_mass = 0.1056583745;
    double el_mass = 0.000511;
    Long64_t nentries = fChain->GetEntriesFast();
+   //Long64_t nentries = 2;
 
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
@@ -113,7 +114,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
-
+      clearTreeVectors();
       double evt_wt;
       if(*isData=='T'){evt_wt=1.;}
       else evt_wt=t_genWeight;
@@ -173,7 +174,14 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
           binv = binv + t_genWeight;
           catyield->SetBinContent(10,binv);
           h_diMuon_mass->Fill(diMuon_mass,evt_wt);
-         
+        
+          run  =  t_run;
+          event = t_event;
+          lumi = t_luminosityBlock;
+          genWeight = evt_wt;
+          Higgs_mass = diMuon_mass;
+          Higgs_pt = diMuon_pt;
+          Higgs_eta = diMuon_eta; 
           //ttH
           if(t_nbJet>0){
               if(el.size()> 0  || mu.size()>0){
@@ -277,15 +285,9 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
               double dRlepH = DeltaR(t_El_eta->at(el.at(0)),t_El_phi->at(el.at(0)),(mu1+mu2).Eta(), (mu1+mu2).Phi());
               h_dRlepH->Fill(dRlepH,evt_wt); 
 
-              run  =  t_run;
-              event =  t_event;
-              genWeight = evt_wt;
               cat_index = 5;
               MET_pt = t_MET_pt;
               MET_phi = t_MET_phi;
-              Higgs_mass = diMuon_mass;
-              Higgs_pt = diMuon_pt;
-              Higgs_eta = diMuon_eta;
               extralep_pfRelIso03 = t_El_pfRelIso03_all->at(el.at(0));
               extralep_pt = t_El_pt->at(el.at(0));
               extralep_eta = t_El_eta->at(el.at(0)); 
@@ -313,15 +315,12 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
               double dRlepH = DeltaR(t_Mu_eta->at(mu.at(0)),t_Mu_phi->at(mu.at(0)),(mu1+mu2).Eta(), (mu1+mu2).Phi());
               h_dRlepH->Fill(dRlepH,evt_wt);
 
-              run  =  t_run;
-              event =  t_event;
-              genWeight = evt_wt;
+              //run  =  t_run;
+              //event =  t_event;
+              //genWeight = evt_wt;
               cat_index = 6;
               MET_pt = t_MET_pt;
               MET_phi = t_MET_phi;
-              Higgs_mass = diMuon_mass;
-              Higgs_pt = diMuon_pt;
-              Higgs_eta = diMuon_eta;
               extralep_pt = t_Mu_pt->at(mu.at(0));
               extralep_eta = t_Mu_eta->at(mu.at(0));
               dRlepHiggs = dRlepH;
