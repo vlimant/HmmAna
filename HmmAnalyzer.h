@@ -57,19 +57,12 @@ class HmmAnalyzer : public MainEvent {
   void BookTreeBranches();
   TH1D *h_sumOfgw = new TH1D("h_sumOfgenWeight","h_sumOfgenWeight",2,0,2);
   RoccoR _Roch_calib;
-<<<<<<< HEAD
-  std::vector<std::string> muon_effSF_files;
-  std::vector<std::string> histo_names;
-  LeptonEfficiencyCorrector Mu_eff_SF;
-  
-=======
   std::vector<std::string> muon_effSF_TRIG_files, muon_effSF_ID_files, muon_effSF_ISO_files;
   std::vector<std::string> histo_names_TRIG, histo_names_ID, histo_names_ISO;
   LeptonEfficiencyCorrector Mu_eff_SF_TRIG;
   LeptonEfficiencyCorrector Mu_eff_SF_ID;
   LeptonEfficiencyCorrector Mu_eff_SF_ISO;
 
->>>>>>> f5a1c310d178e419c1399b341e7568a55b582d42
   TFile *oFile;
   //TFile *ohistFile;
   TTree* tree;
@@ -271,12 +264,7 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
   std::string Mu_Trg_name = "IsoMu27_PtEtaBins/pt_abseta_ratio";
   std::string Mu_ID_name = "NUM_MediumID_DEN_genTracks_pt_abseta";
   std::string Mu_Iso_name = "NUM_LooseRelIso_DEN_MediumID_pt_abseta";
-<<<<<<< HEAD
-  histo_names.push_back(Mu_Trg_name);
-  histo_names.push_back(Mu_ID_name);
-  histo_names.push_back(Mu_Iso_name);
-  Mu_eff_SF.init(muon_effSF_files,histo_names);
-=======
+
   histo_names_TRIG.push_back(Mu_Trg_name);
   histo_names_ID.push_back(Mu_ID_name);
   histo_names_ISO.push_back(Mu_Iso_name);
@@ -284,7 +272,6 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
   Mu_eff_SF_ID.init(muon_effSF_ID_files,histo_names_ID);
   Mu_eff_SF_ISO.init(muon_effSF_ISO_files,histo_names_ISO);
 
->>>>>>> f5a1c310d178e419c1399b341e7568a55b582d42
   TChain *tree = new TChain("Events");
 
   if( ! FillChain(tree, inputFileList) ) {

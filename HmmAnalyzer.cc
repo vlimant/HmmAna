@@ -60,11 +60,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 
 
   Long64_t nentries = fChain->GetEntriesFast();
-<<<<<<< HEAD
-=======
-  //nentries = 100;
->>>>>>> f5a1c310d178e419c1399b341e7568a55b582d42
-   Long64_t nbytes = 0, nb = 0;
+  Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
       if (ientry < 0) break;
@@ -75,12 +71,8 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 
       //sum of genWeight
       float value_h_sumOfgw = 0;
-<<<<<<< HEAD
-      if (*isData!='T'){
-=======
       if(*isData=='F'){
->>>>>>> f5a1c310d178e419c1399b341e7568a55b582d42
-         h_sumOfgw->GetBinContent(1);
+	h_sumOfgw->GetBinContent(1);
          value_h_sumOfgw = value_h_sumOfgw + genWeight;
          h_sumOfgw->SetBinContent(1,value_h_sumOfgw);
       }
@@ -169,14 +161,6 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
         int t_index = 0;
 	for(int i=0;i<nMuon;i++){
           if(fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
-<<<<<<< HEAD
-            
-            /*if(*isData=='F'){
-               cout <<"eff SF: "<<Mu_eff_SF.getSF(13,Muon_pt[i],Muon_eta[i])<<endl;
-	       }*/
-            
-=======
->>>>>>> f5a1c310d178e419c1399b341e7568a55b582d42
             if(i==index_mu1) t_index_mu1 = t_index;
             if(i==index_mu2) t_index_mu2 = t_index;
             if(*isData=='F'){ 
