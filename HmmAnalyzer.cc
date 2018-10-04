@@ -46,7 +46,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
   float muon_mass = 0.1056583745;
 
   //btag SF
-  BTagCalibration calib("deepcsv","DeepCSV_94XSF_V3_B_F.csv");
+  BTagCalibration calib("deepcsv","data/btagSF/DeepCSV_94XSF_V3_B_F.csv");
   BTagCalibrationReader reader(BTagEntry::OP_MEDIUM,  // operating point
 			       "central",             // central sys type
 			       {"up", "down"});      // other sys types
