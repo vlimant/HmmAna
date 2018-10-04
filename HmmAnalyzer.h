@@ -29,7 +29,8 @@
 #include "TAxis.h"
 #include "RoccoR.h"
 #include "LeptonEfficiencyCorrector.h"
-
+#include "BTagCalibrationStandalone.h"
+#include "BTagCalibrationStandalone.cpp"
 #ifdef __CINT__
 
 #pragma link C++ class vector<float>+;
@@ -59,7 +60,7 @@ class HmmAnalyzer : public MainEvent {
   std::vector<std::string> muon_effSF_files;
   std::vector<std::string> histo_names;
   LeptonEfficiencyCorrector Mu_eff_SF;
-
+  
   TFile *oFile;
   //TFile *ohistFile;
   TTree* tree;
@@ -162,8 +163,6 @@ class HmmAnalyzer : public MainEvent {
   std::vector<float>         *t_SubJet_tau2;   
   std::vector<float>         *t_SubJet_tau3;   
   std::vector<float>         *t_SubJet_tau4;   
-
-
   int t_nJet;
   std::vector<float>         *t_Jet_area;   
   std::vector<float>         *t_Jet_btagCMVA;   
@@ -213,6 +212,9 @@ class HmmAnalyzer : public MainEvent {
   std::vector<int>           *t_bJet_nElectrons;   
   std::vector<int>           *t_bJet_nMuons;   
   std::vector<int>           *t_bJet_puId;   
+  std::vector<double>         *t_bJet_SF;
+  std::vector<double>         *t_bJet_SFup;
+  std::vector<double>         *t_bJet_SFdown;
 
   float      t_PV_ndof;
   float      t_PV_x;
@@ -257,7 +259,6 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
   histo_names.push_back(Mu_ID_name);
   histo_names.push_back(Mu_Iso_name);
   Mu_eff_SF.init(muon_effSF_files,histo_names);
-
   TChain *tree = new TChain("Events");
 
   if( ! FillChain(tree, inputFileList) ) {
@@ -536,7 +537,10 @@ void HmmAnalyzer::clearTreeVectors(){
   t_bJet_nElectrons->clear();   
   t_bJet_nMuons->clear();   
   t_bJet_puId->clear();   
-  
+  t_bJet_SF->clear();
+  t_bJet_SFup->clear();
+  t_bJet_SFdown->clear();
+
   t_PV_ndof-=-1000;
   t_PV_x-=-1000;
   t_PV_y-=-1000;
@@ -815,7 +819,9 @@ void HmmAnalyzer::BookTreeBranches(){
   t_bJet_nElectrons= new std::vector<int>();   
   t_bJet_nMuons= new std::vector<int>();   
   t_bJet_puId= new std::vector<int>();   
-
+  t_bJet_SF= new std::vector<double>();
+  t_bJet_SFup= new std::vector<double>();
+  t_bJet_SFdown= new std::vector<double>();
   
   tree->Branch("t_bJet_area"    , "vector<float>"         ,&t_bJet_area);   
   tree->Branch("t_bJet_btagCMVA"    , "vector<float>"         ,&t_bJet_btagCMVA);   
@@ -837,7 +843,9 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_bJet_nElectrons"    , "vector<int>"         ,&t_bJet_nElectrons);   
   tree->Branch("t_bJet_nMuons"    , "vector<int>"         ,&t_bJet_nMuons);   
   tree->Branch("t_bJet_puId"    , "vector<int>"         ,&t_bJet_puId);   
-  
+  tree->Branch("t_bJet_SF"    , "vector<double>"         ,&t_bJet_SF);
+  tree->Branch("t_bJet_SFup"    , "vector<double>"         ,&t_bJet_SFup);
+  tree->Branch("t_bJet_SFdown"    , "vector<double>"     ,&t_bJet_SFdown);
 
 
   tree->Branch("t_PV_ndof", &t_PV_ndof, "t_PV_ndof/F");

@@ -33,6 +33,7 @@ int main(int argc, char* argv[])
   cout << "dataset " << data << " " << endl;
   Hmm.EventLoop(data, isData);
 
+  
   return 0;
 }
 
@@ -44,8 +45,21 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
   //BookTreeBranches();
   //cout<<"booked tree branches\n";
   float muon_mass = 0.1056583745;
+ 
+
+  BTagCalibration calib("deepcsv","DeepCSV_94XSF_V3_B_F.csv");
+  BTagCalibrationReader reader(BTagEntry::OP_MEDIUM,  // operating point
+			       "central",             // central sys type
+			       {"up", "down"});      // other sys types
+
+  reader.load(calib,                // calibration instance
+	      BTagEntry::FLAV_B,    // btag flavour
+	      "comb")       ;        // measurement type
+
+ 
+
+
   Long64_t nentries = fChain->GetEntriesFast();
-  nentries = 100;
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
@@ -57,7 +71,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 
       //sum of genWeight
       float value_h_sumOfgw = 0;
-      if (isData!="T"){
+      if (*isData!='T'){
          h_sumOfgw->GetBinContent(1);
          value_h_sumOfgw = value_h_sumOfgw + genWeight;
          h_sumOfgw->SetBinContent(1,value_h_sumOfgw);
@@ -151,11 +165,11 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
         int t_index = 0;
 	for(int i=0;i<nMuon;i++){
           if(fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
-            /*
-            if(*isData=='F'){
+            
+            /*if(*isData=='F'){
                cout <<"eff SF: "<<Mu_eff_SF.getSF(13,Muon_pt[i],Muon_eta[i])<<endl;
-            }
-            */
+	       }*/
+            
             if(i==index_mu1) t_index_mu1 = t_index;
             if(i==index_mu2) t_index_mu2 = t_index;
             if(*isData=='F') t_Mu_EffSF->push_back(Mu_eff_SF.getSF(13,Muon_pt[i],Muon_eta[i]));
@@ -227,6 +241,22 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    t_Jet_nMuons->push_back(Jet_nMuons[j]);   
 	    t_Jet_puId->push_back(Jet_puId[j]);   
             if(Jet_btagDeepB[j]>0.4941){
+	      if(*isData!='T'){
+		double jet_scalefactor    = reader.eval_auto_bounds(
+								    "central", 
+								    BTagEntry::FLAV_B, 
+								    Jet_pt[j], // absolute value of eta
+								    Jet_eta[j]
+								    ); 
+		double jet_scalefactor_up = reader.eval_auto_bounds(
+								    "up", BTagEntry::FLAV_B, Jet_eta[j], Jet_pt[j]);
+		double jet_scalefactor_do = reader.eval_auto_bounds(
+								    "down", BTagEntry::FLAV_B, Jet_eta[j], Jet_pt[j]); 
+		cout<<jet_scalefactor<<" "<<jet_scalefactor_up<<" "<<jet_scalefactor_do<<endl;
+		t_bJet_SF->push_back(jet_scalefactor);
+		t_bJet_SFup->push_back(jet_scalefactor_up);
+		t_bJet_SFdown->push_back(jet_scalefactor_do);
+	      }
 	      t_nbJet++;
 	      t_bJet_area->push_back(Jet_area[j]);
 	      t_bJet_btagCMVA->push_back(Jet_btagCMVA[j]);   
