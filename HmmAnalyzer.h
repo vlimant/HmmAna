@@ -103,8 +103,11 @@ class HmmAnalyzer : public MainEvent {
   std::vector<UChar_t>       *t_Mu_genPartFlav;
   std::vector<int>           *t_Mu_charge;  
   std::vector<float>         *t_Mu_EffSF_TRIG;
+  std::vector<float>         *t_Mu_EffSFErr_TRIG;
   std::vector<float>         *t_Mu_EffSF_ID;
-  std::vector<float>         *t_Mu_EffSF_ISO; 
+  std::vector<float>         *t_Mu_EffSFErr_ID;
+  std::vector<float>         *t_Mu_EffSF_ISO;
+  std::vector<float>         *t_Mu_EffSFErr_ISO; 
   std::vector<float>         *t_Mu_pt;   
   std::vector<float>         *t_Mu_ptErr;   
   std::vector<float>         *t_Mu_phi;   
@@ -442,8 +445,11 @@ void HmmAnalyzer::clearTreeVectors(){
   t_Mu_genPartFlav->clear();  
   t_Mu_charge->clear();
   t_Mu_EffSF_TRIG->clear();
+  t_Mu_EffSFErr_TRIG->clear();
   t_Mu_EffSF_ID->clear();
+  t_Mu_EffSFErr_ID->clear();
   t_Mu_EffSF_ISO->clear();
+  t_Mu_EffSFErr_ISO->clear();
   t_Mu_pt->clear();   
   t_Mu_ptErr->clear();   
   t_Mu_phi->clear();   
@@ -644,8 +650,11 @@ void HmmAnalyzer::BookTreeBranches(){
   t_Mu_genPartFlav= new std::vector<UChar_t>(); 
   t_Mu_charge= new std::vector<int>();   
   t_Mu_EffSF_TRIG= new std::vector<float>();
+  t_Mu_EffSFErr_TRIG= new std::vector<float>();  
   t_Mu_EffSF_ID= new std::vector<float>();
+  t_Mu_EffSFErr_ID= new std::vector<float>();
   t_Mu_EffSF_ISO= new std::vector<float>();
+  t_Mu_EffSFErr_ISO= new std::vector<float>();
   t_Mu_pt= new std::vector<float>();   
   t_Mu_ptErr= new std::vector<float>();   
   t_Mu_phi= new std::vector<float>();   
@@ -672,8 +681,11 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_Mu_genPartFlav",  "vector<UChar_t>",   &t_Mu_genPartFlav);
   tree->Branch("t_Mu_charge"    , "vector<int>"         ,&t_Mu_charge );
   tree->Branch("t_Mu_EffSF_TRIG",    "vector<float>"   ,&t_Mu_EffSF_TRIG);
+  tree->Branch("t_Mu_EffSFErr_TRIG",    "vector<float>"   ,&t_Mu_EffSFErr_TRIG);
   tree->Branch("t_Mu_EffSF_ID",    "vector<float>"   ,&t_Mu_EffSF_ID);
+  tree->Branch("t_Mu_EffSFErr_ID",    "vector<float>"   ,&t_Mu_EffSFErr_ID);
   tree->Branch("t_Mu_EffSF_ISO",    "vector<float>"   ,&t_Mu_EffSF_ISO);
+  tree->Branch("t_Mu_EffSFErr_ISO",    "vector<float>"   ,&t_Mu_EffSFErr_ISO);
   tree->Branch("t_Mu_pt"    , "vector<float>"         ,&t_Mu_pt );   
   tree->Branch("t_Mu_ptErr"    , "vector<float>"         ,&t_Mu_ptErr );   
   tree->Branch("t_Mu_phi"    , "vector<float>"         ,&t_Mu_phi );   

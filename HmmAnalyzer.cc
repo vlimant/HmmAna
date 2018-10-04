@@ -56,6 +56,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	      "comb")       ;        // measurement type
 
   Long64_t nentries = fChain->GetEntriesFast();
+
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
@@ -73,7 +74,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       }
 
       bool trig_decision = false;
-      if( HLT_IsoMu27==1 /* || HLT_IsoTkMu27_v*==1*/) trig_decision =true;
+      if( HLT_IsoMu27==1 /* || HLT_IsoTkMu27_v*==1*/ ) trig_decision =true;
 
       int index_mu1(-999), index_mu2(-999); 
       bool run_muChecks =false; 
@@ -160,8 +161,11 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
             if(i==index_mu2) t_index_mu2 = t_index;
             if(*isData=='F'){ 
                t_Mu_EffSF_TRIG->push_back(Mu_eff_SF_TRIG.getSF(13,Muon_pt[i],Muon_eta[i]));
+               t_Mu_EffSFErr_TRIG->push_back(Mu_eff_SF_TRIG.getSFErr(13,Muon_pt[i],Muon_eta[i]));
                t_Mu_EffSF_ID->push_back(Mu_eff_SF_ID.getSF(13,Muon_pt[i],Muon_eta[i]));
+               t_Mu_EffSFErr_ID->push_back(Mu_eff_SF_ID.getSFErr(13,Muon_pt[i],Muon_eta[i]));
                t_Mu_EffSF_ISO->push_back(Mu_eff_SF_ISO.getSF(13,Muon_pt[i],Muon_eta[i]));
+               t_Mu_EffSFErr_ISO->push_back(Mu_eff_SF_ISO.getSFErr(13,Muon_pt[i],Muon_eta[i]));
             }
 	    t_Mu_charge->push_back(Muon_charge[i]);   
 	    t_Mu_pt->push_back(mu_pt_Roch_corr[i]);   
@@ -214,8 +218,8 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  if(!matched_mu && Jet_pt[j]>30. && fabs(Jet_eta[j])<4.7 && Jet_jetId[j]>=2 && Jet_puId[j]>=1){
 	    t_nJet++;
 	    t_Jet_area->push_back(Jet_area[j]);
-	    t_Jet_btagCMVA->push_back(Jet_btagCMVA[j]);   
-	    t_Jet_btagCSVV2->push_back(Jet_btagCSVV2[j]);   
+	    //t_Jet_btagCMVA->push_back(Jet_btagCMVA[j]);   
+	    //t_Jet_btagCSVV2->push_back(Jet_btagCSVV2[j]);   
 	    t_Jet_btagDeepB->push_back(Jet_btagDeepB[j]);   
 	    t_Jet_btagDeepC->push_back(Jet_btagDeepC[j]);   
 	    t_Jet_btagDeepFlavB->push_back(Jet_btagDeepFlavB[j]);   
@@ -238,22 +242,22 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 		double jet_scalefactor    = reader.eval_auto_bounds(
 								    "central", 
 								    BTagEntry::FLAV_B, 
-								    Jet_pt[j], // absolute value of eta
-								    Jet_eta[j]
+								    fabs(Jet_eta[j]), // absolute value of eta
+								    Jet_pt[j]
 								    ); 
 		double jet_scalefactor_up = reader.eval_auto_bounds(
-								    "up", BTagEntry::FLAV_B, Jet_eta[j], Jet_pt[j]);
+								    "up", BTagEntry::FLAV_B, fabs(Jet_eta[j]), Jet_pt[j]);
 		double jet_scalefactor_do = reader.eval_auto_bounds(
-								    "down", BTagEntry::FLAV_B, Jet_eta[j], Jet_pt[j]); 
-		cout<<jet_scalefactor<<" "<<jet_scalefactor_up<<" "<<jet_scalefactor_do<<endl;
+								    "down", BTagEntry::FLAV_B, fabs(Jet_eta[j]), Jet_pt[j]); 
+		//cout<<jet_scalefactor<<" "<<jet_scalefactor_up<<" "<<jet_scalefactor_do<<endl;
 		t_bJet_SF->push_back(jet_scalefactor);
 		t_bJet_SFup->push_back(jet_scalefactor_up);
 		t_bJet_SFdown->push_back(jet_scalefactor_do);
 	      }
 	      t_nbJet++;
 	      t_bJet_area->push_back(Jet_area[j]);
-	      t_bJet_btagCMVA->push_back(Jet_btagCMVA[j]);   
-	      t_bJet_btagCSVV2->push_back(Jet_btagCSVV2[j]);   
+	      //t_bJet_btagCMVA->push_back(Jet_btagCMVA[j]);   
+	      //t_bJet_btagCSVV2->push_back(Jet_btagCSVV2[j]);   
 	      t_bJet_btagDeepB->push_back(Jet_btagDeepB[j]);   
 	      t_bJet_btagDeepC->push_back(Jet_btagDeepC[j]);   
 	      t_bJet_btagDeepFlavB->push_back(Jet_btagDeepFlavB[j]);   
@@ -340,7 +344,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	t_MET_phi = MET_phi;
 	t_MET_sumEt  = MET_sumEt;
 
-
+       
 	for(int i=0;i<nFatJet;i++){
 	  t_FatJet_area->push_back(FatJet_area[i]);  
 	  t_FatJet_btagCMVA->push_back(FatJet_btagCMVA[i]);  
@@ -360,7 +364,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  t_FatJet_jetId->push_back(FatJet_tau4[i]);  
 	  t_FatJet_subJetIdx1->push_back(FatJet_subJetIdx1[i]);  
 	  t_FatJet_subJetIdx2->push_back(FatJet_subJetIdx2[i]);  
-	}
+	} 
 	for(int i=0;i<nSubJet;i++){
 	  t_SubJet_btagCMVA->push_back(SubJet_btagCMVA[i]);   
 	  t_SubJet_btagCSVV2->push_back(SubJet_btagCSVV2[i]);   
@@ -376,7 +380,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  t_SubJet_tau3->push_back(SubJet_tau3[i]);   
 	  t_SubJet_tau4->push_back(SubJet_tau4[i]);   
 	}
-
+       
 	t_PV_ndof = PV_ndof;
 	t_PV_x = PV_x;
 	t_PV_y = PV_y;
