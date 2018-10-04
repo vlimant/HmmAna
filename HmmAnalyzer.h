@@ -55,7 +55,7 @@ class HmmAnalyzer : public MainEvent {
   
   void clearTreeVectors();
   void BookTreeBranches();
-  TH1D *h_sumOfgw = new TH1D("h_sumOfgenWeight","h_sumOfgenWeight",2,0,2);
+  TH1D *h_sumOfgw = new TH1D("h_sumOfgenWeight","h_sumOfgenWeight",1,0,1);
   RoccoR _Roch_calib;
   std::vector<std::string> muon_effSF_TRIG_files, muon_effSF_ID_files, muon_effSF_ISO_files;
   std::vector<std::string> histo_names_TRIG, histo_names_ID, histo_names_ISO;
@@ -248,6 +248,8 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
   std::string path_RochCor = "RoccoR2017v1.txt";
   std::cout << "Rochester correction files: " << path_RochCor << std::endl;
   _Roch_calib.init(path_RochCor);
+
+  h_sumOfgw->SetBinContent(1,0.0);
 
   muon_effSF_TRIG_files.clear();
   muon_effSF_ID_files.clear();
