@@ -57,7 +57,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 
       //sum of genWeight
       float value_h_sumOfgw = 0;
-      if (isData!="T"){
+      if(*isData=='F'){
          h_sumOfgw->GetBinContent(1);
          value_h_sumOfgw = value_h_sumOfgw + genWeight;
          h_sumOfgw->SetBinContent(1,value_h_sumOfgw);
@@ -66,11 +66,6 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       bool trig_decision = false;
       if( HLT_IsoMu27==1 /* || HLT_IsoTkMu27_v*==1*/) trig_decision =true;
 
-      //bool goodLumi= false;
-      //if (isData=="T"){//figure out good lumi from json
-      //}
-      //else  goodLumi = true;
-     
       int index_mu1(-999), index_mu2(-999); 
       bool run_muChecks =false; 
       if(nMuon>=2 && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_BadPFMuonFilter && Flag_BadChargedCandidateFilter && trig_decision && PV_npvsGood>0) run_muChecks =true;
