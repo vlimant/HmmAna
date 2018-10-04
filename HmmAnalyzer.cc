@@ -45,7 +45,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
   //cout<<"booked tree branches\n";
   float muon_mass = 0.1056583745;
   Long64_t nentries = fChain->GetEntriesFast();
-  nentries = 100;
+  //nentries = 100;
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
@@ -64,7 +64,6 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       }
 
       bool trig_decision = false;
-
       if( HLT_IsoMu27==1 /* || HLT_IsoTkMu27_v*==1*/) trig_decision =true;
 
       //bool goodLumi= false;
@@ -126,6 +125,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
               dR_TrigObj = DeltaR(Muon_eta[index_mu1], Muon_phi[index_mu1], TrigObj_eta[i], TrigObj_phi[i]);
               if(dR_TrigObj<0.1 && mu_pt_Roch_corr[index_mu1]>30.){ 
                  trig_match = true;
+                 t_index_trigm_mu = 1;
                  break;
               }
               else{
@@ -133,6 +133,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
                   dR_TrigObj = DeltaR(Muon_eta[index_mu2], Muon_phi[index_mu2], TrigObj_eta[i], TrigObj_phi[i]);
                   if(dR_TrigObj<0.1){ 
                     trig_match = true;
+                    t_index_trigm_mu = 2;
                     break;
                   }
                 }
@@ -151,14 +152,13 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
         int t_index = 0;
 	for(int i=0;i<nMuon;i++){
           if(fabs(Muon_eta[i])<2.4 && Muon_mediumId[i] && Muon_pfRelIso04_all[i] < 0.25){
-            /*
-            if(*isData=='F'){
-               cout <<"eff SF: "<<Mu_eff_SF.getSF(13,Muon_pt[i],Muon_eta[i])<<endl;
-            }
-            */
             if(i==index_mu1) t_index_mu1 = t_index;
             if(i==index_mu2) t_index_mu2 = t_index;
-            if(*isData=='F') t_Mu_EffSF->push_back(Mu_eff_SF.getSF(13,Muon_pt[i],Muon_eta[i]));
+            if(*isData=='F'){ 
+               t_Mu_EffSF_TRIG->push_back(Mu_eff_SF_TRIG.getSF(13,Muon_pt[i],Muon_eta[i]));
+               t_Mu_EffSF_ID->push_back(Mu_eff_SF_ID.getSF(13,Muon_pt[i],Muon_eta[i]));
+               t_Mu_EffSF_ISO->push_back(Mu_eff_SF_ISO.getSF(13,Muon_pt[i],Muon_eta[i]));
+            }
 	    t_Mu_charge->push_back(Muon_charge[i]);   
 	    t_Mu_pt->push_back(mu_pt_Roch_corr[i]);   
 	    t_Mu_ptErr->push_back(mu_ptErr_Roch_corr[i]);   
@@ -186,6 +186,9 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	}
         t_mu1 = t_index_mu1;
         t_mu2 = t_index_mu2;
+        //if(t_index_trigm_mu ==1) t_index_trigm_mu = t_mu1;
+        //else t_index_trigm_mu = t_mu2;
+
 	TLorentzVector dimu, mu1,mu2;
 	mu1.SetPtEtaPhiM((mu_pt_Roch_corr)[index_mu1],(Muon_eta)[index_mu1],(Muon_phi)[index_mu1],muon_mass);
 	mu2.SetPtEtaPhiM((mu_pt_Roch_corr)[index_mu2],(Muon_eta)[index_mu2],(Muon_phi)[index_mu2],muon_mass);

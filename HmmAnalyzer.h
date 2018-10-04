@@ -56,9 +56,11 @@ class HmmAnalyzer : public MainEvent {
   void BookTreeBranches();
   TH1D *h_sumOfgw = new TH1D("h_sumOfgenWeight","h_sumOfgenWeight",2,0,2);
   RoccoR _Roch_calib;
-  std::vector<std::string> muon_effSF_files;
-  std::vector<std::string> histo_names;
-  LeptonEfficiencyCorrector Mu_eff_SF;
+  std::vector<std::string> muon_effSF_TRIG_files, muon_effSF_ID_files, muon_effSF_ISO_files;
+  std::vector<std::string> histo_names_TRIG, histo_names_ID, histo_names_ISO;
+  LeptonEfficiencyCorrector Mu_eff_SF_TRIG;
+  LeptonEfficiencyCorrector Mu_eff_SF_ID;
+  LeptonEfficiencyCorrector Mu_eff_SF_ISO;
 
   TFile *oFile;
   //TFile *ohistFile;
@@ -69,6 +71,7 @@ class HmmAnalyzer : public MainEvent {
   float       t_genWeight;
   int         t_mu1;
   int         t_mu2;
+  int         t_index_trigm_mu;
   std::vector<int>           *t_El_genPartIdx;
   std::vector<UChar_t>       *t_El_genPartFlav;
   std::vector <int>          *t_El_charge;
@@ -98,7 +101,9 @@ class HmmAnalyzer : public MainEvent {
   std::vector<int>           *t_Mu_genPartIdx;
   std::vector<UChar_t>       *t_Mu_genPartFlav;
   std::vector<int>           *t_Mu_charge;  
-  std::vector<float>         *t_Mu_EffSF; 
+  std::vector<float>         *t_Mu_EffSF_TRIG;
+  std::vector<float>         *t_Mu_EffSF_ID;
+  std::vector<float>         *t_Mu_EffSF_ISO; 
   std::vector<float>         *t_Mu_pt;   
   std::vector<float>         *t_Mu_ptErr;   
   std::vector<float>         *t_Mu_phi;   
@@ -242,21 +247,27 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
   std::cout << "Rochester correction files: " << path_RochCor << std::endl;
   _Roch_calib.init(path_RochCor);
 
-  muon_effSF_files.clear();
-  histo_names.clear();
+  muon_effSF_TRIG_files.clear();
+  muon_effSF_ID_files.clear();
+  muon_effSF_ISO_files.clear();
+  histo_names_TRIG.clear();
+  histo_names_ID.clear();
+  histo_names_ISO.clear();
   std::string Mu_Trg_file = "data/leptonSF/EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
   std::string Mu_ID_file = "data/leptonSF/RunBCDEF_SF_ID.root";
   std::string Mu_Iso_file = "data/leptonSF/RunBCDEF_SF_ISO.root";
-  muon_effSF_files.push_back(Mu_Trg_file);
-  muon_effSF_files.push_back(Mu_ID_file);
-  muon_effSF_files.push_back(Mu_Iso_file);
-  std::string Mu_Trg_name = "IsoMu27_PtEtaBins/abseta_pt_ratio";
+  muon_effSF_TRIG_files.push_back(Mu_Trg_file);
+  muon_effSF_ID_files.push_back(Mu_ID_file);
+  muon_effSF_ISO_files.push_back(Mu_Iso_file);
+  std::string Mu_Trg_name = "IsoMu27_PtEtaBins/pt_abseta_ratio";
   std::string Mu_ID_name = "NUM_MediumID_DEN_genTracks_pt_abseta";
   std::string Mu_Iso_name = "NUM_LooseRelIso_DEN_MediumID_pt_abseta";
-  histo_names.push_back(Mu_Trg_name);
-  histo_names.push_back(Mu_ID_name);
-  histo_names.push_back(Mu_Iso_name);
-  Mu_eff_SF.init(muon_effSF_files,histo_names);
+  histo_names_TRIG.push_back(Mu_Trg_name);
+  histo_names_ID.push_back(Mu_ID_name);
+  histo_names_ISO.push_back(Mu_Iso_name);
+  Mu_eff_SF_TRIG.init(muon_effSF_TRIG_files,histo_names_TRIG);
+  Mu_eff_SF_ID.init(muon_effSF_ID_files,histo_names_ID);
+  Mu_eff_SF_ISO.init(muon_effSF_ISO_files,histo_names_ISO);
 
   TChain *tree = new TChain("Events");
 
@@ -393,6 +404,7 @@ void HmmAnalyzer::clearTreeVectors(){
   t_genWeight = -999.;
   t_mu1=-999; 
   t_mu2=-999;
+  t_index_trigm_mu=-999;
   t_nJet=0;
   t_nbJet=0;
   t_El_genPartIdx->clear();
@@ -424,7 +436,9 @@ void HmmAnalyzer::clearTreeVectors(){
   t_Mu_genPartIdx->clear();
   t_Mu_genPartFlav->clear();  
   t_Mu_charge->clear();
-  t_Mu_EffSF->clear();
+  t_Mu_EffSF_TRIG->clear();
+  t_Mu_EffSF_ID->clear();
+  t_Mu_EffSF_ISO->clear();
   t_Mu_pt->clear();   
   t_Mu_ptErr->clear();   
   t_Mu_phi->clear();   
@@ -564,6 +578,7 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_genWeight", &t_genWeight,"t_genWeight/F");
   tree->Branch("t_mu1", &t_mu1,"t_mu1/i");
   tree->Branch("t_mu2", &t_mu2,"t_mu2/i");
+  tree->Branch("t_index_trigm_mu", &t_index_trigm_mu, "t_index_trigm_mu/i");
 
   t_El_genPartIdx= new std::vector<int>();
   t_El_genPartFlav= new std::vector<UChar_t>();
@@ -620,7 +635,9 @@ void HmmAnalyzer::BookTreeBranches(){
   t_Mu_genPartIdx= new std::vector<int>();
   t_Mu_genPartFlav= new std::vector<UChar_t>(); 
   t_Mu_charge= new std::vector<int>();   
-  t_Mu_EffSF= new std::vector<float>();
+  t_Mu_EffSF_TRIG= new std::vector<float>();
+  t_Mu_EffSF_ID= new std::vector<float>();
+  t_Mu_EffSF_ISO= new std::vector<float>();
   t_Mu_pt= new std::vector<float>();   
   t_Mu_ptErr= new std::vector<float>();   
   t_Mu_phi= new std::vector<float>();   
@@ -646,7 +663,9 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_Mu_genPartIdx"    , "vector<int>"     ,&t_Mu_genPartIdx);
   tree->Branch("t_Mu_genPartFlav",  "vector<UChar_t>",   &t_Mu_genPartFlav);
   tree->Branch("t_Mu_charge"    , "vector<int>"         ,&t_Mu_charge );
-  tree->Branch("t_Mu_EffSF",    "vector<float>"   ,&t_Mu_EffSF);
+  tree->Branch("t_Mu_EffSF_TRIG",    "vector<float>"   ,&t_Mu_EffSF_TRIG);
+  tree->Branch("t_Mu_EffSF_ID",    "vector<float>"   ,&t_Mu_EffSF_ID);
+  tree->Branch("t_Mu_EffSF_ISO",    "vector<float>"   ,&t_Mu_EffSF_ISO);
   tree->Branch("t_Mu_pt"    , "vector<float>"         ,&t_Mu_pt );   
   tree->Branch("t_Mu_ptErr"    , "vector<float>"         ,&t_Mu_ptErr );   
   tree->Branch("t_Mu_phi"    , "vector<float>"         ,&t_Mu_phi );   
