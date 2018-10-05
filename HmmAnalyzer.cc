@@ -64,6 +64,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       // if (Cut(ientry) < 0) continue;
       if(jentry%50000==0) cout <<"entry: "<<jentry<<endl;
+
       clearTreeVectors();
 
       //sum of genWeight
@@ -97,7 +98,6 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
             float gen_pt = -999.;
             if(*isData=='F'){
               for(int j=0;j<nGenPart;j++){
-                //cout <<"nGenPart "<<j<<endl;
                 if(Muon_charge[i]==-1 && GenPart_pdgId[j]==13 && DeltaR(Muon_eta[i], Muon_phi[i], GenPart_eta[j], GenPart_phi[j]) <0.1){ gen_pt = GenPart_pt[j]; break;}
                 else if(Muon_charge[i]==1 && GenPart_pdgId[j]==-13 && DeltaR(Muon_eta[i], Muon_phi[i], GenPart_eta[j], GenPart_phi[j]) <0.1){ gen_pt = GenPart_pt[j]; break;}
               }
@@ -111,9 +111,9 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
         }
         
         for(int i=0;i<nMuon;i++){
-          if(/*Muon_isglobal[i] && Muon_istracker[i] &&*/ mu_pt_Roch_corr[i]>30. && Muon_mediumId[i] && abs(Muon_eta[i])<2.4 && Muon_pfRelIso04_all[i]<0.25){
+          if(/*Muon_isglobal[i] && Muon_istracker[i] &&*/ mu_pt_Roch_corr[i]>30. && Muon_mediumId[i] && fabs(Muon_eta[i])<2.4 && Muon_pfRelIso04_all[i]<0.25){
               for(int j=i+1;j<nMuon;j++){
-                 if(/*Muon_isglobal[j] && Muon_istracker[j] &&*/ Muon_charge[i]*Muon_charge[j]== -1 && mu_pt_Roch_corr[j]>20. && Muon_mediumId[j] && abs(Muon_eta[j])<2.4 && Muon_pfRelIso04_all[j]<0.25){
+                 if(/*Muon_isglobal[j] && Muon_istracker[j] &&*/ Muon_charge[i]*Muon_charge[j]== -1 && mu_pt_Roch_corr[j]>20. && Muon_mediumId[j] && fabs(Muon_eta[j])<2.4 && Muon_pfRelIso04_all[j]<0.25){
                     Event_sel =true; 
                     index_mu1 = i; 
                     index_mu2 = j;
@@ -282,34 +282,29 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	  }
 	}
 	if(t_Jet_pt->size()>=2){
-         for(int k=0;k<t_Jet_pt->size();k++){
-          for(int m=k+1; m<t_Jet_pt->size();m++){
-	  TLorentzVector j1,j2, jj;
-          if(k==0 && m==1){
-	  j1.SetPtEtaPhiM((*t_Jet_pt)[0], (*t_Jet_eta)[0],(*t_Jet_phi)[0],(*t_Jet_mass)[0]);
-	  j2.SetPtEtaPhiM((*t_Jet_pt)[1], (*t_Jet_eta)[1],(*t_Jet_phi)[1],(*t_Jet_mass)[1]);
+          for(int k=0;k<t_Jet_pt->size();k++){
+            for(int m=k+1; m<t_Jet_pt->size();m++){
+              TLorentzVector j1,j2, jj;
+              if(k==0 && m==1){
+          	  j1.SetPtEtaPhiM((*t_Jet_pt)[0], (*t_Jet_eta)[0],(*t_Jet_phi)[0],(*t_Jet_mass)[0]);
+	          j2.SetPtEtaPhiM((*t_Jet_pt)[1], (*t_Jet_eta)[1],(*t_Jet_phi)[1],(*t_Jet_mass)[1]);
+	          jj=j1+j2;	
+	          t_diJet_pt = jj.Pt();
+	          t_diJet_eta=jj.Eta();
+	          t_diJet_phi=jj.Phi();
+	          t_diJet_mass=jj.M();
+                  t_diJet_mass_mo=jj.M();
+              }
+              else{
+                  j1.SetPtEtaPhiM((*t_Jet_pt)[k], (*t_Jet_eta)[k],(*t_Jet_phi)[k],(*t_Jet_mass)[k]);
+                  j2.SetPtEtaPhiM((*t_Jet_pt)[m], (*t_Jet_eta)[m],(*t_Jet_phi)[m],(*t_Jet_mass)[m]);
+                  jj=j1+j2;
+                  if(t_diJet_mass_mo<jj.M()) t_diJet_mass_mo=jj.M();
 
-	  jj=j1+j2;
-	
-	  t_diJet_pt = jj.Pt();
-	  t_diJet_eta=jj.Eta();
-	  t_diJet_phi=jj.Phi();
-	  t_diJet_mass=jj.M();
-          t_diJet_mass_mo=jj.M();
+             }
+            }
           }
-          else{
-            j1.SetPtEtaPhiM((*t_Jet_pt)[k], (*t_Jet_eta)[k],(*t_Jet_phi)[k],(*t_Jet_mass)[k]);
-            j2.SetPtEtaPhiM((*t_Jet_pt)[m], (*t_Jet_eta)[m],(*t_Jet_phi)[m],(*t_Jet_mass)[m]);
-
-            jj=j1+j2;
-
-            if(t_diJet_mass_mo<jj.M()) t_diJet_mass_mo=jj.M();
-
-          }
-          }
-         }
 	}
-
 
 	for(int i=0;i<nElectron;i++){
           t_El_genPartIdx->push_back(Electron_genPartIdx[i]);
