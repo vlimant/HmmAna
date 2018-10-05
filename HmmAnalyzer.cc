@@ -238,18 +238,10 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	    t_Jet_nMuons->push_back(Jet_nMuons[j]);   
 	    t_Jet_puId->push_back(Jet_puId[j]);   
             if(Jet_btagDeepB[j]>0.4941){
-              if(*isData!='T'){
-		double jet_scalefactor    = reader.eval_auto_bounds(
-								    "central", 
-								    BTagEntry::FLAV_B, 
-								    fabs(Jet_eta[j]), // absolute value of eta
-								    Jet_pt[j]
-								    ); 
-		double jet_scalefactor_up = reader.eval_auto_bounds(
-								    "up", BTagEntry::FLAV_B, fabs(Jet_eta[j]), Jet_pt[j]);
-		double jet_scalefactor_do = reader.eval_auto_bounds(
-								    "down", BTagEntry::FLAV_B, fabs(Jet_eta[j]), Jet_pt[j]); 
-		//cout<<jet_scalefactor<<" "<<jet_scalefactor_up<<" "<<jet_scalefactor_do<<endl;
+	      if(*isData!='T'){
+		double jet_scalefactor    = reader.eval_auto_bounds("central", BTagEntry::FLAV_B,fabs(Jet_eta[j]), Jet_pt[j]); 
+		double jet_scalefactor_up = reader.eval_auto_bounds("up", BTagEntry::FLAV_B, fabs(Jet_eta[j]), Jet_pt[j]);
+		double jet_scalefactor_do = reader.eval_auto_bounds("down", BTagEntry::FLAV_B, fabs(Jet_eta[j]), Jet_pt[j]); 
 		t_bJet_SF->push_back(jet_scalefactor);
 		t_bJet_SFup->push_back(jet_scalefactor_up);
 		t_bJet_SFdown->push_back(jet_scalefactor_do);
