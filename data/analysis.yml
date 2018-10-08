@@ -42,7 +42,7 @@ datasets:
         miniaod: /VBFHToMuMu_M125_13TeV_amcatnlo_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.000823 #YR 0.0008208 #Hmm old twiki
         nevents: 1000000 #central nanoAOD
-        sumOfgenWeight: 4506449.599577 #central nanoAOD
+        sumOfgenWeight: 4022986.765625 #4506449.599577(first round) #central nanoAOD
     
     #Higgs production in association with a W+ boson
     wph_hmumu:
@@ -50,7 +50,7 @@ datasets:
         nanoaod: /WplusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/NANOAODSIM
         miniaod: /WplusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM
         xs: 0.000183 #YR 0.0001858 #Hmm old twiki
-        sumOfgenWeight:259992.317749#cental nanoAOD
+        sumOfgenWeight:259992.317749 #cental nanoAOD
         
     #Higgs production in association with a W- boson
     wmh_hmumu:
@@ -68,7 +68,7 @@ datasets:
         miniaod: /ZH_HToMuMu_ZToAll_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.000192 #YR
         nevents: 
-        sumOfgenWeight: 13507.2419434
+        sumOfgenWeight: 234623.306747 #central nanoAOD 13507.2419434
         
     #Higgs production in association with a top quark pair   
     tth_hmumu:
@@ -85,7 +85,7 @@ datasets:
         miniaod: 
         xs:  6.871e+02 +- 5.174e-01 pb #GenXSecAnalyzer
         nevents:  
-        sumOfgenWeight:  
+        sumOfgenWeight: 11784986264.000000  #central nanoAOD
         
     DYJetsToLL:
        - name: DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8
@@ -95,8 +95,9 @@ datasets:
        xs: 5765.4 #McM: 6529.0 pb	
        nevents: 181511556 #ext, central nanoAOD
                 7413121 #central nanoAOD
-       sumOfgenWeight: 3241270753030.957031 #ext central nanoAOD
-                       489144902631.884766 #central nanoAOD
+       sumOfgenWeight: 3258462550016.000000 #ext1 (first nanoAOD dataset), central nanoAOD
+                       492179082112.000000 # (second nanoAOD dataset) central nanoAOD
+                       
        
     ZZTo4L:
        - name: ZZTo4L_13TeV_powheg_pythia8
@@ -130,7 +131,7 @@ datasets:
        nanoaod: /ZZ_TuneCP5_13TeV-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
        miniaod: /ZZ_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs: 16.523
-       sumOfgenWeight: 1949768.0
+       sumOfgenWeight: 1949768.0 #Central nanoAOD
        
     WZTo1L1Nu2Q:
        - name: WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8
@@ -138,7 +139,7 @@ datasets:
        miniaod: /WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
        xs: 1.161e+01 +- 5.392e-02 pb #GenXSecAnalyzer
        nevents: 
-       sumOfgenWeight: 352741934.219
+       sumOfgenWeight: 352741934.218750 #Central nanoAOD
         
     WZTo2L2Q:
        - name: WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8
@@ -146,7 +147,7 @@ datasets:
        miniaod: /WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs: 5.595
        nevents: 
-       sumOfgenWeight: 255256973.25
+       sumOfgenWeight: 267734884.250000 #Central nanoAOD 255256973.25
         
     WZTo3LNu:
        - name: WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8 
@@ -154,7 +155,7 @@ datasets:
        miniaod: /WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs: 4.42965
        nevents: 
-       sumOfgenWeight: 93694769.25
+       sumOfgenWeight: 93694769.25 #Central nanoADO
         
     WWToLNuQQ:
        - name: WWToLNuQQ_NNPDF31_TuneCP5_13TeV-powheg-pythia8
@@ -162,7 +163,7 @@ datasets:
        miniaod: /WWToLNuQQ_NNPDF31_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs: 4.599e+01 +- 2.930e-02 pb #GenXSecAnalyzer
        nevents:  
-       sumOfgenWeight:  405648754.016
+       sumOfgenWeight:  405648754.015625 #Central nanoADO
         
     WWTo2L2Nu:
        - name: WWTo2L2Nu_NNPDF31_TuneCP5Up_13TeV-powheg-pythia8
@@ -178,19 +179,30 @@ datasets:
        miniaod: /TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs: 0.2001 
        nevents:  
-       sumOfgenWeight:  
+       sumOfgenWeight: 
+   
+   TTZJetsToLLNuNu: 
+       - name: TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8
+       nanoaod: 
+       miniaod: /TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+       xs: 0.2001 
+       nevents:  
+       sumOfgenWeight: 1840656.296875 #Central nanoADO
        
    TTTo2l2Nu:
    nanoaod: /TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
-    xs: 85.656 
+            /TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+            /TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8/
+   xs: 85.656 
    sumOfgenWeight: 623402174.0 #central nanoAOD
-   
+                   4782395097.687500 #central nanoAOD, PSweights sample
+                   744733.000000 #entral nanoAOD, madgraph sample
    WWW_4F:
    nanoaod: /WWW_4F_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM 
    xs:0.2086
-   sumOfgenWeight: 50039.244873
+   sumOfgenWeight: 50039.244873 #central nanoAOD
    
    WWZ_4F:
    nanoaod: /WWZ_4F_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
    xs:0.1651
-   sumOfgenWeight: 41205.3044434
+   sumOfgenWeight: 41205.3044434 #central nanoAOD
