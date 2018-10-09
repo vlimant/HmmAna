@@ -17,6 +17,9 @@ declare -a arr=(
 "WWToLNuQQ"
 "WWW_4F"
 "WWZ_4F"
+"ttJets_DiLept"
+"TTZToLLNuNu"
+"TTWJetsToLNu"
 )
 ## now loop through the above array
 for i in "${arr[@]}"

@@ -54,6 +54,7 @@ public :
    Float_t         t_genWeight;
    UInt_t          t_mu1;
    UInt_t          t_mu2;
+   UInt_t          t_index_trigm_mu;
    vector<int>     *t_El_charge;
    vector<float>   *t_El_pt;
    vector<float>   *t_El_phi;
@@ -69,6 +70,7 @@ public :
    vector<float>   *t_El_dxyErr;
    vector<float>   *t_El_dz;
    vector<float>   *t_El_dzErr;
+   vector<float>   *t_Electron_mvaFall17Iso;
    vector<bool>    *t_Electron_mvaFall17Iso_WP80;
    vector<bool>    *t_Electron_mvaFall17Iso_WP90;
    vector<bool>    *t_Electron_mvaFall17Iso_WPL;
@@ -76,6 +78,12 @@ public :
    vector<bool>    *t_Electron_mvaFall17noIso_WP90;
    vector<bool>    *t_Electron_mvaFall17noIso_WPL;
    vector<int>     *t_Mu_charge;
+   vector<float>   *t_Mu_EffSF_TRIG;
+   vector<float>   *t_Mu_EffSFErr_TRIG;
+   vector<float>   *t_Mu_EffSF_ID;
+   vector<float>   *t_Mu_EffSFErr_ID;
+   vector<float>   *t_Mu_EffSF_ISO;
+   vector<float>   *t_Mu_EffSFErr_ISO; 
    vector<float>   *t_Mu_pt;
    vector<float>   *t_Mu_ptErr;
    vector<float>   *t_Mu_phi;
@@ -182,6 +190,10 @@ public :
    vector<int>     *t_bJet_nElectrons;
    vector<int>     *t_bJet_nMuons;
    vector<int>     *t_bJet_puId;
+   vector<double>   *t_bJet_SF;
+   vector<double>   *t_bJet_SFup;
+   vector<double>   *t_bJet_SFdown;
+
    Float_t         t_PV_ndof;
    Float_t         t_PV_x;
    Float_t         t_PV_y;
@@ -203,6 +215,7 @@ public :
    TBranch        *b_t_genWeight;   //!
    TBranch        *b_t_mu1;   //!
    TBranch        *b_t_mu2;   //!
+   TBranch        *b_t_index_trigm_mu;
    TBranch        *b_t_El_charge;   //!
    TBranch        *b_t_El_pt;   //!
    TBranch        *b_t_El_phi;   //!
@@ -218,6 +231,7 @@ public :
    TBranch        *b_t_El_dxyErr;   //!
    TBranch        *b_t_El_dz;   //!
    TBranch        *b_t_El_dzErr;   //!
+   TBranch        *b_t_Electron_mvaFall17Iso;
    TBranch        *b_t_Electron_mvaFall17Iso_WP80;   //!
    TBranch        *b_t_Electron_mvaFall17Iso_WP90;   //!
    TBranch        *b_t_Electron_mvaFall17Iso_WPL;   //!
@@ -225,6 +239,12 @@ public :
    TBranch        *b_t_Electron_mvaFall17noIso_WP90;   //!
    TBranch        *b_t_Electron_mvaFall17noIso_WPL;   //!
    TBranch        *b_t_Mu_charge;   //!
+   TBranch        *b_t_Mu_EffSF_TRIG;
+   TBranch        *b_t_Mu_EffSFErr_TRIG;
+   TBranch        *b_t_Mu_EffSF_ID;
+   TBranch        *b_t_Mu_EffSFErr_ID;
+   TBranch        *b_t_Mu_EffSF_ISO;
+   TBranch        *b_t_Mu_EffSFErr_ISO;
    TBranch        *b_t_Mu_pt;   //!
    TBranch        *b_t_Mu_ptErr;   //!
    TBranch        *b_t_Mu_phi;   //!
@@ -331,6 +351,9 @@ public :
    TBranch        *b_t_bJet_nElectrons;   //!
    TBranch        *b_t_bJet_nMuons;   //!
    TBranch        *b_t_bJet_puId;   //!
+   TBranch        *b_t_bJet_SF;
+   TBranch        *b_t_bJet_SFup;
+   TBranch        *b_t_bJet_SFdown;
    TBranch        *b_t_PV_ndof;   //!
    TBranch        *b_t_PV_x;   //!
    TBranch        *b_t_PV_y;   //!
@@ -384,6 +407,7 @@ void NtupleVariables::Init(TTree *tree)
    t_El_dxyErr = 0;
    t_El_dz = 0;
    t_El_dzErr = 0;
+   t_Electron_mvaFall17Iso=0;
    t_Electron_mvaFall17Iso_WP80 = 0;
    t_Electron_mvaFall17Iso_WP90 = 0;
    t_Electron_mvaFall17Iso_WPL = 0;
@@ -391,6 +415,12 @@ void NtupleVariables::Init(TTree *tree)
    t_Electron_mvaFall17noIso_WP90 = 0;
    t_Electron_mvaFall17noIso_WPL = 0;
    t_Mu_charge = 0;
+   t_Mu_EffSF_TRIG=0;
+   t_Mu_EffSFErr_TRIG=0;
+   t_Mu_EffSF_ID=0;
+   t_Mu_EffSFErr_ID=0;
+   t_Mu_EffSF_ISO=0;
+   t_Mu_EffSFErr_ISO=0;
    t_Mu_pt = 0;
    t_Mu_ptErr = 0;
    t_Mu_phi = 0;
@@ -483,6 +513,9 @@ void NtupleVariables::Init(TTree *tree)
    t_bJet_nElectrons = 0;
    t_bJet_nMuons = 0;
    t_bJet_puId = 0;
+   t_bJet_SF = 0;
+   t_bJet_SFup = 0;
+   t_bJet_SFdown = 0;
    t_GenPart_eta = 0;
    t_GenPart_mass = 0;
    t_GenPart_phi = 0;
@@ -502,6 +535,7 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_genWeight", &t_genWeight, &b_t_genWeight);
    fChain->SetBranchAddress("t_mu1", &t_mu1, &b_t_mu1);
    fChain->SetBranchAddress("t_mu2", &t_mu2, &b_t_mu2);
+   fChain->SetBranchAddress("t_index_trigm_mu", &t_index_trigm_mu, &b_t_index_trigm_mu);
    fChain->SetBranchAddress("t_El_charge", &t_El_charge, &b_t_El_charge);
    fChain->SetBranchAddress("t_El_pt", &t_El_pt, &b_t_El_pt);
    fChain->SetBranchAddress("t_El_phi", &t_El_phi, &b_t_El_phi);
@@ -517,6 +551,7 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_El_dxyErr", &t_El_dxyErr, &b_t_El_dxyErr);
    fChain->SetBranchAddress("t_El_dz", &t_El_dz, &b_t_El_dz);
    fChain->SetBranchAddress("t_El_dzErr", &t_El_dzErr, &b_t_El_dzErr);
+   fChain->SetBranchAddress("t_Electron_mvaFall17Iso", &t_Electron_mvaFall17Iso, &b_t_Electron_mvaFall17Iso);
    fChain->SetBranchAddress("t_Electron_mvaFall17Iso_WP80", &t_Electron_mvaFall17Iso_WP80, &b_t_Electron_mvaFall17Iso_WP80);
    fChain->SetBranchAddress("t_Electron_mvaFall17Iso_WP90", &t_Electron_mvaFall17Iso_WP90, &b_t_Electron_mvaFall17Iso_WP90);
    fChain->SetBranchAddress("t_Electron_mvaFall17Iso_WPL", &t_Electron_mvaFall17Iso_WPL, &b_t_Electron_mvaFall17Iso_WPL);
@@ -524,6 +559,12 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_Electron_mvaFall17noIso_WP90", &t_Electron_mvaFall17noIso_WP90, &b_t_Electron_mvaFall17noIso_WP90);
    fChain->SetBranchAddress("t_Electron_mvaFall17noIso_WPL", &t_Electron_mvaFall17noIso_WPL, &b_t_Electron_mvaFall17noIso_WPL);
    fChain->SetBranchAddress("t_Mu_charge", &t_Mu_charge, &b_t_Mu_charge);
+   fChain->SetBranchAddress("t_Mu_EffSF_TRIG", &t_Mu_EffSF_TRIG, &b_t_Mu_EffSF_TRIG);
+   fChain->SetBranchAddress("t_Mu_EffSFErr_TRIG", &t_Mu_EffSFErr_TRIG, &b_t_Mu_EffSFErr_TRIG);
+   fChain->SetBranchAddress("t_Mu_EffSF_ID", &t_Mu_EffSF_ID, &b_t_Mu_EffSF_ID);
+   fChain->SetBranchAddress("t_Mu_EffSFErr_ID", &t_Mu_EffSFErr_ID, &b_t_Mu_EffSFErr_ID);
+   fChain->SetBranchAddress("t_Mu_EffSF_ISO", &t_Mu_EffSF_ISO, &b_t_Mu_EffSF_ISO);
+   fChain->SetBranchAddress("t_Mu_EffSFErr_ISO", &t_Mu_EffSFErr_ISO, &b_t_Mu_EffSFErr_ISO);
    fChain->SetBranchAddress("t_Mu_pt", &t_Mu_pt, &b_t_Mu_pt);
    fChain->SetBranchAddress("t_Mu_ptErr", &t_Mu_ptErr, &b_t_Mu_ptErr);
    fChain->SetBranchAddress("t_Mu_phi", &t_Mu_phi, &b_t_Mu_phi);
@@ -630,6 +671,9 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_bJet_nElectrons", &t_bJet_nElectrons, &b_t_bJet_nElectrons);
    fChain->SetBranchAddress("t_bJet_nMuons", &t_bJet_nMuons, &b_t_bJet_nMuons);
    fChain->SetBranchAddress("t_bJet_puId", &t_bJet_puId, &b_t_bJet_puId);
+   fChain->SetBranchAddress("t_bJet_SF", &t_bJet_SF, &b_t_bJet_SF);
+   fChain->SetBranchAddress("t_bJet_SFup", &t_bJet_SFup, &b_t_bJet_SFup);
+   fChain->SetBranchAddress("t_bJet_SFdown", &t_bJet_SFdown, &b_t_bJet_SFdown);
    fChain->SetBranchAddress("t_PV_ndof", &t_PV_ndof, &b_t_PV_ndof);
    fChain->SetBranchAddress("t_PV_x", &t_PV_x, &b_t_PV_x);
    fChain->SetBranchAddress("t_PV_y", &t_PV_y, &b_t_PV_y);

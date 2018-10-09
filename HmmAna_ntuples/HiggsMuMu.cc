@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
   const char *isData        = argv[4];
   HiggsMuMu hmm(inputFileList, outFileName, data, isData);
   cout << "dataset " << data << " " << endl;
-  //hmm.EventLoop(data, isData);
+  hmm.EventLoop(data, isData);
   hmm.Categorization(data, isData, 100, 140);
   //hmm.GenInfo(data, isData);
   return 0;
@@ -122,7 +122,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
       vector<int> el;
       vector<int> mu;
       el.clear();
-      mu.clear();
+      /*    mu.clear();
 
       if(t_Mu_pt->size() > 2){
          bool Event_sel =  false;
@@ -139,11 +139,11 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
             }
             if(Event_sel) break;
          }
-      }
-
+	 }
+*/
       if(t_Mu_pt->size() > 2){
          for(int i=0; i<t_Mu_pt->size(); i++){
-             if(i!=index_mu1 && i!=index_mu2){
+             if(i!=t_mu1 && i!=t_mu2){
                  if(t_Mu_pt->at(i)>10.) mu.push_back(i);
              }
          }  
@@ -158,22 +158,33 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
       }
 
       //if(index_mu1!=0 || index_mu2!=1) cout <<"dimuon pair index: "<<index_mu1<<" "<<index_mu2<<endl;
-
+      
       TLorentzVector dimu, mu1,mu2;
-      mu1.SetPtEtaPhiM((*t_Mu_pt)[index_mu1],(*t_Mu_eta)[index_mu1],(*t_Mu_phi)[index_mu1],muon_mass);
-      mu2.SetPtEtaPhiM((*t_Mu_pt)[index_mu2],(*t_Mu_eta)[index_mu2],(*t_Mu_phi)[index_mu2],muon_mass);
+      if(t_mu1>1000 || t_mu2>1000)continue;
+      mu1.SetPtEtaPhiM((*t_Mu_pt)[t_mu1],(*t_Mu_eta)[t_mu1],(*t_Mu_phi)[t_mu1],muon_mass);
+      mu2.SetPtEtaPhiM((*t_Mu_pt)[t_mu2],(*t_Mu_eta)[t_mu2],(*t_Mu_phi)[t_mu2],muon_mass);
       double diMuon_mass = (mu1 + mu2).M(); 
       double diMuon_pt = (mu1 + mu2).Pt();
       double diMuon_eta = (mu1 + mu2).Eta();
-      double dR= DeltaR((*t_Mu_eta)[index_mu1],(*t_Mu_phi)[index_mu1],(*t_Mu_eta)[index_mu2],(*t_Mu_phi)[index_mu2]);
-      double dEta = (*t_Mu_eta)[index_mu1] - (*t_Mu_eta)[index_mu2];
-      double dPhi= DeltaPhi((*t_Mu_phi)[index_mu2],(*t_Mu_phi)[index_mu1]);
+      double diMuon_phi = (mu1 + mu2).Phi();
+      double dR= DeltaR((*t_Mu_eta)[t_mu1],(*t_Mu_phi)[t_mu1],(*t_Mu_eta)[t_mu2],(*t_Mu_phi)[t_mu2]);
+      double dEta = (*t_Mu_eta)[t_mu1] - (*t_Mu_eta)[t_mu2];
+      double dPhi= DeltaPhi((*t_Mu_phi)[t_mu2],(*t_Mu_phi)[t_mu1]);
       //SR: 120-130, sideband: 110-120, 130-150
+      double lepSF;
       if(diMuon_mass>mlo && diMuon_mass<mhi){
           double binv = catyield->GetBinContent(10);
           binv = binv + t_genWeight;
+	  if(*isData=='F'){
+	    if(t_index_trigm_mu==t_mu1) lepSF = (*t_Mu_EffSF_TRIG)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu1]*(*t_Mu_EffSF_ISO)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu2]*(*t_Mu_EffSF_ISO)[t_mu2];
+	    
+	    else if( t_index_trigm_mu==t_mu2) lepSF = (*t_Mu_EffSF_TRIG)[t_mu2]*(*t_Mu_EffSF_ID)[t_mu1]*(*t_Mu_EffSF_ISO)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu2]*(*t_Mu_EffSF_ISO)[t_mu2];
+	    
+	    
+	    evt_wt*=lepSF;
+	  }
           catyield->SetBinContent(10,binv);
-          h_diMuon_mass->Fill(diMuon_mass,evt_wt);
+          h_diMuon_mass_cat->Fill(diMuon_mass,evt_wt);
         
           run  =  t_run;
           event = t_event;
@@ -184,29 +195,70 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
           Higgs_eta = diMuon_eta; 
           //ttH
           if(t_nbJet>0){
+	    if(*isData=='F')evt_wt*=(*t_bJet_SF)[0];
               if(el.size()> 0  || mu.size()>0){
                   cat_index = 1;
                   double binv = catyield->GetBinContent(1);
                   binv = binv + t_genWeight;
                   catyield->SetBinContent(1,binv);
-                  h_diMuon_mass_ttHLep->Fill(diMuon_mass,evt_wt);
-              }
+                  if(*isData=='F')h_diMuon_mass_ttHLep->Fill(diMuon_mass,evt_wt);
+		  if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_ttHLep->Fill(diMuon_mass,evt_wt);
+		  else if(*isData=='F')h_diMuon_mass_110To140_ttHLep->Fill(diMuon_mass,evt_wt);
+		  if(diMuon_mass<120. || diMuon_mass>130.){
+		    h_mu1mu2dR_ttHLep->Fill(dR,evt_wt);
+		    h_mu1mu2dPhi_ttHLep->Fill(dPhi,evt_wt);
+		    h_mu1mu2dEta_ttHLep->Fill(dEta,evt_wt);
+		    h_diMuon_pt_ttHLep->Fill(diMuon_pt,evt_wt);
+		    h_diMuon_eta_ttHLep->Fill(diMuon_eta,evt_wt);
+		    h_diMuon_phi_ttHLep->Fill(diMuon_phi,evt_wt);
+		    //h_Nbjet_ttHLep->Fill(t_nbJet);
+		    h_leading_bJet_pt_ttHLep->Fill((*t_bJet_pt)[0],evt_wt);
+		    h_leading_bJet_eta_ttHLep->Fill((*t_bJet_eta)[0],evt_wt);
+		    h_leading_bJet_phi_ttHLep->Fill((*t_bJet_phi)[0],evt_wt);
+		  }
+	      }
               else if(t_nJet>4){
                   cat_index = 2;
                   double binv = catyield->GetBinContent(2);
                   binv = binv + t_genWeight;
                   catyield->SetBinContent(2,binv);
-                  h_diMuon_mass_ttHHad->Fill(diMuon_mass,evt_wt);
+                  if(*isData=='F')h_diMuon_mass_ttHHad->Fill(diMuon_mass,evt_wt);
+		  if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_ttHHad->Fill(diMuon_mass,evt_wt);
+		  else if(*isData=='F')h_diMuon_mass_110To140_ttHHad->Fill(diMuon_mass,evt_wt);
+		  if(diMuon_mass<120. || diMuon_mass>130.){
+		    h_mu1mu2dR_ttHHad->Fill(dR,evt_wt);
+		    h_mu1mu2dPhi_ttHHad->Fill(dPhi,evt_wt);
+		    h_mu1mu2dEta_ttHHad->Fill(dEta,evt_wt);
+		    h_diMuon_pt_ttHHad->Fill(diMuon_pt,evt_wt);
+		    h_diMuon_eta_ttHHad->Fill(diMuon_eta,evt_wt);
+		    h_diMuon_phi_ttHHad->Fill(diMuon_phi,evt_wt);
+		    h_leading_bJet_pt_ttHHad->Fill((*t_bJet_pt)[0],evt_wt);
+		    h_leading_bJet_eta_ttHHad->Fill((*t_bJet_eta)[0],evt_wt);
+		    h_leading_bJet_phi_ttHHad->Fill((*t_bJet_phi)[0],evt_wt);
+		  }
               }
               else{
                   cat_index = 3;
                   double binv = catyield->GetBinContent(3);
                   binv = binv + t_genWeight;
                   catyield->SetBinContent(3,binv);
-                  h_diMuon_mass_ZHll->Fill(diMuon_mass,evt_wt);
+                  if(*isData=='F')h_diMuon_mass_ttHLoose->Fill(diMuon_mass,evt_wt);
+		  if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_ttHLoose->Fill(diMuon_mass,evt_wt);
+		  else if(*isData=='F')h_diMuon_mass_110To140_ttHLoose->Fill(diMuon_mass,evt_wt);
+		  if(diMuon_mass<120. || diMuon_mass>130.){
+		    h_mu1mu2dR_ttHLoose->Fill(dR,evt_wt);
+		    h_mu1mu2dPhi_ttHLoose->Fill(dPhi,evt_wt);
+		    h_mu1mu2dEta_ttHLoose->Fill(dEta,evt_wt);
+		    h_diMuon_pt_ttHLoose->Fill(diMuon_pt,evt_wt);
+		    h_diMuon_eta_ttHLoose->Fill(diMuon_eta,evt_wt);
+		    h_diMuon_phi_ttHLoose->Fill(diMuon_phi,evt_wt);
+		    h_leading_bJet_pt_ttHLoose->Fill((*t_bJet_pt)[0],evt_wt);
+		    h_leading_bJet_eta_ttHLoose->Fill((*t_bJet_eta)[0],evt_wt);
+		    h_leading_bJet_phi_ttHLoose->Fill((*t_bJet_phi)[0],evt_wt);
+		  }
               }
               cattree->Fill();
-          }
+	  }
           //ZH mm
           else if(mu.size()>1){
               bool isOS=false;
@@ -269,29 +321,36 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
           }
           //WH, W->ev
           else if(el.size()>0){
+
               double binv = catyield->GetBinContent(5);
               binv = binv + t_genWeight;
               catyield->SetBinContent(5,binv);
-              h_diMuon_mass_WHlv->Fill(diMuon_mass,evt_wt);
-             
+	      double dRlepH = DeltaR(t_El_eta->at(el.at(0)),t_El_phi->at(el.at(0)),(mu1+mu2).Eta(), (mu1+mu2).Phi());
+	
+	      if(*isData=='F')h_diMuon_mass_WHlv->Fill(diMuon_mass,evt_wt);
+	      if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_WHlv->Fill(diMuon_mass,evt_wt);
+	      else if(*isData=='F')h_diMuon_mass_110To140_WHlv->Fill(diMuon_mass,evt_wt);
               //h_mu1mu2dEta->Fill(dEta,evt_wt); 
-              h_mu1mu2dR->Fill(dR,evt_wt);
-              h_mu1mu2dPhi->Fill(dPhi,evt_wt);
-              h_diMuon_pt->Fill(diMuon_pt,evt_wt);
-              h_diMuon_eta->Fill(diMuon_eta,evt_wt);
-
-              h_extralep1_pt->Fill(t_El_pt->at(el.at(0)),evt_wt);
-              h_extralep1_eta->Fill(t_El_eta->at(el.at(0)),evt_wt);
-              double dRlepH = DeltaR(t_El_eta->at(el.at(0)),t_El_phi->at(el.at(0)),(mu1+mu2).Eta(), (mu1+mu2).Phi());
-              h_dRlepH->Fill(dRlepH,evt_wt); 
-
+	      if(diMuon_mass<120. || diMuon_mass>130.){
+		h_mu1mu2dR_WHTolv->Fill(dR,evt_wt);
+		h_mu1mu2dPhi_WHTolv->Fill(dPhi,evt_wt);
+		h_mu1mu2dEta_WHTolv->Fill(dEta,evt_wt);
+		h_diMuon_pt_WHTolv->Fill(diMuon_pt,evt_wt);
+		h_diMuon_eta_WHTolv->Fill(diMuon_eta,evt_wt);
+		h_diMuon_phi_WHTolv->Fill(diMuon_phi,evt_wt);
+		h_extralep1_pt->Fill(t_El_pt->at(el.at(0)),evt_wt);
+		h_extralep1_eta->Fill(t_El_eta->at(el.at(0)),evt_wt);
+		h_dRlepH->Fill(dRlepH,evt_wt); 
+		h_extralep_Electron_mvaFall17Iso->Fill(t_Electron_mvaFall17Iso->at(el.at(0)),evt_wt);
+              
+	      }
               cat_index = 5;
               MET_pt = t_MET_pt;
               MET_phi = t_MET_phi;
               extralep_pfRelIso03 = t_El_pfRelIso03_all->at(el.at(0));
               extralep_pt = t_El_pt->at(el.at(0));
               extralep_eta = t_El_eta->at(el.at(0)); 
-              dRlepHiggs = dRlepH;
+	      dRlepHiggs = dRlepH;
               dRmm = dR;
               dEtamm = dEta;
               dPhimm = dPhi;
@@ -300,21 +359,26 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
           //WH, W->mv
           else if(mu.size()>0){
           //else if(t_Mu_pt->size()==3 && t_Mu_pt->at(2)>10. && fabs(t_Mu_eta->at(2))<2.4){
-              double binv = catyield->GetBinContent(6);
-              binv = binv + t_genWeight;
-              catyield->SetBinContent(6,binv);
-              h_diMuon_mass_WHlv->Fill(diMuon_mass,evt_wt);
-              /*
-              h_mu1mu2dR->Fill(dR,evt_wt);
-              h_mu1mu2dPhi->Fill(dPhi,evt_wt);
-              h_diMuon_pt->Fill(diMuon_pt,evt_wt);
-              h_diMuon_eta->Fill(diMuon_eta,evt_wt);
-              */
+	    if(*isData=='F')evt_wt*=t_Mu_EffSF_ID->at(mu.at(0))*t_Mu_EffSF_ISO->at(mu.at(0));
+	    double binv = catyield->GetBinContent(6);
+	    binv = binv + t_genWeight;
+	    catyield->SetBinContent(6,binv);
+	    double dRlepH = DeltaR(t_Mu_eta->at(mu.at(0)),t_Mu_phi->at(mu.at(0)),(mu1+mu2).Eta(), (mu1+mu2).Phi());
+             
+	    if(*isData=='F')h_diMuon_mass_WHlv->Fill(diMuon_mass,evt_wt);
+	    if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_WHlv->Fill(diMuon_mass,evt_wt);
+	    else if(*isData=='F')h_diMuon_mass_110To140_WHlv->Fill(diMuon_mass,evt_wt);
+	    if(diMuon_mass<120. || diMuon_mass>130.){
+	      h_mu1mu2dR_WHTolv->Fill(dR,evt_wt);
+	      h_mu1mu2dPhi_WHTolv->Fill(dPhi,evt_wt);
+	      h_mu1mu2dEta_WHTolv->Fill(dEta,evt_wt);
+	      h_diMuon_pt_WHTolv->Fill(diMuon_pt,evt_wt);
+	      h_diMuon_eta_WHTolv->Fill(diMuon_eta,evt_wt);
+	      h_diMuon_phi_WHTolv->Fill(diMuon_phi,evt_wt);
               h_extralep1_pt->Fill(t_Mu_pt->at(mu.at(0)),evt_wt);
               h_extralep1_eta->Fill(t_Mu_eta->at(mu.at(0)),evt_wt);
-              double dRlepH = DeltaR(t_Mu_eta->at(mu.at(0)),t_Mu_phi->at(mu.at(0)),(mu1+mu2).Eta(), (mu1+mu2).Phi());
               h_dRlepH->Fill(dRlepH,evt_wt);
-
+	    }
               //run  =  t_run;
               //event =  t_event;
               //genWeight = evt_wt;
@@ -328,7 +392,6 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
               dEtamm = dEta;
               dPhimm = dPhi;
               cattree->Fill();
-
           }
           //VBF
           else if(t_diJet_mass>400.){
@@ -336,9 +399,26 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
               double binv = catyield->GetBinContent(7);
               binv = binv + t_genWeight;
               catyield->SetBinContent(7,binv);
-              h_diMuon_mass_VBF->Fill(diMuon_mass,evt_wt);
-              cattree->Fill();
-          }
+              if(*isData=='F')h_diMuon_mass_VBF->Fill(diMuon_mass,evt_wt);
+	      if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_VBF->Fill(diMuon_mass,evt_wt);
+	      else if(*isData=='F')h_diMuon_mass_110To140_VBF->Fill(diMuon_mass,evt_wt);
+	      if(diMuon_mass<120. || diMuon_mass>130.){
+		h_diMuon_pt_VBF->Fill(diMuon_pt,evt_wt);
+		h_diMuon_eta_VBF->Fill(diMuon_eta,evt_wt);
+		h_diMuon_phi_VBF->Fill(diMuon_phi,evt_wt);
+		h_mu1mu2dR_VBF->Fill(dR,evt_wt);
+		h_mu1mu2dPhi_VBF->Fill(dPhi,evt_wt);
+		h_mu1mu2dEta_VBF->Fill(dEta,evt_wt);
+
+		h_dijet_pt_VBF->Fill(t_diJet_pt,evt_wt);
+		h_dijet_eta_VBF->Fill(t_diJet_eta,evt_wt);
+		h_dijet_phi_VBF->Fill(t_diJet_phi,evt_wt);
+		h_Mjj_VBF->Fill(t_diJet_mass,evt_wt);
+		h_dijet_dEta_VBF->Fill((*t_Jet_eta)[0]-(*t_Jet_eta)[1],evt_wt);
+	      }
+	      cattree->Fill();
+	  }
+	  
           //VH, had
           else if(t_diJet_mass>60. && t_diJet_mass<110){
               cat_index = 8;
@@ -434,9 +514,9 @@ void HiggsMuMu::EventLoop(const char *data,const char *isData)
 
 	  h_Njet->Fill(t_nJet,evt_wt);
 	  h_Nbjet->Fill(t_nbJet,evt_wt);
-	  cout<<t_nJet<<endl;
+	  //cout<<t_nJet<<endl;
 	  if(t_nJet>0){
-	    cout<<(*t_Jet_pt)[0]<<endl;
+	    //cout<<(*t_Jet_pt)[0]<<endl;
 	    h_j1pt->Fill((*t_Jet_pt)[0],evt_wt);
 	    //cout<<"pt\n";
 	    h_j1eta->Fill((*t_Jet_eta)[0],evt_wt);
