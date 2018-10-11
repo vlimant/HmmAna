@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
   HiggsMuMu hmm(inputFileList, outFileName, data, isData);
   cout << "dataset " << data << " " << endl;
   hmm.EventLoop(data, isData);
-  hmm.Categorization(data, isData, 100, 140);
+  hmm.Categorization(data, isData, 100, 150);
   //hmm.GenInfo(data, isData);
   return 0;
 }
@@ -332,6 +332,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	      else if(*isData=='F')h_diMuon_mass_110To140_WHlv->Fill(diMuon_mass,evt_wt);
               //h_mu1mu2dEta->Fill(dEta,evt_wt); 
 	      if(diMuon_mass<120. || diMuon_mass>130.){
+                h_MET_pt_WHTolv->Fill(t_MET_pt,evt_wt);
 		h_mu1mu2dR_WHTolv->Fill(dR,evt_wt);
 		h_mu1mu2dPhi_WHTolv->Fill(dPhi,evt_wt);
 		h_mu1mu2dEta_WHTolv->Fill(dEta,evt_wt);
@@ -369,6 +370,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	    if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_WHlv->Fill(diMuon_mass,evt_wt);
 	    else if(*isData=='F')h_diMuon_mass_110To140_WHlv->Fill(diMuon_mass,evt_wt);
 	    if(diMuon_mass<120. || diMuon_mass>130.){
+              h_MET_pt_WHTolv->Fill(t_MET_pt,evt_wt);
 	      h_mu1mu2dR_WHTolv->Fill(dR,evt_wt);
 	      h_mu1mu2dPhi_WHTolv->Fill(dPhi,evt_wt);
 	      h_mu1mu2dEta_WHTolv->Fill(dEta,evt_wt);

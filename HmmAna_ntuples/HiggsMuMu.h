@@ -124,6 +124,7 @@ public :
   TH1D *h_diMuon_eta_ttHLep;
   TH1D *h_diMuon_phi_ttHLep;
 
+  TH1D *h_MET_pt_WHTolv;
   TH1D *h_mu1mu2dR_WHTolv;
   TH1D *h_mu1mu2dPhi_WHTolv;
   TH1D *h_mu1mu2dEta_WHTolv;
@@ -243,6 +244,7 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   h_extralep1_pt = new TH1D("h_extralep1_pt","extralep1_pt",10,0,100);
   h_extralep1_eta = new TH1D("h_extralep1_eta","extralep1_eta",10,-5,5);
   h_extralep_Electron_mvaFall17Iso =new TH1D("Electron_mvaFall17Iso","Electron_mvaFall17Iso",100,0.,1.);
+  h_mu1mu2dR_WHTolv=new TH1D("MET_pt_WHlv","MET pT",25,0.,200.);
   h_mu1mu2dR_WHTolv=new TH1D("mu1mu2dR_WHlv","#Delta R between two leading muons",15,0.,4.);
   h_mu1mu2dPhi_WHTolv=new TH1D("mu1mu2dPhi_WHlv","#Delta #phi for two leading muons",32,-3.2,3.2);
   h_mu1mu2dEta_WHTolv=new TH1D("mu1mu2dEta_WHlv","#Delta #eta for two leading muons",80,-8.,8.);
