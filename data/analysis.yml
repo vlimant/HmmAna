@@ -195,7 +195,7 @@ datasets:
        - name: TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8
        nanoaod: 
        miniaod: /TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-       xs: 0.2001 
+       xs: 0.2529
        nevents:  
        sumOfgenWeight: 1840656.296875 #Central nanoADO
        N_nanoAODfiles: 10
