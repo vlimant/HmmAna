@@ -188,8 +188,8 @@ datasets:
        miniaod: /TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        xs: 0.2001 
        nevents:  
-       sumOfgenWeight: 
-       N_nanoAODfiles: 
+       sumOfgenWeight: 1682066.50879
+       N_nanoAODfiles: 7
        
    TTZJetsToLLNuNu: 
        - name: TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8
