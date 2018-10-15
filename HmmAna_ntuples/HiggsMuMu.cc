@@ -484,7 +484,11 @@ void HiggsMuMu::EventLoop(const char *data,const char *isData)
       if(olp){
 	//cout<<evt_wt<<endl;
 	//if(t_diMuon_mass<120. || t_diMuon_mass>130.)h_diMuon_mass->Fill(t_diMuon_mass,evt_wt);
-	/*if(m12.M()<120. || m12.M()>130.)*/h_diMuon_mass->Fill(m12.M(),evt_wt);
+	if(*isData=='T'){
+	  if(m12.M()<120. || m12.M()>130.)
+	    h_diMuon_mass->Fill(m12.M(),evt_wt);
+	}
+	else h_diMuon_mass->Fill(m12.M(),evt_wt);
 	if(m12.M()>120. && m12.M()<130.)h_diMuon_mass_SR->Fill(m12.M(),evt_wt);
 	if((m12.M()>110. && m12.M()<120.) || (m12.M()>130. && m12.M()<150.)){
 	  h_mu1pt->Fill((*t_Mu_pt)[0],evt_wt);
