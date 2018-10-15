@@ -17,6 +17,8 @@ datasets = [#"ttTo2l2v",
           #  "WWW_4F",
            # "WWZ_4F",
  #          "ZH",
+  "TTWJetsToLNu",
+  "TTZToLLNuNu"
 ]
 
 for data in datasets:

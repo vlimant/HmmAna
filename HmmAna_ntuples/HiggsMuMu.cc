@@ -483,7 +483,19 @@ void HiggsMuMu::EventLoop(const char *data,const char *isData)
 	}
       }
       //cout<<olp<<endl;
+
+
+      double lepSF;
       if(olp){
+
+	if(*isData=='F'){
+	  if(t_index_trigm_mu==t_mu1) lepSF = (*t_Mu_EffSF_TRIG)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu1]*(*t_Mu_EffSF_ISO)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu2]*(*t_Mu_EffSF_ISO)[t_mu2];
+	  
+	  else if( t_index_trigm_mu==t_mu2) lepSF = (*t_Mu_EffSF_TRIG)[t_mu2]*(*t_Mu_EffSF_ID)[t_mu1]*(*t_Mu_EffSF_ISO)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu2]*(*t_Mu_EffSF_ISO)[t_mu2];
+	    
+	    
+	  evt_wt*=lepSF;
+	}
 	//cout<<evt_wt<<endl;
 	//if(t_diMuon_mass<120. || t_diMuon_mass>130.)h_diMuon_mass->Fill(t_diMuon_mass,evt_wt);
 	if(*isData=='T'){
