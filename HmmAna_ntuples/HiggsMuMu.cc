@@ -195,28 +195,33 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
           Higgs_eta = diMuon_eta; 
           //ttH
           if(t_nbJet>0){
-	    if(*isData=='F')evt_wt*=(*t_bJet_SF)[0];
-              if(el.size()> 0  || mu.size()>0){
-                  cat_index = 1;
-                  double binv = catyield->GetBinContent(1);
-                  binv = binv + t_genWeight;
-                  catyield->SetBinContent(1,binv);
-                  if(*isData=='F')h_diMuon_mass_ttHLep->Fill(diMuon_mass,evt_wt);
-		  if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_ttHLep->Fill(diMuon_mass,evt_wt);
-		  else if(*isData=='F')h_diMuon_mass_110To140_ttHLep->Fill(diMuon_mass,evt_wt);
-		  if(diMuon_mass<120. || diMuon_mass>130.){
-		    h_mu1mu2dR_ttHLep->Fill(dR,evt_wt);
-		    h_mu1mu2dPhi_ttHLep->Fill(dPhi,evt_wt);
-		    h_mu1mu2dEta_ttHLep->Fill(dEta,evt_wt);
-		    h_diMuon_pt_ttHLep->Fill(diMuon_pt,evt_wt);
-		    h_diMuon_eta_ttHLep->Fill(diMuon_eta,evt_wt);
-		    h_diMuon_phi_ttHLep->Fill(diMuon_phi,evt_wt);
-		    //h_Nbjet_ttHLep->Fill(t_nbJet);
-		    h_leading_bJet_pt_ttHLep->Fill((*t_bJet_pt)[0],evt_wt);
-		    h_leading_bJet_eta_ttHLep->Fill((*t_bJet_eta)[0],evt_wt);
-		    h_leading_bJet_phi_ttHLep->Fill((*t_bJet_phi)[0],evt_wt);
-		  }
+	    if(*isData=='F'){
+	      for(int k=0;k<t_Jet_pt->size();k++){
+		if((*t_Jet_btagDeepB)[k]>0.4941) evt_wt*=(*t_bJet_SF)[k];
+		else evt_wt*=(1-(*t_bJet_SF)[k]);
 	      }
+	    }
+	    if(el.size()> 0  || mu.size()>0){
+	      cat_index = 1;
+	      double binv = catyield->GetBinContent(1);
+	      binv = binv + t_genWeight;
+	      catyield->SetBinContent(1,binv);
+	      if(*isData=='F')h_diMuon_mass_ttHLep->Fill(diMuon_mass,evt_wt);
+	      if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_ttHLep->Fill(diMuon_mass,evt_wt);
+	      else if(*isData=='F')h_diMuon_mass_110To140_ttHLep->Fill(diMuon_mass,evt_wt);
+	      if(diMuon_mass<120. || diMuon_mass>130.){
+		h_mu1mu2dR_ttHLep->Fill(dR,evt_wt);
+		h_mu1mu2dPhi_ttHLep->Fill(dPhi,evt_wt);
+		h_mu1mu2dEta_ttHLep->Fill(dEta,evt_wt);
+		h_diMuon_pt_ttHLep->Fill(diMuon_pt,evt_wt);
+		h_diMuon_eta_ttHLep->Fill(diMuon_eta,evt_wt);
+		h_diMuon_phi_ttHLep->Fill(diMuon_phi,evt_wt);
+		//h_Nbjet_ttHLep->Fill(t_nbJet);
+		h_leading_bJet_pt_ttHLep->Fill((*t_bJet_pt)[0],evt_wt);
+		h_leading_bJet_eta_ttHLep->Fill((*t_bJet_eta)[0],evt_wt);
+		h_leading_bJet_phi_ttHLep->Fill((*t_bJet_phi)[0],evt_wt);
+	      }
+	    }
               else if(t_nJet>4){
                   cat_index = 2;
                   double binv = catyield->GetBinContent(2);
