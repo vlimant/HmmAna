@@ -202,6 +202,7 @@ class HmmAnalyzer : public MainEvent {
   float t_diJet_mass;
   float t_diJet_mass_mo;
 
+  float t_cthetaCS;
   int t_nbJet;
   std::vector<float>         *t_bJet_area;   
   std::vector<float>         *t_bJet_btagCMVA;   
@@ -476,7 +477,7 @@ void HmmAnalyzer::clearTreeVectors(){
   t_diMuon_eta=-1000;
   t_diMuon_phi=-1000;
   t_diMuon_mass=-1000;
-
+  t_cthetaCS=-1000;
   t_MET_phi=-1000;
   t_MET_pt=-1000;
   t_MET_sumEt=-1000;
@@ -713,6 +714,7 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_diMuon_phi",  &t_diMuon_phi,"t_diMuon_phi/F");
   tree->Branch("t_diMuon_mass",   &t_diMuon_mass,"t_diMuon_mass/F");
 
+  tree->Branch("t_cthetaCS",&t_cthetaCS,"t_cthetaCS/F");
   tree->Branch("t_MET_phi",  &t_MET_phi,"t_MET_phi/F");
   tree->Branch("t_MET_pt",   &t_MET_pt,"t_MET_pt/F");
   tree->Branch("t_MET_sumEt",&t_MET_sumEt,"t_MET_sumEt/F");

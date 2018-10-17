@@ -206,6 +206,8 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
 	t_diMuon_phi= dimu.Phi();
 	t_diMuon_mass= dimu.M();
 
+	t_cthetaCS=2*(mu2.E()*mu1.Pz()-mu1.E()*mu2.Pz())/(dimu.M()*sqrt(pow(dimu.M(),2)+pow(dimu.Pt(),2)));
+
 	for (int j =0;j<nJet;j++){
 	  bool matched_mu=false;
 	  for(int i=0;i<t_Mu_pt->size();i++){
