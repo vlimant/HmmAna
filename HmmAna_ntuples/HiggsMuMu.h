@@ -57,6 +57,19 @@ public :
   float dPhimm = -9999.;  
   float MET_phi = -9999.;
   float MET_pt = -9999.;
+  float dEta_jj = -9999.;
+  float M_jj= -9999.;
+  float Zep = -9999.;
+  float dRmin_mj = -9999.;
+  float dRmax_mj = -9999.;
+  float dRmin_mmj = -9999.;
+  float dRmax_mmj= -9999.;
+  float leadingJet_pt = -9999.;
+  float subleadingJet_pt = -9999.;
+  float leadingJet_eta = -9999.;
+  float subleadingJet_eta = -9999.;
+  float dPhijj=-9999.;
+  float cthetaCS = -9999.;
   std::vector<int>   *l1_index;
   std::vector<int>   *l2_index;
 
@@ -214,10 +227,20 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   cattree->Branch("l2_index", "vector<int>", &l2_index);
   cattree->Branch("MET_phi", &MET_phi, "MET_phi/F");
   cattree->Branch("MET_pt", &MET_pt, "MET_pt/F");
-
-  
+  cattree->Branch("dEta_jj", &dEta_jj,"dEta_jj/F");
+  cattree->Branch("M_jj", &M_jj,"M_jj/F");
+  cattree->Branch("Zep", &Zep,"Zep/F");
+  cattree->Branch("dRmin_mj", &dRmin_mj,"dRmin_mj/F");
+  cattree->Branch("dRmax_mj", &dRmax_mj,"dRmax_mj/F");
+  cattree->Branch("dRmin_mmj", &dRmin_mmj,"dRmin_mmj/F");
+  cattree->Branch("dRmax_mmj", &dRmax_mmj,"dRmax_mmj/F");
+  cattree->Branch("leadingJet_pt",&leadingJet_pt,"leadingJet_pt/F");
+  cattree->Branch("subleadingJet_pt",&subleadingJet_pt,"subleadingJet_pt/F");
+  cattree->Branch("leadingJet_eta",&leadingJet_eta,"leadingJet_eta/F");
+  cattree->Branch("subleadingJet_eta",&subleadingJet_eta,"subleadingJet_eta/F");
+  cattree->Branch("dPhijj", &dPhijj,"dPhijj/F");
+  cattree->Branch("cthetaCS",&cthetaCS,"cthetaCS/F");
   h_diMuon_mass_ggH = new TH1D("h_diMuon_mass_ggH","diMuon_mass_ggH",10,120,130);
-  
   h_diMuon_mass_VHHad = new TH1D("h_diMuon_mass_VHHad","diMuon_mass_VHHad",10,120,130);
   h_diMuon_mass_ZHll = new TH1D("h_diMuon_mass_ZHll","diMuon_mass_ZHll",10,120,130);
 

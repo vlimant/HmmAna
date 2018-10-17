@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
   const char *isData        = argv[4];
   HiggsMuMu hmm(inputFileList, outFileName, data, isData);
   cout << "dataset " << data << " " << endl;
-  hmm.EventLoop(data, isData);
+  //  hmm.EventLoop(data, isData);
   hmm.Categorization(data, isData, 100, 150);
   //hmm.GenInfo(data, isData);
   return 0;
@@ -195,12 +195,16 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
           Higgs_eta = diMuon_eta; 
           //ttH
           if(t_nbJet>0){
+
+	    //	    if(t_nJet!=t_nbJet)cout<<evt_wt<<" :";
 	    if(*isData=='F'){
-	      for(int k=0;k<t_Jet_pt->size();k++){
+	      /*for(int k=0;k<t_nJet;k++){
+		//		if(t_nJet!=t_nbJet)cout<<fabs(t_nJet-t_nbJet)<<endl;
 		if((*t_Jet_btagDeepB)[k]>0.4941) evt_wt*=(*t_bJet_SF)[k];
 		else evt_wt*=(1-(*t_bJet_SF)[k]);
-	      }
+		}*/
 	    }
+	    //	    if(t_nJet!=t_nbJet)cout<<evt_wt<<endl;
 	    if(el.size()> 0  || mu.size()>0){
 	      cat_index = 1;
 	      double binv = catyield->GetBinContent(1);
@@ -348,10 +352,10 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 		h_extralep1_eta->Fill(t_El_eta->at(el.at(0)),evt_wt);
 		h_dRlepH->Fill(dRlepH,evt_wt); 
 		h_extralep_Electron_mvaFall17Iso->Fill(t_Electron_mvaFall17Iso->at(el.at(0)),evt_wt);
-              
+		
 	      }
               cat_index = 5;
-              MET_pt = t_MET_pt;
+              /*MET_pt = t_MET_pt;
               MET_phi = t_MET_phi;
               extralep_pfRelIso03 = t_El_pfRelIso03_all->at(el.at(0));
               extralep_pt = t_El_pt->at(el.at(0));
@@ -359,7 +363,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	      dRlepHiggs = dRlepH;
               dRmm = dR;
               dEtamm = dEta;
-              dPhimm = dPhi;
+              dPhimm = dPhi;*/
               cattree->Fill();
           }
           //WH, W->mv
@@ -390,14 +394,14 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
               //event =  t_event;
               //genWeight = evt_wt;
               cat_index = 6;
-              MET_pt = t_MET_pt;
+              /*MET_pt = t_MET_pt;
               MET_phi = t_MET_phi;
               extralep_pt = t_Mu_pt->at(mu.at(0));
               extralep_eta = t_Mu_eta->at(mu.at(0));
               dRlepHiggs = dRlepH;
               dRmm = dR;
               dEtamm = dEta;
-              dPhimm = dPhi;
+              dPhimm = dPhi;*/
               cattree->Fill();
           }
           //VBF
@@ -423,6 +427,52 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 		h_Mjj_VBF->Fill(t_diJet_mass,evt_wt);
 		h_dijet_dEta_VBF->Fill((*t_Jet_eta)[0]-(*t_Jet_eta)[1],evt_wt);
 	      }
+	      dRmm = dR;
+              dEtamm = dEta;
+              dPhimm = dPhi;
+	      M_jj=t_diJet_mass;
+	      dEta_jj=(*t_Jet_eta)[0]-(*t_Jet_eta)[1];
+	      Zep=diMuon_eta-0.5*((*t_Jet_eta)[0]+(*t_Jet_eta)[1])/fabs((*t_Jet_eta)[0]-(*t_Jet_eta)[1]);
+	      
+	      double dr[4];
+	      dr[0]=DeltaR((*t_Mu_eta)[t_mu2],(*t_Mu_phi)[t_mu2],(*t_Jet_eta)[0],(*t_Jet_phi)[0]);
+	      dr[1] = DeltaR((*t_Mu_eta)[t_mu1],(*t_Mu_phi)[t_mu1],(*t_Jet_eta)[0],(*t_Jet_phi)[0]);
+	      dr[2]=DeltaR((*t_Mu_eta)[t_mu2],(*t_Mu_phi)[t_mu2],(*t_Jet_eta)[1],(*t_Jet_phi)[1]);
+	      dr[3]=DeltaR((*t_Mu_eta)[t_mu1],(*t_Mu_phi)[t_mu1],(*t_Jet_eta)[1],(*t_Jet_phi)[1]);
+	      
+	      for (int c = 0 ; c < 3; c++)
+		{
+		  for (int d = 0 ; d < 3 - c; d++)
+		    {
+		      if (dr[d] > dr[d+1]) /* For decreasing order use < */
+			{
+			  double swap = dr[d];
+			  dr[d]   = dr[d+1];
+			  dr[d+1] = swap;
+			}
+		    }
+		}
+	      dRmin_mj=dr[0];
+	      dRmax_mj=dr[3];
+
+	      dr[0]=DeltaR(diMuon_eta,diMuon_phi,(*t_Jet_eta)[0],(*t_Jet_phi)[0]);
+	      dr[1]=DeltaR(diMuon_eta,diMuon_phi,(*t_Jet_eta)[1],(*t_Jet_phi)[1]);
+	      
+	      if(dr[0]>dr[1]){
+		dRmin_mmj=dr[1];
+		dRmax_mmj=dr[0];
+	      }
+	      else{
+		dRmin_mmj=dr[0];
+                dRmax_mmj=dr[1];
+	      }
+	      
+	      dPhijj=DeltaPhi((*t_Jet_phi)[1],(*t_Jet_phi)[0]);
+	      leadingJet_pt=(*t_Jet_pt)[0];
+	      subleadingJet_pt=(*t_Jet_pt)[1];
+	      leadingJet_eta = (*t_Jet_eta)[0];
+	      subleadingJet_eta = (*t_Jet_eta)[1];
+	      cthetaCS=2*(mu2.E()*mu1.Pz()-mu1.E()*mu2.Pz())/(diMuon_mass*sqrt(pow(diMuon_mass,2)+pow(diMuon_pt,2)));
 	      cattree->Fill();
 	  }
 	  
