@@ -95,13 +95,21 @@ datasets:
                 /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
                 /DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
                 /DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
-       miniaod: /DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+       miniaod: /DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+                /DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
                 /DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-       xs: 5765.4 #McM: 6529.0 pb	
+       xs: 5765.4 #McM: 6529.0 pb	(inclusive sample)
+           5409 #McM (0j)
+           937.4 #McM (1j)
+           291 #McM (2j)
        nevents: 181511556 #ext, central nanoAOD
                 7413121 #central nanoAOD
        sumOfgenWeight: 3258462550016.000000 #ext1 (first nanoAOD dataset), central nanoAOD
                        492179082112.000000 # (second nanoAOD dataset) central nanoAOD
+                       525496638080.000000 #0J
+                       587697890042.468750 #1J
+                       137566456384.000000 #2J
+                       
        N_nanoAODfiles: 20 #ext1 (first nanoAOD dataset), central nanoAOD
                        134 # (second nanoAOD dataset) central nanoAOD                
        
