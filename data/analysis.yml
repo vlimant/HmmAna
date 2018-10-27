@@ -106,9 +106,9 @@ datasets:
                 7413121 #central nanoAOD
        sumOfgenWeight: 3258462550016.000000 #ext1 (first nanoAOD dataset), central nanoAOD
                        492179082112.000000 # (second nanoAOD dataset) central nanoAOD
-                       525496638080.000000 #0J
-                       587697890042.468750 #1J
-                       137566456384.000000 #2J
+                       527851878538.000000 #0J
+                       444408909938.000000 #1J
+                       137595943613.000000 #2J
                        
        N_nanoAODfiles: 20 #ext1 (first nanoAOD dataset), central nanoAOD
                        134 # (second nanoAOD dataset) central nanoAOD                
