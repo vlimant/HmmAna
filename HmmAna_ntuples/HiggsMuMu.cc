@@ -472,8 +472,23 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	      subleadingJet_pt=(*t_Jet_pt)[1];
 	      leadingJet_eta = (*t_Jet_eta)[0];
 	      subleadingJet_eta = (*t_Jet_eta)[1];
+
 	      cthetaCS=2*(mu2.E()*mu1.Pz()-mu1.E()*mu2.Pz())/(diMuon_mass*sqrt(pow(diMuon_mass,2)+pow(diMuon_pt,2)));
+	      cout<<event<<" "<<cthetaCS<<" "<<Zep<<endl;
 	      cattree->Fill();
+	      if(diMuon_mass<120. || diMuon_mass>130.){
+		h_dijet_dPhijj_VBF->Fill(dPhijj,evt_wt);
+		h_jet1_pt_VBF->Fill(leadingJet_pt,evt_wt);
+		h_jet2_pt_VBF->Fill(subleadingJet_pt,evt_wt);
+		h_jet1_eta_VBF->Fill(leadingJet_eta,evt_wt);
+		h_jet2_eta_VBF->Fill(subleadingJet_eta,evt_wt);
+		h_cthetaCS_VBF->Fill(cthetaCS,evt_wt);
+		h_dRmin_mj_VBF->Fill(dRmin_mj,evt_wt);
+		h_dRmax_mj_VBF->Fill(dRmax_mj,evt_wt);
+		h_dRmin_mmj_VBF->Fill(dRmin_mmj,evt_wt);
+                h_dRmax_mmj_VBF->Fill(dRmax_mmj,evt_wt);
+		h_Zep_VBF->Fill(Zep,evt_wt);
+	      }
 	  }
 	  
           //VH, had
