@@ -24,6 +24,7 @@
 #include<string>
 #include "TF1.h"
 #include "TAxis.h"
+#include<map>
 class HiggsMuMu:public NtupleVariables  {
 public :
 
@@ -32,7 +33,7 @@ public :
   Bool_t   FillChain(TChain *chain, const TString &inputFileList);
   Long64_t LoadTree(Long64_t entry);
   void     EventLoop(const char *, const char *);
-  void     Categorization(const char *, const char *, float , float);
+  void     Categorization(const char *, const char *, float , float,double);
   void     GenInfo(const char *, const char *);
   void     BookHistogram(const char *);
   void     clearTreeVectors();

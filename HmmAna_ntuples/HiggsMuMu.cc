@@ -20,8 +20,42 @@ int main(int argc, char* argv[])
   const char *isData        = argv[4];
   HiggsMuMu hmm(inputFileList, outFileName, data, isData);
   cout << "dataset " << data << " " << endl;
+
+  map<TString,double> proc_scale;
+  double lumi = 41.529*1000.;
+  proc_scale["Glu"]=0.009605*lumi/217554238.5;
+  proc_scale["VBFHToMuMu"]=0.000823*lumi/4022986.765625;
+  /* proc_scale["ZH"]=0.000192*lumi/234623.306747;
+  proc_scale["WplusH"]=0.000183*lumi/259992.317749;
+  proc_scale["WminusH"]=0.000116*lumi/162196.811523;
+  proc_scale["ttH"]=0.000110*lumi/155014.531738;*/
+  proc_scale["DYJetsToLL"]=5765.4*lumi/(3258462550016.0+492179082112.0);
+  /*proc_scale["TTToSemiLeptonic"]=6.871e+02*lumi/11784986264.000000;
+  proc_scale["TTTo2L"]=85.656*lumi/(623402174.0+4782395097.687500);
+  proc_scale["WZTo1L1Nu2Q"]=1.161e+01*lumi/352741934.218750;
+  proc_scale["WZTo3LNu"]=4.42965*lumi/93694769.25;
+  proc_scale["WZTo2L2Q"]=5.595*lumi/267734884.25;
+  proc_scale["ZZ"]=16.523*lumi/1949768.0;
+  proc_scale["WWTo2L2Nu"]=12.46*lumi/177178.179688;
+  proc_scale["WWToLNuQQ"]=4.599e+01*lumi/405648754.015625;
+  proc_scale["WWW_4F"]=0.2086*lumi/50039.244873;
+  proc_scale["WWZ_4F"]=0.1651*lumi/41205.3044434;*/
+  proc_scale["DYJetsToLL_ext"]=5765.4*lumi/3258462550016.0;
+  proc_scale["DYJetsToLL_small"]=5765.4*lumi/492179082112.0;
+  /* proc_scale["TTTo2L_small"]=85.656*lumi/623402174.0;
+  proc_scale["TTTo2L2Nu_TuneCP5_PSweights"]=85.656*lumi/4782395097.687500;
+  proc_scale["TTZToLLNuNu"]=0.2529*lumi/1840656.296875;
+  proc_scale["TTW"]=0.2001*lumi/1682066.50879;*/
+  proc_scale["DY_0J"]=5409.0*lumi/525496638080.000000;
+  proc_scale["DY_1J"]=937.4*lumi/587697890042.468750;
+  proc_scale["DY_2J"]=291.0*lumi/137566456384.000000;
+
+
+  TString procname   = argv[3];
+  if(*isData=='F') cout <<"process name: "<<procname<<" scale: "<<proc_scale[procname]<<endl;
+  
   //  hmm.EventLoop(data, isData);
-  hmm.Categorization(data, isData, 100, 150);
+  hmm.Categorization(data, isData, 100, 150,proc_scale[procname]);
   //hmm.GenInfo(data, isData);
   return 0;
 }
@@ -99,7 +133,7 @@ void HiggsMuMu::GenInfo(const char *data,const char *isData)
   }
 }
 
-void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, float mhi)
+void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, float mhi, double scale)
 {  if (fChain == 0) return;
    cout <<"mass window: "<<mlo<<" - "<<mhi<<endl;
    //TH1F *catyield = new TH1F("h_category_yield","h_category_yield",10,0,10);
@@ -116,8 +150,9 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       clearTreeVectors();
       double evt_wt;
+      //cout<<"Scale : "<<scale<<endl;
       if(*isData=='T'){evt_wt=1.;}
-      else evt_wt=t_genWeight;
+      else evt_wt=t_genWeight*scale;
       int index_mu1 =0, index_mu2=1;
       vector<int> el;
       vector<int> mu;
