@@ -107,6 +107,17 @@ public :
   TH1D *h_dijet_phi_VBF;
   TH1D *h_Mjj_VBF;
   TH1D *h_dijet_dEta_VBF;
+  TH1D *h_dijet_dPhijj_VBF;
+  TH1D *h_jet1_pt_VBF;
+  TH1D *h_jet2_pt_VBF;
+  TH1D *h_jet1_eta_VBF;
+  TH1D *h_jet2_eta_VBF;
+  TH1D *h_cthetaCS_VBF;
+  TH1D *h_dRmin_mj_VBF;
+  TH1D *h_dRmax_mj_VBF;
+  TH1D *h_dRmin_mmj_VBF;
+  TH1D *h_dRmax_mmj_VBF;
+  TH1D *h_Zep_VBF;
 
   TH1D *h_leading_bJet_pt_ttHLoose;
   TH1D *h_leading_bJet_eta_ttHLoose;
@@ -289,10 +300,22 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   h_diMuon_phi_VBF=new TH1D("diMuon_phi_VBF","#phi for dimuon system",32,-3.2,3.2);
   h_diMuon_eta_VBF=new TH1D("diMuon_eta_VBF","#eta for dimuon system",40,-4.,4.);
   h_dijet_pt_VBF=new TH1D("dijet_pt_VBF","P_{T} for dijet system",100,0.0,1000.);
-  h_dijet_eta_VBF=new TH1D("dijet_phi_VBF","#phi for dijet system",32,-3.2,3.2);
-  h_dijet_phi_VBF=new TH1D("dijet_eta_VBF","#eta for dijet system",40,-4.,4.);
+  h_dijet_phi_VBF=new TH1D("dijet_phi_VBF","#phi for dijet system",32,-3.2,3.2);
+  h_dijet_eta_VBF=new TH1D("dijet_eta_VBF","#eta for dijet system",40,-4.,4.);
   h_Mjj_VBF=new TH1D("diJet_mass_VBF","Mass for dijet system",100,60.,1000.);
   h_dijet_dEta_VBF=new TH1D("dijet_dEta_VBF","#Delta #eta for two leading jets",80,-8.,8.);
+  h_dijet_dPhijj_VBF=new TH1D("dijet_dPhijj_VBF","#Delta #phi for dijet system",32,-3.2,3.2);
+  h_jet1_pt_VBF=new TH1D("jet1_pt_VBF","P_{T} for leading jet",100,0.0,1000.);
+  h_jet2_pt_VBF=new TH1D("jet2_pt_VBF","P_{T} for sub-leading jet",100,0.0,1000.);
+  h_jet1_eta_VBF=new TH1D("jet1_eta_VBF","#eta for leading jet",40,-4.,4.);
+  h_jet2_eta_VBF=new TH1D("jet2_eta_VBF","#eta for sub-leading jet",40,-4.,4.);
+  h_cthetaCS_VBF=new TH1D("cthetaCS_VBF","cos(#theta^{*})",20,0.,1.);
+  h_dRmin_mj_VBF=new TH1D("dRmin_mj_VBF","Min. #Delta R between muon and jet",15,0.,4.);
+  h_dRmax_mj_VBF=new TH1D("dRmax_mj_VBF","Max. #Delta R between muon and jet",15,0.,4.);
+  h_dRmin_mmj_VBF=new TH1D("dRmin_mmj_VBF","Min. #Delta R between dimuon pair and jet",15,0.,4.);
+  h_dRmax_mmj_VBF=new TH1D("dRmax_mmj_VBF","Max. #Delta R between dimuon pair and jet",15,0.,4.);
+  h_Zep_VBF=new TH1D("Zep_VBF","Zeppenfeld variable",50,-5.,5.);
+
   //========================================================================================//
   oFile->mkdir("ttHHad");
   oFile->cd("ttHHad");
