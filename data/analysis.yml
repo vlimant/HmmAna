@@ -20,6 +20,15 @@ datasets:
       - name: RunF
         nanoaod: /SingleMuon/Run2017F-31Mar2018-v1/NANOAOD
         miniaod: 
+      - name: 2016
+        nanoaod: /SingleMuon/Run2016B-22Aug2018_ver1-v1/NANOAOD (not used)
+        /SingleMuon/Run2016B-22Aug2018_ver2-v1/NANOAOD
+        /SingleMuon/Run2016C-22Aug2018-v1/NANOAOD
+        /SingleMuon/Run2016D-22Aug2018-v1/NANOAOD
+        /SingleMuon/Run2016E-22Aug2018-v1/NANOAOD
+        /SingleMuon/Run2016F-22Aug2018-v1/NANOAOD
+        /SingleMuon/Run2016G-22Aug2018-v1/NANOAOD
+        /SingleMuon/Run2016H-22Aug2018-v1/NANOAOD
 
   #All the MC samples
   simulation:
@@ -95,9 +104,14 @@ datasets:
                 /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
                 /DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
                 /DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+                #2016
+                /DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16NanoAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/NANOAODSIM (106)
+                
        miniaod: /DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
                 /DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
                 /DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+                #2016
+                /DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM (871)
        xs: 5765.4 #McM: 6529.0 pb	(inclusive sample)
            5409 #McM (0j)
            937.4 #McM (1j)
