@@ -466,6 +466,17 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
               dEtamm = dEta;
               dPhimm = dPhi;
 	      M_jj=t_diJet_mass;
+	      pt_jj=t_diJet_pt;
+	      eta_jj=t_diJet_eta;
+	      phi_jj=t_diJet_phi;
+	      TLorentzVector dimu,dijet,mmjj;
+	      dimu.SetPtEtaPhiM(diMuon_pt,diMuon_eta,diMuon_phi,diMuon_mass);
+	      dijet.SetPtEtaPhiM(t_diJet_pt,t_diJet_eta,t_diJet_phi,t_diJet_mass);
+	      mmjj=dimu+dijet;
+	      M_mmjj=mmjj.M();
+	      pt_mmjj=mmjj.Pt();
+	      eta_mmjj=mmjj.Eta();
+	      phi_mmjj=mmjj.Phi();
 	      dEta_jj=(*t_Jet_eta)[0]-(*t_Jet_eta)[1];
 	      Zep=diMuon_eta-0.5*((*t_Jet_eta)[0]+(*t_Jet_eta)[1])/fabs((*t_Jet_eta)[0]-(*t_Jet_eta)[1]);
 	      
@@ -507,9 +518,10 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	      subleadingJet_pt=(*t_Jet_pt)[1];
 	      leadingJet_eta = (*t_Jet_eta)[0];
 	      subleadingJet_eta = (*t_Jet_eta)[1];
-
+	      leadingJet_qgl=(*t_Jet_qgl)[0];
+	      subleadingJet_qgl=(*t_Jet_qgl)[1];
 	      cthetaCS=2*(mu2.E()*mu1.Pz()-mu1.E()*mu2.Pz())/(diMuon_mass*sqrt(pow(diMuon_mass,2)+pow(diMuon_pt,2)));
-	      cout<<event<<" "<<cthetaCS<<" "<<Zep<<endl;
+	      //cout<<event<<" "<<cthetaCS<<" "<<Zep<<endl;
 	      cattree->Fill();
 	      if(diMuon_mass<120. || diMuon_mass>130.){
 		h_dijet_dPhijj_VBF->Fill(dPhijj,evt_wt);
