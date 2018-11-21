@@ -38,7 +38,9 @@ datasets:
       - name: GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8
         mass: 125
         nanoaod: /GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
+                 /GluGluHToMuMu_M-125_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
         miniaod: /GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+                 /GluGluHToMuMu_M-125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.009605 #YR, 0.009618 #Hmm old twiki #unit is pb
         nevents: 
         sumOfgenWeight: 217554238.5 #central nanoAOD
