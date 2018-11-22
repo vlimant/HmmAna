@@ -235,7 +235,7 @@ datasets:
        xs: 85.656 
        sumOfgenWeight: 623402174.0 #central nanoAOD
                    4782395097.687500 #central nanoAOD, PSweights sample
-                   744733.000000 #entral nanoAOD, madgraph sample
+                   199762.000000 (?744733.000000) #entral nanoAOD, madgraph sample
        N_nanoAODfiles: 10
                       107 
                       
