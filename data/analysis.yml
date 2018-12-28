@@ -200,7 +200,7 @@ datasets:
        sumOfgenWeight:  405648754.015625 #Central nanoADO
        N_nanoAODfiles: 8
        
-    WWTo2L2Nu:
+    WWTo2L2Nu_TuneCp5Up:
        - name: WWTo2L2Nu_NNPDF31_TuneCP5Up_13TeV-powheg-pythia8
        nanoaod:               
        miniaod: /WWTo2L2Nu_NNPDF31_TuneCP5Up_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
@@ -208,7 +208,16 @@ datasets:
        nevents: 
        sumOfgenWeight: 177178.179688
        N_nanoAODfiles: 7
-        
+     
+     WWTo2L2Nu:
+       - name: WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8
+       nanoaod:    /WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM           
+       miniaod: 
+       xs: 12.46
+       nevents: 
+       sumOfgenWeight: 21080826.3516
+       N_nanoAODfiles: 6
+       
    TTWJetsToLNu: 
        - name: TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8
        nanoaod: 
