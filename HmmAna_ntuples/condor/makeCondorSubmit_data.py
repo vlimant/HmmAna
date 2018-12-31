@@ -9,7 +9,7 @@ datasets = [#["DY1J", "DY1J"]
             #["VBFHToMuMu","VBFHToMuMu"]
             #["ZZ","ZZ"]
             #["ttTosemileptonic","ttTosemileptonic"]
-            ["ZH","ZH"]
+            #["ZH","ZH"]
             #["ttH","ttH"]
             #["WminusH","WminusH"]
             #["WplusH","WplusH"]
@@ -18,12 +18,13 @@ datasets = [#["DY1J", "DY1J"]
             #["WZTo3LNu","WZTo3LNu"]
             #["WZTo2L2Q","WZTo2L2Q"]
             #["WWTo2L2Nu","WWTo2L2Nu"]
-            #["WWTo2L2Nu_Up","WWTo2L2Nu_Up"]
             #["WWToLNuQQ","WWToLNuQQ"]
             #["WWW_4F","WWW_4F"]
             #["WWZ_4F","WWZ_4F"]
+            #["ttJets_DiLept","ttJets_DiLept"]
             #["TTZToLLNuNu","TTZToLLNuNu"]
             #["TTWJetsToLNu","TTWJetsToLNu"]
+            ["Data","Data"]
 ]
 
 NSections = 10
@@ -185,14 +186,6 @@ for data in datasets:
         NSections = 10
 
 
-    elif ( data[0]=="WWTo2L2Nu_Up"):
-        dataname = "WWTo2L2Nu_Up"
-        inputfname = "WWTo2L2Nu_Up.txt"
-        with open(inputfname) as inputfile:
-            readFiles = inputfile.readlines()
-            print "len(readFiles)", len(readFiles)
-        NSections = 10
-
     elif ( data[0]=="WWToLNuQQ"):
         dataname = "WWToLNuQQ"
         inputfname = "WWToLNuQQ.txt"
@@ -245,9 +238,9 @@ for data in datasets:
             print "len(readFiles)", len(readFiles)
         NSections = 10
   
-    elif ( data[0]=="MuData1"):
-        dataname = "MuData1"
-        inputfname = "Data1_Muon.txt"
+    elif ( data[0]=="Data"):
+        dataname = "Data"
+        inputfname = "Data.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
@@ -390,7 +383,6 @@ for data in datasets:
 
     NFilesTotal = len(readFiles)
     TotalFiles = NFilesTotal
-
     print "Dataset ",  data[0], " NFilesTotal ", NFilesTotal
     NFilesDone  = 0
 
@@ -398,6 +390,7 @@ for data in datasets:
     print outDir
     if not os.path.exists(outDir):
         os.mkdir(outDir)
+
     while( NFilesDone < NFilesTotal ) :
         thisList = readFiles[NFilesDone : NFilesDone+NSections]
         print "NFilesDone ", NFilesDone, "len(thisList)", len(thisList)
@@ -411,7 +404,7 @@ for data in datasets:
         condorSubmit = "condor_submit/submitCondor_"+data[0]+"_"+str(jobidx)
         jobName      = "26Dec2018"+data[0]+"_job"+str(jobidx)
         outHistFile = data[0]+"_job"+str(jobidx)+".root"
-        isData       ="F"
+        isData       ="T"
         shutil.copyfile("proto_condor_submit",condorSubmit)
         for line in fileinput.FileInput(condorSubmit, inplace=1):
             line=line.replace("JOBNAME", jobName)

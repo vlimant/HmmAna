@@ -18,6 +18,7 @@
 #include "vector"
 #include "NtupleVariables.h"
 #include "TH1D.h"
+#include "TH2D.h"
 #include "TH2F.h"
 #include "TH3F.h"
 #include "TLorentzVector.h"
@@ -127,6 +128,20 @@ public :
   TH1D *h_dRmin_mmj_VBF;
   TH1D *h_dRmax_mmj_VBF;
   TH1D *h_Zep_VBF;
+  TH1D *h_M_mmjj_VBF;
+  TH1D *h_pt_mmjj_VBF;
+  TH1D *h_eta_mmjj_VBF;
+  TH1D *h_phi_mmjj_VBF;
+  TH1D *h_leadingJet_qgl_VBF;
+  TH1D *h_subleadingJet_qgl_VBF;
+  TH2D *h_2D_ptjj_dRmm;
+  TH2D *h_2D_CS_dEtamm;
+  TH2D *h_2D_Hpt_ptjj;
+  TH2D *h_2D_Hpt_dRmm;
+  TH2D *h_2D_j1eta_dEtajj;
+  TH2D *h_2D_j2eta_dEtajj;
+  TH2D *h_2D_etammjj_etajj;
+  TH2D *h_2D_j1pt_ptjj;
 
   TH1D *h_leading_bJet_pt_ttHLoose;
   TH1D *h_leading_bJet_eta_ttHLoose;
@@ -333,7 +348,20 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   h_dRmin_mmj_VBF=new TH1D("dRmin_mmj_VBF","Min. #Delta R between dimuon pair and jet",15,0.,4.);
   h_dRmax_mmj_VBF=new TH1D("dRmax_mmj_VBF","Max. #Delta R between dimuon pair and jet",15,0.,4.);
   h_Zep_VBF=new TH1D("Zep_VBF","Zeppenfeld variable",50,-5.,5.);
-
+  h_M_mmjj_VBF = new TH1D("di_muon_jet_mass_VBF","diMuon_mass_VBF",100,500.,2000.);
+  h_pt_mmjj_VBF=new TH1D("di_muon_jet_pt_VBF","P_{T} for dimuon+dijet system",100,0.0,1000.);
+  h_eta_mmjj_VBF=new TH1D("di_muon_jet_eta_VBF","#eta for dimuon+dijet system",40,-4.,4.);
+  h_phi_mmjj_VBF=new TH1D("di_muon_jet_phi_VBF","#phi for dimuon+dijet system",32,-3.2,3.2);
+  h_leadingJet_qgl_VBF=new TH1D("jet1_qgl_VBF","QGL for leading jet",20,0.,1.);
+  h_subleadingJet_qgl_VBF=new TH1D("jet2_qgl_VBF","QGL for subleading jet",20,0.,1.);
+  h_2D_ptjj_dRmm=new TH2D("2D_ptjj_dRmm_VBF","P_{T} for dijet vs #Delta R between muons",100,0.0,1000.,15,0.,4.);
+  h_2D_CS_dEtamm=new TH2D("2D_CS_dEtamm_VBF","cos(#theta^{*}) vs #Delta #eta for two leading muons",20,0.,1.,40,-4.,4.);
+  h_2D_Hpt_ptjj=new TH2D("2D_diMuonpt_ptjj_VBF","P_{T} for dimuon system vs P_{T} for dijet",100,0.0,1000.,100,0.0,1000.);
+  h_2D_Hpt_dRmm=new TH2D("2D_diMuonpt_dRmm_VBF","P_{T} for dimuon system vs #Delta R between muons",100,0.0,1000.,15,0.,4.);
+  h_2D_j1eta_dEtajj=new TH2D("2D_j1eta_dEtajj_VBF","#eta for leading jet vs #Delta #eta for two leading jets",40,-4.,4.,40,-4.,4.);
+  h_2D_j2eta_dEtajj=new TH2D("2D_j2eta_dEtajj_VBF","#eta for sub-leading jet vs #Delta #eta for two leading jets",40,-4.,4.,40,-4.,4.);
+  h_2D_etammjj_etajj=new TH2D("2D_etammjj_etajj_VBF","#eta for dimuon+dijet system vs #Delta #eta for two leading jets",40,-4.,4.,40,-4.,4.);
+  h_2D_j1pt_ptjj=new TH2D("2D_j1pt_ptjj_VBF","P_{T} for leading jet  vs P_{T} for dijet",100,0.0,1000., 100,0.0,1000.);
   //========================================================================================//
   oFile->mkdir("ttHHad");
   oFile->cd("ttHHad");

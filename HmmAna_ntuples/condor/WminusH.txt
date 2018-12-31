@@ -1,0 +1,5 @@
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WminusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8_1_out.root
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WminusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8_2_out.root
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WminusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8_3_out.root
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WminusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8_4_out.root
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WminusH_HToMuMu_WToAll_M125_13TeV_powheg_pythia8_5_out.root

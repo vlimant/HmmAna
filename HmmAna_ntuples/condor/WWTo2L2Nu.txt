@@ -1,0 +1,6 @@
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_24Oct18_v2/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8__0.root
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_24Oct18_v2/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8__1.root
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_24Oct18_v2/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8__2.root
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_24Oct18_v2/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8__3.root
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_24Oct18_v2/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8__4.root
+/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8_24Oct18_v2/WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8__5.root

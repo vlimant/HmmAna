@@ -23,32 +23,34 @@ int main(int argc, char* argv[])
 
   map<TString,double> proc_scale;
   double lumi = 41.529*1000.;
-  proc_scale["Glu"]=0.009605*lumi/217554238.5;
+  proc_scale["ggH"]=0.009605*lumi/217554238.5;
   proc_scale["VBFHToMuMu"]=0.000823*lumi/4022986.765625;
-  /* proc_scale["ZH"]=0.000192*lumi/234623.306747;
+  proc_scale["ZH"]=0.000192*lumi/234623.306747;
   proc_scale["WplusH"]=0.000183*lumi/259992.317749;
   proc_scale["WminusH"]=0.000116*lumi/162196.811523;
-  proc_scale["ttH"]=0.000110*lumi/155014.531738;*/
+  proc_scale["ttH"]=0.000110*lumi/155014.531738;
   proc_scale["DYJetsToLL"]=5765.4*lumi/(3258462550016.0+492179082112.0);
-  /*proc_scale["TTToSemiLeptonic"]=6.871e+02*lumi/11784986264.000000;
+  proc_scale["ttTosemileptonic"]=6.871e+02*lumi/11784986264.000000;
+  proc_scale["ttTo2l2v"]=85.656*lumi/(623402174.0+4782395097.687500+199762.000000);
   proc_scale["TTTo2L"]=85.656*lumi/(623402174.0+4782395097.687500);
   proc_scale["WZTo1L1Nu2Q"]=1.161e+01*lumi/352741934.218750;
   proc_scale["WZTo3LNu"]=4.42965*lumi/93694769.25;
   proc_scale["WZTo2L2Q"]=5.595*lumi/267734884.25;
   proc_scale["ZZ"]=16.523*lumi/1949768.0;
-  proc_scale["WWTo2L2Nu"]=12.46*lumi/177178.179688;
+  proc_scale["WWTo2L2Nu"]=12.46*lumi/21080826.3516;
+  proc_scale["WWTo2L2Nu_Up"]=12.46*lumi/177178.179688;
   proc_scale["WWToLNuQQ"]=4.599e+01*lumi/405648754.015625;
   proc_scale["WWW_4F"]=0.2086*lumi/50039.244873;
-  proc_scale["WWZ_4F"]=0.1651*lumi/41205.3044434;*/
+  proc_scale["WWZ_4F"]=0.1651*lumi/41205.3044434;
   proc_scale["DYJetsToLL_ext"]=5765.4*lumi/3258462550016.0;
   proc_scale["DYJetsToLL_small"]=5765.4*lumi/492179082112.0;
-  /* proc_scale["TTTo2L_small"]=85.656*lumi/623402174.0;
+  proc_scale["TTTo2L_small"]=85.656*lumi/623402174.0;
   proc_scale["TTTo2L2Nu_TuneCP5_PSweights"]=85.656*lumi/4782395097.687500;
   proc_scale["TTZToLLNuNu"]=0.2529*lumi/1840656.296875;
-  proc_scale["TTW"]=0.2001*lumi/1682066.50879;*/
-  proc_scale["DY_0J"]=5409.0*lumi/525496638080.000000;
-  proc_scale["DY_1J"]=937.4*lumi/587697890042.468750;
-  proc_scale["DY_2J"]=291.0*lumi/137566456384.000000;
+  proc_scale["TTWJetsToLNu"]=0.2001*lumi/1682066.50879;
+  proc_scale["DY0J"]=5409.0*lumi/525496638080.000000;
+  proc_scale["DY1J"]=937.4*lumi/587697890042.468750;
+  proc_scale["DY2J"]=291.0*lumi/137566456384.000000;
 
 
   TString procname   = argv[3];
@@ -478,7 +480,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	      eta_mmjj=mmjj.Eta();
 	      phi_mmjj=mmjj.Phi();
 	      dEta_jj=(*t_Jet_eta)[0]-(*t_Jet_eta)[1];
-	      Zep=diMuon_eta-0.5*((*t_Jet_eta)[0]+(*t_Jet_eta)[1])/fabs((*t_Jet_eta)[0]-(*t_Jet_eta)[1]);
+	      Zep=(diMuon_eta-0.5*((*t_Jet_eta)[0]+(*t_Jet_eta)[1])/fabs((*t_Jet_eta)[0]-(*t_Jet_eta)[1]));
 	      
 	      double dr[4];
 	      dr[0]=DeltaR((*t_Mu_eta)[t_mu2],(*t_Mu_phi)[t_mu2],(*t_Jet_eta)[0],(*t_Jet_phi)[0]);
@@ -535,6 +537,20 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 		h_dRmin_mmj_VBF->Fill(dRmin_mmj,evt_wt);
                 h_dRmax_mmj_VBF->Fill(dRmax_mmj,evt_wt);
 		h_Zep_VBF->Fill(Zep,evt_wt);
+		h_M_mmjj_VBF->Fill(M_mmjj,evt_wt);
+		h_pt_mmjj_VBF->Fill(pt_mmjj,evt_wt);
+		h_eta_mmjj_VBF->Fill(eta_mmjj,evt_wt);
+		h_phi_mmjj_VBF->Fill(phi_mmjj,evt_wt);
+		h_leadingJet_qgl_VBF->Fill(leadingJet_qgl,evt_wt);
+		h_subleadingJet_qgl_VBF->Fill(subleadingJet_qgl,evt_wt);
+		h_2D_ptjj_dRmm->Fill(pt_jj,dRmm,evt_wt);
+		h_2D_CS_dEtamm->Fill(M_mmjj,M_jj,evt_wt);
+		h_2D_Hpt_ptjj->Fill(diMuon_pt,pt_jj,evt_wt);
+		h_2D_Hpt_dRmm->Fill(diMuon_pt,dRmm,evt_wt);
+		h_2D_j1eta_dEtajj->Fill(leadingJet_eta,dEta_jj,evt_wt);
+		h_2D_j2eta_dEtajj->Fill(subleadingJet_eta,dEta_jj,evt_wt);
+		h_2D_etammjj_etajj->Fill(eta_mmjj,eta_jj,evt_wt);
+		h_2D_j1pt_ptjj->Fill(leadingJet_pt,pt_jj,evt_wt);
 	      }
 	  }
 	  
@@ -556,7 +572,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
               h_diMuon_mass_ggH->Fill(diMuon_mass,evt_wt);
               cattree->Fill();
           }
-      }
+      }//between mlo and mhi
    }
 }
 
