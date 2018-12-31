@@ -190,9 +190,9 @@ public :
    vector<int>     *t_bJet_nElectrons;
    vector<int>     *t_bJet_nMuons;
    vector<int>     *t_bJet_puId;
-   vector<double>   *t_bJet_SF;
-   vector<double>   *t_bJet_SFup;
-   vector<double>   *t_bJet_SFdown;
+   vector<double>  *t_bJet_SF;
+   vector<double>  *t_bJet_SFup;
+   vector<double>  *t_bJet_SFdown;
 
    Float_t         t_PV_ndof;
    Float_t         t_PV_x;
