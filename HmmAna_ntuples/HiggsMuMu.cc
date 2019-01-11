@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
   proc_scale["WplusH"]=0.000183*lumi/259992.317749;
   proc_scale["WminusH"]=0.000116*lumi/162196.811523;
   proc_scale["ttH"]=0.000110*lumi/155014.531738;
-  proc_scale["DYJetsToLL"]=5765.4*lumi/(3258462550016.0+492179082112.0);
+  proc_scale["DYJetsToLL"]=6225.42*lumi/(3258462550016.0+492179082112.0);
   proc_scale["ttTosemileptonic"]=6.871e+02*lumi/11784986264.000000;
   proc_scale["ttTo2l2v"]=85.656*lumi/(623402174.0+4782395097.687500+199762.000000);
   proc_scale["TTTo2L"]=85.656*lumi/(623402174.0+4782395097.687500);
@@ -217,12 +217,16 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	    
 	    else if( t_index_trigm_mu==t_mu2) lepSF = (*t_Mu_EffSF_TRIG)[t_mu2]*(*t_Mu_EffSF_ID)[t_mu1]*(*t_Mu_EffSF_ISO)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu2]*(*t_Mu_EffSF_ISO)[t_mu2];
 	    
-	    
+	    lep_SF=lepSF;
+	    if(lepSF==0){
+
+	      if(t_index_trigm_mu==t_mu1) cout<<(*t_Mu_EffSF_TRIG)[t_mu1]<<","<<(*t_Mu_EffSF_ID)[t_mu1]<<","<<(*t_Mu_EffSF_ISO)[t_mu1]<<","<<(*t_Mu_EffSF_ID)[t_mu2]<<","<<(*t_Mu_EffSF_ISO)[t_mu2]<<endl;
+	      else if( t_index_trigm_mu==t_mu2) cout<<(*t_Mu_EffSF_TRIG)[t_mu2]<<","<<(*t_Mu_EffSF_ID)[t_mu1]<<","<<(*t_Mu_EffSF_ISO)[t_mu1]<<","<<(*t_Mu_EffSF_ID)[t_mu2]<<","<<(*t_Mu_EffSF_ISO)[t_mu2]<<endl;
+	    }
 	    evt_wt*=lepSF;
-	  }
+	    }
           catyield->SetBinContent(10,binv);
           h_diMuon_mass_cat->Fill(diMuon_mass,evt_wt);
-        
           run  =  t_run;
           event = t_event;
           lumi = t_luminosityBlock;
