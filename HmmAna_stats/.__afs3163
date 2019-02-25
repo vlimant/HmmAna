@@ -1,0 +1,11 @@
+./FitHiggsMuMu /eos/cms/store/user/nlu/Hmm/categorization/Nov12/ws_test/Data2017_nw2016.root output_Feb11 bkg
+./FitHiggsMuMu /eos/cms/store/user/nlu/Hmm/categorization/Nov12/ws_test/Glu_nw2016.root output_Feb11 ggH
+./FitHiggsMuMu /eos/cms/store/user/nlu/Hmm/categorization/Nov12/ws_test/VBFH_nw2016.root output_Feb11 VBFH
+./FitHiggsMuMu /eos/cms/store/user/nlu/Hmm/categorization/Nov12/ws_test/WplusH_nw2016.root output_Feb11 WH
+./FitHiggsMuMu /eos/cms/store/user/nlu/Hmm/categorization/Nov12/ws_test/ZH_nw2016.root output_Feb11 ZH
+./FitHiggsMuMu /eos/cms/store/user/nlu/Hmm/categorization/Nov12/ws_test/ttH_nw2016.root output_Feb11 ttH
+
+#./FitHiggsMuMu /eos/cms/store/user/nlu/Hmm/categorization/Oct04/VHBDT/DY_BDT_ttbar.root output_Feb11 bkg
+#./FitHiggsMuMu /eos/cms/store/user/nlu/Hmm/categorization/Oct04/VHBDT/WminusH_el_BDT_ttbar.root output_Feb11 sig 
+
+#./FitHiggsMuMu /eos/cms/store/user/nlu/Hmm/categorization/Oct04/VHBDT/WminusH_el_BDT_ttbar.root output_Feb11.root F (cat_index==5)&&disc>0.97&&disc_ttbar>0.8&&(Higgs_mass>110&&Higgs_mass<150) 
