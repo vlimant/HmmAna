@@ -2,7 +2,7 @@ imax 9 number of bins
 
 jmax 5 number of processes minus 1
 
-kmax 0 number of nuisance parameters
+kmax 1 number of nuisance parameters
 
 ----------------------------------------
 
@@ -89,8 +89,12 @@ observation  -1   -1   -1   -1   -1   -1   -1   -1   -1
 bin      cat1     cat1     cat1     cat1     cat1     cat1     cat2     cat2     cat2     cat2     cat2     cat2     cat3     cat3     cat3     cat3     cat3     cat3     cat4     cat4     cat4     cat4     cat4     cat4     cat5     cat5     cat5     cat5     cat5     cat5     cat6     cat6     cat6     cat6     cat6     cat6     cat7     cat7     cat7     cat7     cat7     cat7     cat8     cat8     cat8     cat8     cat8     cat8     cat9     cat9     cat9     cat9     cat9     cat9
 process  Bkg      SigggH   SigVBFH  SigWH    SigZH    SigttH    Bkg      SigggH   SigVBFH  SigWH    SigZH    SigttH    Bkg      SigggH   SigVBFH  SigWH    SigZH    SigttH    Bkg      SigggH   SigVBFH  SigWH    SigZH    SigttH    Bkg      SigggH   SigVBFH  SigWH    SigZH    SigttH    Bkg      SigggH   SigVBFH  SigWH    SigZH    SigttH    Bkg      SigggH   SigVBFH  SigWH    SigZH    SigttH    Bkg      SigggH   SigVBFH  SigWH    SigZH    SigttH    Bkg      SigggH   SigVBFH  SigWH    SigZH    SigttH
 process  1        0        -1        -2        -3        -4       1        0        -1        -2        -3        -4        1        0        -1        -2        -3        -4        1        0        -1        -2        -3        -4       1        0        -1        -2        -3        -4        1        0        -1        -2        -3        -4        1        0        -1        -2        -3        -4       1        0        -1        -2        -3        -4    1        0        -1        -2        -3        -4
-rate   1.0   10.0   10.0   10.0  10.0   10.0   1.0   10.0   10.0   10.0  10.0   10.0   1.0   10.0   10.0   10.0  10.0   10.0   1.0   10.0   10.0   10.0  10.0   10.0  1.0   10.0   10.0   10.0  10.0   10.0   1.0   10.0   10.0   10.0  10.0   10.0   1.0   10.0   10.0   10.0  10.0   10.0   1.0   10.0   10.0   10.0  10.0   10.0   1.0   10.0   10.0   10.0  10.0   10.0
+rate   1.0   1.0   1.0   1.0  1.0   1.0   1.0   1.0   1.0   1.0  1.0   1.0   1.0   1.0   1.0   1.0  1.0   1.0   1.0   1.0   1.0   1.0  1.0   1.0  1.0   1.0   1.0   1.0  1.0   1.0   1.0   1.0   1.0   1.0  1.0   1.0   1.0   1.0   1.0   1.0  1.0   1.0   1.0   1.0   1.0   1.0  1.0   1.0   1.0   1.0   1.0   1.0  1.0   1.0
 --------------------------------------------
+
+lumi_13TeV   lnN   -   1.025    1.025    1.025    1.025    1.025   -   1.025    1.025    1.025    1.025    1.025   -   1.025    1.025    1.025    1.025    1.025   -   1.025    1.025    1.025    1.025    1.025   -   1.025    1.025    1.025    1.025    1.025   -   1.025    1.025    1.025    1.025    1.025   -   1.025    1.025    1.025    1.025    1.025   -   1.025    1.025    1.025    1.025    1.025   -   1.025    1.025    1.025    1.025    1.025         
+
+----------------------------------------
 
 bkgcat1_nbkg  rateParam cat1 Bkg pdfs_Feb12/Hmm.inputbkgbkg_13TeV.cat1_m.root:w_all
 bkgcat2_nbkg  rateParam cat2 Bkg pdfs_Feb12/Hmm.inputbkgbkg_13TeV.cat2_m.root:w_all
