@@ -1,1 +1,0 @@
-/mnt/hadoop/store/user/nlu/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/Hmm_MC_DY_Sep12_v1/180912_144726/0000/test94X_NANO_1.root

@@ -1,9 +1,0 @@
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8_1_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8_2_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8_3_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8_4_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8_5_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8_6_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8_7_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8_8_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8_9_out.root

@@ -1,7 +1,0 @@
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_1_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_2_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_3_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_4_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_5_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_6_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_7_out.root

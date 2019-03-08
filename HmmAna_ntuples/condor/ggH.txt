@@ -1,3 +1,0 @@
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8_1_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8_2_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/GluGluHToMuMu_M125_13TeV_amcatnloFXFX_pythia8_3_out.root

@@ -1,3 +1,0 @@
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/ZZ_TuneCP5_13TeV-pythia8_1_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/ZZ_TuneCP5_13TeV-pythia8_2_out.root
-/mnt/hadoop/store/user/nlu/ntuple/Prod_v3/MC/cerneos/ZZ_TuneCP5_13TeV-pythia8_3_out.root
