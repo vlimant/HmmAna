@@ -41,12 +41,15 @@
 
 class HmmAnalyzer : public MainEvent {
  public :
-   HmmAnalyzer(const TString &inputFileList="foo.txt", const char *outFileName="histo.root",const char *dataset="data",const char *isData="F");
+   HmmAnalyzer(const TString &inputFileList="foo.txt", const char *outFileName="histo.root", TString dataset="data",const char *isData="F");
    virtual ~HmmAnalyzer();
    void Analyze(bool isData, int option, string outputFileName, string label);
    
   Bool_t   FillChain(TChain *chain, const TString &inputFileList);
   Long64_t LoadTree(Long64_t entry);
+  float getPileupWeight(int);
+  float getPileupWeightUp(int);
+  float getPileupWeightDown(int);
   void CorrectPtRoch( const RoccoR _calib, const bool _doSys, const TLorentzVector _mu_vec,
                     float& _pt, float& _ptErr, float& _pt_sys_up, float& _pt_sys_down,
                     const int _charge, const int _trk_layers, const float _GEN_pt, const bool _isData );
@@ -57,9 +60,13 @@ class HmmAnalyzer : public MainEvent {
   void BookTreeBranches();
   TH1D *h_sumOfgw = new TH1D("h_sumOfgenWeight","h_sumOfgenWeight",1,0,1);
   RoccoR _Roch_calib;
+
+  TFile *pileupWeightFile;
+  TH1F *pileupWeightHist, *pileupWeightSysUpHist, *pileupWeightSysDownHist;
+
   std::vector<std::string> muon_effSF_TRIG_files, muon_effSF_ID_files, muon_effSF_ISO_files;
   std::vector<std::string> histo_names_TRIG, histo_names_ID, histo_names_ISO;
-  LeptonEfficiencyCorrector Mu_eff_SF_TRIG;
+  //LeptonEfficiencyCorrector Mu_eff_SF_TRIG;
   LeptonEfficiencyCorrector Mu_eff_SF_ID;
   LeptonEfficiencyCorrector Mu_eff_SF_ISO;
 
@@ -70,6 +77,9 @@ class HmmAnalyzer : public MainEvent {
   uint          t_luminosityBlock;
   ulong       t_event;
   float       t_genWeight;
+  float       t_pileupWeight;
+  float       t_pileupupWeight;
+  float       t_pileupdnWeight;
   int         t_mu1;
   int         t_mu2;
   int         t_index_trigm_mu;
@@ -192,9 +202,6 @@ class HmmAnalyzer : public MainEvent {
   std::vector<int>           *t_Jet_nElectrons;   
   std::vector<int>           *t_Jet_nMuons;   
   std::vector<int>           *t_Jet_puId;   
-  std::vector<double>         *t_Jet_btagSF;
-  std::vector<double>         *t_Jet_btagSFup;
-  std::vector<double>         *t_Jet_btagSFdown;
 
   float t_diJet_pt;
   float t_diJet_eta;
@@ -202,7 +209,6 @@ class HmmAnalyzer : public MainEvent {
   float t_diJet_mass;
   float t_diJet_mass_mo;
 
-  float t_cthetaCS;
   int t_nbJet;
   std::vector<float>         *t_bJet_area;   
   std::vector<float>         *t_bJet_btagCMVA;   
@@ -224,6 +230,9 @@ class HmmAnalyzer : public MainEvent {
   std::vector<int>           *t_bJet_nElectrons;   
   std::vector<int>           *t_bJet_nMuons;   
   std::vector<int>           *t_bJet_puId;   
+  std::vector<double>         *t_bJet_SF;
+  std::vector<double>         *t_bJet_SFup;
+  std::vector<double>         *t_bJet_SFdown;
 
   float      t_PV_ndof;
   float      t_PV_x;
@@ -244,37 +253,52 @@ class HmmAnalyzer : public MainEvent {
 #endif
 
 #ifdef HmmAnalyzer_cxx
-HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, const char* dataset, const char *isData) 
+HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, TString dataset, const char *isData) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 
-  std::string path_RochCor = "RoccoR2017v1.txt";
+  std::string path_RochCor = "RoccoR2016v1.txt";
   std::cout << "Rochester correction files: " << path_RochCor << std::endl;
   _Roch_calib.init(path_RochCor);
 
   h_sumOfgw->SetBinContent(1,0.0);
 
-  muon_effSF_TRIG_files.clear();
+  //pileup reweight
+  std::cout <<"loading pileup weight histograms" << std::endl;
+  pileupWeightFile = TFile::Open("data/pileup/PileupReweight_Summer16_2016_36p2ifb.root");
+  pileupWeightHist = (TH1F*)pileupWeightFile->Get("PileupReweight");
+  pileupWeightSysUpHist = (TH1F*)pileupWeightFile->Get("PileupReweightSysUp");
+  pileupWeightSysDownHist = (TH1F*)pileupWeightFile->Get("PileupReweightSysDown");
+
+  //muon eff SFs
+  //muon_effSF_TRIG_files.clear();
   muon_effSF_ID_files.clear();
   muon_effSF_ISO_files.clear();
-  histo_names_TRIG.clear();
+  //histo_names_TRIG.clear();
   histo_names_ID.clear();
   histo_names_ISO.clear();
-  std::string Mu_Trg_file = "data/leptonSF/EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
+  //std::string Mu_Trg_file = "data/leptonSF/EfficienciesAndSF_RunBtoF_Nov17Nov2017.root";
   std::string Mu_ID_file = "data/leptonSF/RunBCDEF_SF_ID.root";
   std::string Mu_Iso_file = "data/leptonSF/RunBCDEF_SF_ISO.root";
-  muon_effSF_TRIG_files.push_back(Mu_Trg_file);
+  if( dataset.Contains("16G") || dataset.Contains("16H") ){
+      Mu_ID_file = "data/leptonSF/RunGH_SF_ID.root";
+      Mu_Iso_file = "data/leptonSF/RunGH_SF_ISO.root";
+  }
+  std::cout << "Muon ID correction files: " << Mu_ID_file << std::endl;
+  std::cout << "Muon Isolation correction files: " << Mu_Iso_file << std::endl;
+
+  //muon_effSF_TRIG_files.push_back(Mu_Trg_file);
   muon_effSF_ID_files.push_back(Mu_ID_file);
   muon_effSF_ISO_files.push_back(Mu_Iso_file);
-  std::string Mu_Trg_name = "IsoMu27_PtEtaBins/pt_abseta_ratio";
-  std::string Mu_ID_name = "NUM_MediumID_DEN_genTracks_pt_abseta";
-  std::string Mu_Iso_name = "NUM_LooseRelIso_DEN_MediumID_pt_abseta";
+  //std::string Mu_Trg_name = "IsoMu27_PtEtaBins/pt_abseta_ratio";
+  std::string Mu_ID_name = "NUM_MediumID_DEN_genTracks_eta_pt";
+  std::string Mu_Iso_name = "NUM_LooseRelIso_DEN_MediumID_eta_pt";
 
-  histo_names_TRIG.push_back(Mu_Trg_name);
+  //histo_names_TRIG.push_back(Mu_Trg_name);
   histo_names_ID.push_back(Mu_ID_name);
   histo_names_ISO.push_back(Mu_Iso_name);
-  Mu_eff_SF_TRIG.init(muon_effSF_TRIG_files,histo_names_TRIG);
+  //Mu_eff_SF_TRIG.init(muon_effSF_TRIG_files,histo_names_TRIG);
   Mu_eff_SF_ID.init(muon_effSF_ID_files,histo_names_ID);
   Mu_eff_SF_ISO.init(muon_effSF_ISO_files,histo_names_ISO);
 
@@ -295,6 +319,36 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
   TString histname(outFileName);
   //ohistFile = new TFile("hist_"+histname, "recreate");
   BookTreeBranches();
+}
+
+float HmmAnalyzer::getPileupWeight(int NPU) {
+    if (pileupWeightHist) {
+        return pileupWeightHist->GetBinContent(pileupWeightHist->GetXaxis()->FindFixBin(NPU));
+    }
+    else {
+        std::cout << "error: pileup weight requested, but no histogram available!" << std::endl;
+        return 0;
+    }
+}
+
+float HmmAnalyzer::getPileupWeightUp(int NPU) {
+    if (pileupWeightSysUpHist) {
+        return pileupWeightSysUpHist->GetBinContent(pileupWeightSysUpHist->GetXaxis()->FindFixBin(NPU));
+    }
+    else {
+        std::cout << "error: 'up' pileup weight requested, but no histogram available!" << std::endl;
+        return 0;
+    }
+}
+
+float HmmAnalyzer::getPileupWeightDown(int NPU) {
+    if (pileupWeightSysDownHist) {
+        return pileupWeightSysDownHist->GetBinContent(pileupWeightSysDownHist->GetXaxis()->FindFixBin(NPU));
+    }
+    else {
+        std::cout << "error: 'down' pileup weight requested, but no histogram available!" << std::endl;
+        return 0;
+    }
 }
 
 void HmmAnalyzer::CorrectPtRoch( const RoccoR _calib, const bool _doSys, const TLorentzVector _mu_vec,
@@ -411,6 +465,9 @@ void HmmAnalyzer::clearTreeVectors(){
   t_luminosityBlock=0;
   t_event=0;
   t_genWeight = -999.;
+  t_pileupWeight = -999.;
+  t_pileupupWeight = -999.;
+  t_pileupdnWeight = -999.;
   t_mu1=-999; 
   t_mu2=-999;
   t_index_trigm_mu=-999;
@@ -477,7 +534,7 @@ void HmmAnalyzer::clearTreeVectors(){
   t_diMuon_eta=-1000;
   t_diMuon_phi=-1000;
   t_diMuon_mass=-1000;
-  t_cthetaCS=-1000;
+
   t_MET_phi=-1000;
   t_MET_pt=-1000;
   t_MET_sumEt=-1000;
@@ -535,9 +592,6 @@ void HmmAnalyzer::clearTreeVectors(){
   t_Jet_nElectrons->clear();   
   t_Jet_nMuons->clear();   
   t_Jet_puId->clear();   
-  t_Jet_btagSF->clear();
-  t_Jet_btagSFup->clear();
-  t_Jet_btagSFdown->clear();
 
   t_diJet_pt=-1000;
   t_diJet_eta=-1000;
@@ -565,6 +619,9 @@ void HmmAnalyzer::clearTreeVectors(){
   t_bJet_nElectrons->clear();   
   t_bJet_nMuons->clear();   
   t_bJet_puId->clear();   
+  t_bJet_SF->clear();
+  t_bJet_SFup->clear();
+  t_bJet_SFdown->clear();
 
   t_PV_ndof-=-1000;
   t_PV_x-=-1000;
@@ -591,6 +648,9 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_luminosityBlock", &t_luminosityBlock,"t_luminosityBlock/i");
   tree->Branch("t_event", &t_event,"t_event/l");
   tree->Branch("t_genWeight", &t_genWeight,"t_genWeight/F");
+  tree->Branch("t_pileupWeight", &t_pileupWeight,"t_pileupWeight/F");
+  tree->Branch("t_pileupupWeight", &t_pileupupWeight,"t_pileupupWeight/F");
+  tree->Branch("t_pileupdnWeight", &t_pileupdnWeight,"t_pileupdnWeight/F");
   tree->Branch("t_mu1", &t_mu1,"t_mu1/i");
   tree->Branch("t_mu2", &t_mu2,"t_mu2/i");
   tree->Branch("t_index_trigm_mu", &t_index_trigm_mu, "t_index_trigm_mu/i");
@@ -714,7 +774,6 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_diMuon_phi",  &t_diMuon_phi,"t_diMuon_phi/F");
   tree->Branch("t_diMuon_mass",   &t_diMuon_mass,"t_diMuon_mass/F");
 
-  tree->Branch("t_cthetaCS",&t_cthetaCS,"t_cthetaCS/F");
   tree->Branch("t_MET_phi",  &t_MET_phi,"t_MET_phi/F");
   tree->Branch("t_MET_pt",   &t_MET_pt,"t_MET_pt/F");
   tree->Branch("t_MET_sumEt",&t_MET_sumEt,"t_MET_sumEt/F");
@@ -806,9 +865,6 @@ void HmmAnalyzer::BookTreeBranches(){
   t_Jet_nElectrons= new std::vector<int>();   
   t_Jet_nMuons= new std::vector<int>();   
   t_Jet_puId= new std::vector<int>();   
-  t_Jet_btagSF= new std::vector<double>();
-  t_Jet_btagSFup= new std::vector<double>();
-  t_Jet_btagSFdown= new std::vector<double>();
 
   tree->Branch("t_nJet",  &t_nJet,"t_nJet/I");
   tree->Branch("t_Jet_area"    , "vector<float>"         ,&t_Jet_area);   
@@ -831,10 +887,6 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_Jet_nElectrons"    , "vector<int>"         ,&t_Jet_nElectrons);   
   tree->Branch("t_Jet_nMuons"    , "vector<int>"         ,&t_Jet_nMuons);   
   tree->Branch("t_Jet_puId"    , "vector<int>"         ,&t_Jet_puId);   
-  tree->Branch("t_Jet_btagSF"    , "vector<double>"         ,&t_Jet_btagSF);
-  tree->Branch("t_Jet_btagSFup"    , "vector<double>"         ,&t_Jet_btagSFup);
-  tree->Branch("t_Jet_btagSFdown"    , "vector<double>"     ,&t_Jet_btagSFdown);
-
 
   tree->Branch("t_diJet_pt",   &t_diJet_pt,"t_diJet_pt/F");  
   tree->Branch("t_diJet_eta",   &t_diJet_eta,"t_diJet_eta/F");
@@ -863,6 +915,9 @@ void HmmAnalyzer::BookTreeBranches(){
   t_bJet_nElectrons= new std::vector<int>();   
   t_bJet_nMuons= new std::vector<int>();   
   t_bJet_puId= new std::vector<int>();   
+  t_bJet_SF= new std::vector<double>();
+  t_bJet_SFup= new std::vector<double>();
+  t_bJet_SFdown= new std::vector<double>();
   
   tree->Branch("t_bJet_area"    , "vector<float>"         ,&t_bJet_area);   
   tree->Branch("t_bJet_btagCMVA"    , "vector<float>"         ,&t_bJet_btagCMVA);   
@@ -884,6 +939,9 @@ void HmmAnalyzer::BookTreeBranches(){
   tree->Branch("t_bJet_nElectrons"    , "vector<int>"         ,&t_bJet_nElectrons);   
   tree->Branch("t_bJet_nMuons"    , "vector<int>"         ,&t_bJet_nMuons);   
   tree->Branch("t_bJet_puId"    , "vector<int>"         ,&t_bJet_puId);   
+  tree->Branch("t_bJet_SF"    , "vector<double>"         ,&t_bJet_SF);
+  tree->Branch("t_bJet_SFup"    , "vector<double>"         ,&t_bJet_SFup);
+  tree->Branch("t_bJet_SFdown"    , "vector<double>"     ,&t_bJet_SFdown);
 
 
   tree->Branch("t_PV_ndof", &t_PV_ndof, "t_PV_ndof/F");
