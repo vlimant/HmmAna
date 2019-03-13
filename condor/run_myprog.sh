@@ -32,11 +32,11 @@ echo "output filename: $TMP/$OUTPUT_FILENAME"
 #Run NanoAOD postprocessing step
 FILENAMES=`cat $TMP/$INPUT_FILELIST | xargs`
 $BASE_DIR/scripts/nano_postproc.py --data_period 2017 --outdir $TMP $FILENAMES
-ls -al
+ls -al $TMP
 
 #Run private ntuple
 $BASE_DIR/analyzeHmm $TMP/$INPUT_FILELIST $TMP/$OUTPUT_FILENAME $DATANAME $ISDATA
-ls -al
+ls -al $TMP
 
 #copy output to final location
 mv $TMP/$OUTPUT_FILENAME $OUTDIR/
