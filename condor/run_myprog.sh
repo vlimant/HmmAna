@@ -30,12 +30,12 @@ env
 echo "output filename: $TMP/$OUTPUT_FILENAME"
 
 #Run NanoAOD postprocessing step
-FILENAMES=`cat $INPUT_FILELIST | xargs`
-$BASE_DIR/scripts/nano_postproc.py --data_period 2017 --outdir $TMPDIR $FILENAMES
+FILENAMES=`cat $TMP/$INPUT_FILELIST | xargs`
+$BASE_DIR/scripts/nano_postproc.py --data_period 2017 --outdir $TMP $FILENAMES
 ls -al
 
 #Run private ntuple
-$BASE_DIR/analyzeHmm $INPUT_FILELIST $TMP/$OUTPUT_FILENAME $DATANAME $ISDATA
+$BASE_DIR/analyzeHmm $TMP/$INPUT_FILELIST $TMP/$OUTPUT_FILENAME $DATANAME $ISDATA
 ls -al
 
 #copy output to final location

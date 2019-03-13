@@ -51,7 +51,7 @@ def main(args):
     modules = [puAutoWeight()]
     
     #friend: if True, create a new tree that contains *only* the output weights, without copying all the inputs. Much faster.
-    p=PostProcessor("./", args.input_files, friend=True, modules=modules)
+    p=PostProcessor(args.outdir, args.input_files, friend=True, modules=modules)
 
     #actually run the code, creating one output file per each input file
     p.run()
