@@ -18,6 +18,7 @@ INPUT_FILELIST=$1
 OUTPUT_FILENAME=$2
 DATANAME=$3
 ISDATA=$4
+OUTDIR=$5
 
 cd $BASE_DIR
 source /cvmfs/cms.cern.ch/cmsset_default.sh
@@ -31,8 +32,11 @@ echo "output filename: $TMP/$OUTPUT_FILENAME"
 #Run NanoAOD postprocessing step
 FILENAMES=`cat $INPUT_FILELIST | xargs`
 $BASE_DIR/scripts/nano_postproc.py --data_period 2017 --outdir $TMPDIR $FILENAMES
+ls -al
 
 #Run private ntuple
 $BASE_DIR/analyzeHmm $INPUT_FILELIST $TMP/$OUTPUT_FILENAME $DATANAME $ISDATA
+ls -al
 
-mv $TMP/$2 $5
+#copy output to final location
+mv $TMP/$OUTPUT_FILENAME $OUTDIR/
