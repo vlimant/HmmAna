@@ -44,6 +44,8 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
   //BookTreeBranches();
   //cout<<"booked tree branches\n";
   float muon_mass = 0.1056583745;
+  bool datafile = true;
+  if(*isData=='F') datafile = false;
   /*
   //btag SF
   BTagCalibration calib("deepcsv","data/btagSF/DeepCSV_94XSF_V3_B_F.csv");
@@ -105,7 +107,7 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
             }
             CorrectPtRoch( _Roch_calib, false, mu_raw,
                    pt_Roch, ptErr_Roch, pt_Roch_sys_up, pt_Roch_sys_down,
-                    Muon_charge[i], Muon_nTrackerLayers[i], gen_pt, true );
+                    Muon_charge[i], Muon_nTrackerLayers[i], gen_pt, datafile );
             //cout <<"pt_Roch "<<pt_Roch<<endl;
             mu_pt_Roch_corr.push_back(pt_Roch);
             mu_ptErr_Roch_corr.push_back(ptErr_Roch); 

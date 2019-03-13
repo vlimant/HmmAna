@@ -258,7 +258,7 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
 
-  std::string path_RochCor = "RoccoR2016v1.txt";
+  std::string path_RochCor = "RoccoR2016.txt";
   std::cout << "Rochester correction files: " << path_RochCor << std::endl;
   _Roch_calib.init(path_RochCor);
 
