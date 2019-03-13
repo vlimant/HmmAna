@@ -1,0 +1,2 @@
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWW_4F_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Y02022019_v1r/Nano_Y02022019_v1rWWW_4F_TuneCUETP8M1_13TeV-amcatnlo-pythia8_job0.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWW_4F_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Y02022019_v1r/Nano_Y02022019_v1rWWW_4F_TuneCUETP8M1_13TeV-amcatnlo-pythia8_job1.root

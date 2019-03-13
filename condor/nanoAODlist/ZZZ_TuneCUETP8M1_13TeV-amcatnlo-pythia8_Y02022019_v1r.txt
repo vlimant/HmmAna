@@ -1,0 +1,4 @@
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/ZZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Y02022019_v1r/Nano_Y02022019_v1rZZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_job0.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/ZZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Y02022019_v1r/Nano_Y02022019_v1rZZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_job1.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/ZZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Y02022019_v1r/Nano_Y02022019_v1rZZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_job2.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/ZZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Y02022019_v1r/Nano_Y02022019_v1rZZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_job3.root

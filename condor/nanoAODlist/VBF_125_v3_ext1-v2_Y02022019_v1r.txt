@@ -1,0 +1,12 @@
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job0.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job1.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job10.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job11.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job2.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job3.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job4.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job5.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job6.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job7.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job8.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/VBF_125_v3_ext1-v2_Y02022019_v1r/Nano_Y02022019_v1rVBF_125_v3_ext1-v2_job9.root

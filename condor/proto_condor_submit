@@ -1,0 +1,16 @@
+executable=/data/nlu/work/Hmm/CMSSW_9_4_9/src/HmmAna_2016/condor/run_myprog.sh
+universe=vanilla
+Arguments=FILELIST ROOTOUT DATANAME ISDATA OUTDIR
+Input =
+Output = condor_output/condor_logs/condor_JOBNAME.out
+Error  = condor_output/condor_logs/condor_JOBNAME.err
+Log    = condor_output/condor_logs/condor_JOBNAME.log
+Requirements=TARGET.OpSysAndVer=="CentOS7"
+rank           = Memory >= 3000
+request_memory = 3000
+notification=never
+should_transfer_files=YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = analyzeHmm
+use_x509userproxy = true
+queue

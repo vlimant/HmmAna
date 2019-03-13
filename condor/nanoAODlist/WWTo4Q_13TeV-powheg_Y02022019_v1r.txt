@@ -1,0 +1,14 @@
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job0.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job1.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job10.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job11.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job12.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job13.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job2.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job3.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job4.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job5.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job6.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job7.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job8.root
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WWTo4Q_13TeV-powheg_Y02022019_v1r/Nano_Y02022019_v1rWWTo4Q_13TeV-powheg_job9.root

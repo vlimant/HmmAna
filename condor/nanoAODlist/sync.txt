@@ -1,0 +1,1 @@
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/sync/test_data_94X_NANO_muon_type.root

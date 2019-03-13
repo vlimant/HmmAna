@@ -1,0 +1,1 @@
+/mnt/hadoop/store/user/nlu/Hmm/nanoAOD/WMinusH_HToMuMu_M125_13TeV_powheg_pythia8_Y02022019_v1r/Nano_Y02022019_v1rWMinusH_HToMuMu_M125_13TeV_powheg_pythia8_job0.root
