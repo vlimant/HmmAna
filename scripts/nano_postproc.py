@@ -15,6 +15,9 @@ def parse_args():
     parser.add_argument('--data_period', type=str, choices=["2016", "2017", "2018"],
         help="The data-taking period that corresponds to the MC file being processed", default="2017"
     )
+    parser.add_argument('--outdir', type=str, required=True,
+        help="The output directory where to write the *_Friend.root files, must be writable (not /mnt/hadoop!)"
+    )
     parser.add_argument('input_files', nargs=argparse.REMAINDER, help="List of all input files, must be readable using ROOT")
    
     args = parser.parse_args()

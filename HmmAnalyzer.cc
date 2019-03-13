@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 {
 
   if(argc < 4) {
-    cerr << "Please give 4 arguments " << "runList " << " " << "outputFileName" << " " << "dataset" << "data type"<<endl;
+    cerr << "Please give 4 arguments: " << "inputFileList outFileName datasetname isdata"<<endl;
     return -1;
   }
   const char *inputFileList = argv[1];

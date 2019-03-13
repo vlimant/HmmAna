@@ -1,25 +1,38 @@
 #!/bin/bash
 
-#set filelist=${1}
-#set outfile=${2}
-#set data=${3}
+#based on https://caltech.teamwork.com/#notebooks/119930
+#test using:
+#TMP=`pwd` ./condor/run_myprog.sh /data/jpata/hmumu/CMSSW_10_2_10/src/MyAnalysis/HmmAna/condor/test.txt test.root DYJetsToLL_1 F
 
-#I think you need to set your root environment. Best is to checkout a CMSSW package, cmsenv will give you access to root
-#cd /home/spandey/t3store/public/CMSSW/CMSSW_7_5_0_pre5/src
-#source /cvmfs/cms.cern.ch/cmsset_default.sh
-#eval `scram runtime -sh`
-#source /cvmfs/cms.cern.ch/cmsset_default.sh
-#export SCRAM_ARCH=slc7_amd64_gcc630
-#ulimit -c 0
-#eval `scram runtime -sh`
-#echo `which root`
-cd /data/idutta/CMSSW_9_4_9/src/HmmAna/condor/condor_output/condor_logs
+#Print out all bash commands
+set -x
+
+#Abort bash script on any error
+set -e
+
+echo "Looking inside job scratch dir: $TMP"
+ls -al $TMP
+
+BASE_DIR=/data/jpata/hmumu/CMSSW_10_2_10/src/MyAnalysis/HmmAna/
+INPUT_FILELIST=$1
+OUTPUT_FILENAME=$2
+DATANAME=$3
+ISDATA=$4
+
+cd $BASE_DIR
 source /cvmfs/cms.cern.ch/cmsset_default.sh
-export SCRAM_ARCH=slc7_amd64_gcc630
+#export SCRAM_ARCH=slc7_amd64_gcc630
 ulimit -c 0
 eval `scram runtime -sh`
 env 
-echo "$TMPDIR/$2"
-/data/idutta/CMSSW_9_4_9/src/HmmAna/analyzeHmm $1 $TMPDIR/$2 $3 $4
 
-mv $TMPDIR/$2 $5
+echo "output filename: $TMP/$OUTPUT_FILENAME"
+
+#Run NanoAOD postprocessing step
+FILENAMES=`cat $INPUT_FILELIST | xargs`
+$BASE_DIR/scripts/nano_postproc.py --data_period 2017 --outdir $TMPDIR $FILENAMES
+
+#Run private ntuple
+$BASE_DIR/analyzeHmm $INPUT_FILELIST $TMP/$OUTPUT_FILENAME $DATANAME $ISDATA
+
+mv $TMP/$2 $5
