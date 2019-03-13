@@ -2,6 +2,7 @@
 
 #NanoAOD postprocessing for the Caltech Hmumu analysis
 #Run as ./nano_postproc.py --help
+
 import os
 import argparse
 
@@ -17,6 +18,8 @@ def parse_args():
     parser.add_argument('input_files', nargs=argparse.REMAINDER, help="List of all input files, must be readable using ROOT")
    
     args = parser.parse_args()
+
+    #example input files just to test
     if len(args.input_files) == 0:
     	args.input_files = [
             "/mnt/hadoop/store/mc/RunIIFall17NanoAOD/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/F2ABC928-DAA5-E811-8A4A-842B2B689031.root",
@@ -30,7 +33,7 @@ def parse_args():
 pileup_files_data = {
     "2016": "RunII_2016_data.root", 
     "2017": "RunII_2017_data.root", 
-    "2018": "RunII_2018.root", 
+    "2018": "RunII_2018_data.root", 
 }
 
 def main(args):
@@ -39,7 +42,7 @@ def main(args):
     datadir = os.path.join(os.environ["CMSSW_BASE"], "src/MyAnalysis/HmmAna/data")
 
     #configure the puWeightProducer to extract the MC distribution directly from the current NanoAOD file ("auto")
-    puAutoWeight = lambda : puWeightProducer("auto", os.path.join(datadir, "pileup", pileup_files_data[args.data_period]), "pu_mc", "pileup", verbose=False)
+    puAutoWeight = lambda : puWeightProducer("auto", os.path.join(datadir, "pileup", pileup_files_data[args.data_period]), "pu_mc", "pileup", verbose=True)
     
     #book all the different things we want to compute in the postprocessor
     modules = [puAutoWeight()]
