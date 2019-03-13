@@ -1,5 +1,5 @@
 Universe = vanilla
-Executable = /data/jpata/hmumu/CMSSW_10_2_10/src/MyAnalysis/HmmAna/condor/run_myprog.sh
+Executable = run_myprog.sh
 Arguments = test.txt test.root DYJetsToLL_1 F /mnt/hadoop/store/$ENV(USER)/hmumu/
 
 Input =
