@@ -63,7 +63,14 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       // if (Cut(ientry) < 0) continue;
-      if(jentry%50000==0) cout <<"entry: "<<jentry<<endl;
+      if(jentry%10000==0) {
+          cout <<"entry: "<<jentry<<endl;
+      }
+ 
+      //if(jentry>0 && jentry%50000==0) {
+      //    cout << "breaking loop at " << jentry << endl;
+      //    break;
+      //}
 
       clearTreeVectors();
 
