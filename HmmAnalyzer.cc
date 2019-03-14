@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 {
 
   if(argc < 4) {
-    cerr << "Please give 4 arguments " << "runList " << " " << "outputFileName" << " " << "dataset" << "data type"<<endl;
+    cerr << "Please give 4 arguments: " << "inputFileList outFileName datasetname isdata"<<endl;
     return -1;
   }
   const char *inputFileList = argv[1];
@@ -63,7 +63,14 @@ void HmmAnalyzer::EventLoop(const char *data,const char *isData)
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       // if (Cut(ientry) < 0) continue;
-      if(jentry%50000==0) cout <<"entry: "<<jentry<<endl;
+      if(jentry%10000==0) {
+          cout <<"entry: "<<jentry<<endl;
+      }
+ 
+      //if(jentry>0 && jentry%50000==0) {
+      //    cout << "breaking loop at " << jentry << endl;
+      //    break;
+      //}
 
       clearTreeVectors();
 

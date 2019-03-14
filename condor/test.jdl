@@ -1,0 +1,30 @@
+Universe = vanilla
+Executable = run_myprog.sh
+Arguments = test.txt test.root DYJetsToLL_1 F /mnt/hadoop/store/$ENV(USER)/hmumu/
+
+Input =
+Output = condor_output/condor_logs/condor_JOBNAME.out
+Error = condor_output/condor_logs/condor_JOBNAME.err
+Log = condor_output/condor_logs/condor_JOBNAME.log
+Notification = never
+
+#needed on tier2
++RunAsOwner = True
++InteractiveUser = true
++SingularityImage = "/cvmfs/singularity.opensciencegrid.org/bbockelm/cms:rhel7"
++SingularityBindCVMFS = True
+run_as_owner = True
+use_x509userproxy = true
+
+#request no more than needed
+RequestDisk = 4
+RequestMemory = 2000
+RequestCpus = 1
+Requirements=(TARGET.OpSysAndVer=="CentOS7")
+
+#transfer some inputs
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+transfer_input_files = ../RoccoR2017v1.txt,test.txt
+
+Queue 1

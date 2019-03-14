@@ -47,7 +47,7 @@ class HmmAnalyzer : public MainEvent {
    
   Bool_t   FillChain(TChain *chain, const TString &inputFileList);
   Long64_t LoadTree(Long64_t entry);
-  void CorrectPtRoch( const RoccoR _calib, const bool _doSys, const TLorentzVector _mu_vec,
+  void CorrectPtRoch( const RoccoR& _calib, const bool _doSys, const TLorentzVector _mu_vec,
                     float& _pt, float& _ptErr, float& _pt_sys_up, float& _pt_sys_down,
                     const int _charge, const int _trk_layers, const float _GEN_pt, const bool _isData );
   void     EventLoop(const char *, const char *);
@@ -297,7 +297,7 @@ HmmAnalyzer::HmmAnalyzer(const TString &inputFileList, const char *outFileName, 
   BookTreeBranches();
 }
 
-void HmmAnalyzer::CorrectPtRoch( const RoccoR _calib, const bool _doSys, const TLorentzVector _mu_vec,
+void HmmAnalyzer::CorrectPtRoch( const RoccoR& _calib, const bool _doSys, const TLorentzVector _mu_vec,
                     float& _pt, float& _ptErr, float& _pt_sys_up, float& _pt_sys_down,
                     const int _charge, const int _trk_layers, const float _GEN_pt, const bool _isData ) {
 
