@@ -87,3 +87,11 @@ process = nanoAOD_customizeMC(process)
 from Configuration.StandardSequences.earlyDeleteSettings_cff import customiseEarlyDelete
 process = customiseEarlyDelete(process)
 # End adding early deletion
+
+from MyAnalysis.HmmAna.fsr_cfi import addFSRphotonNano
+addFSRphotonNano(process)
+
+#for debugging
+#with open("dump.py", "w") as fi:
+#    fi.write(process.dumpPython())
+
