@@ -30,6 +30,6 @@ pileup_variations() {
     mv nominal.root $3
 }
 
-#pileup_variations $GOLDEN_2016 $PILEUP_2016 "RunII_2016_data.root"
-#pileup_variations $GOLDEN_2017 $PILEUP_2017 "RunII_2017_data.root"
+pileup_variations $GOLDEN_2016 $PILEUP_2016 "RunII_2016_data.root"
+pileup_variations $GOLDEN_2017 $PILEUP_2017 "RunII_2017_data.root"
 pileup_variations $GOLDEN_2018 $PILEUP_2018 "RunII_2018_data.root"
