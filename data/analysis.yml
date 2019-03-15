@@ -85,6 +85,8 @@ datasets:
         mass: 125
         nanoaod:
         miniaod: /GluGluHToMuMu_M-125_TuneCP5_PSweights_13TeV_powheg_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM
+                 /GluGluHToMuMu_M-120_TuneCP5_PSweights_13TeV_powheg_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM
+                 /GluGluHToMuMu_M-130_TuneCP5_PSweights_13TeV_powheg_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM
                  /GluGluHToMuMu_M-125_TuneCP5_PSweights_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM
                  /GluGluHToMuMu_M-125_TuneCP5_PSweights_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
                  /GluGluHToMuMu_M-125_TuneCP5_PSweights_13TeV_powheg_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM
@@ -155,25 +157,25 @@ datasets:
                         69
                         38
         
-      - name: 
-        mass: 
+      - name: WPlusH_HToMuMu_M125_13TeV_powheg_pythia8
+        mass: 125
         nanoaod:
-        miniaod: 
+        miniaod: /WPlusH_HToMuMu_M120_13TeV_powheg_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM
         xs: 
         nevents: 
         sumOfgenWeight:
         N_nanoAODfiles:
-        N_miniAODfiles:
+        N_miniAODfiles: 1
         
-      - name: 
-        mass: 
+      - name: WMinusH_HToMuMu_M120_13TeV_powheg_pythia8
+        mass: 125
         nanoaod:
-        miniaod: 
+        miniaod:/WMinusH_HToMuMu_M120_13TeV_powheg_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM
         xs: 
         nevents: 
         sumOfgenWeight:
         N_nanoAODfiles:
-        N_miniAODfiles:
+        N_miniAODfiles: 1
         
       - name: 
         mass: 
