@@ -291,7 +291,15 @@ datasets:
          N_nanoAODfiles: 20 #ext1 (first nanoAOD dataset), central nanoAOD
                        134 # (second nanoAOD dataset) central nanoAOD
          pu_histogram_file: data/pileup/RunIIFall17MiniAODv2-PU2017.root
-
+    
+    DYJetsToLL_VBFfilter:
+       - name:
+       - nanoaod: 
+                 # 2018
+                 /DYJetsToLL_M-105To160_VBFFilter_TuneCP5_PSweights_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18NanoAOD*/NANOAODSIM
+       - xs : 2.02 pb
+       - sumOfgenWeight: 1048681845.5
+       
     ZZTo4L:
        - name: ZZTo4L_13TeV_powheg_pythia8
          nanoaod: /ZZTo4L_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
