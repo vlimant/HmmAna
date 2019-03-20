@@ -243,10 +243,14 @@ datasets:
     ttjets_sl:
       - name: TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8
         nanoaod: /TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/NANOAODSIM
+                #2018
+                /TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16-v1/NANOAODSIM
         miniaod:
         xs:  6.871e+02 +- 5.174e-01 pb #GenXSecAnalyzer
         nevents:
         sumOfgenWeight: 11784986264.000000  #central nanoAOD
+                        #2018
+                        29967356136.0
         N_nanoAODfiles: 36
         pu_histogram_file: data/pileup/RunIIFall17MiniAODv2-PU2017.root
 
@@ -258,7 +262,11 @@ datasets:
                   /DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM
                   #2016
                   /DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16NanoAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/NANOAODSIM (106)
-
+                  #2018
+                  /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16-v1/NANOAODSIM 
+                  /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18NanoAOD-102X_upgrade2018_realistic_v15-v1/NANOAODSIM
+                  
+                  
          miniaod: /DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
                   /DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
                   /DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
@@ -276,6 +284,9 @@ datasets:
                        527851878538.000000 #0J
                        444408909938.000000 #1J
                        137595943613.000000 #2J
+                       
+                       #2018
+                       1322823808.0 # amcatnlo DY inclusive v15+v16
 
          N_nanoAODfiles: 20 #ext1 (first nanoAOD dataset), central nanoAOD
                        134 # (second nanoAOD dataset) central nanoAOD
@@ -382,26 +393,38 @@ datasets:
     TTWJetsToLNu:
       - name: TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8
         nanoaod:
+                  #2018
+                  /TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16_ext1-v1/NANOAODSIM 
         miniaod: /TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.2001
         nevents:
         sumOfgenWeight: 1682066.50879
+                        #2018
+                        1689122.54346
         N_nanoAODfiles: 7
         pu_histogram_file: data/pileup/RunIIFall17MiniAODv2-PU2017.root
 
     TTZJetsToLLNuNu:
       - name: TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8
         nanoaod:
+                  #2018
+                  /TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16_ext1-v1/NANOAODSIM 
         miniaod: /TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         xs: 0.2529
         nevents:
         sumOfgenWeight: 1840656.296875 #Central nanoADO
+                        #2018
+                        3231284.61328
+                        #2018
+                        3231284.61328
         N_nanoAODfiles: 10
         pu_histogram_file: data/pileup/RunIIFall17MiniAODv2-PU2017.root
 
     TTTo2l2Nu:
       - name: TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8
-        nanoaod: /TT_DiLept_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16_ext1-v1/NANOAODSIM
+        nanoaod: 
+                  #2018
+                 /TT_DiLept_TuneCP5_13TeV-amcatnlo-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16_ext1-v1/NANOAODSIM
                  /TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16-v1/NANOAODSIM
                  /TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16-v1/NANOAODSIM
                  
@@ -410,6 +433,8 @@ datasets:
         sumOfgenWeight: 623402174.0 #central nanoAOD
                    4782395097.687500 #central nanoAOD, PSweights sample
                    199762.000000 (?744733.000000) #entral nanoAOD, madgraph sample
+                   # 2018
+                   4887541247.5 #amcatnlo+powheg
         N_nanoAODfiles: 10
                       107
         pu_histogram_file: data/pileup/RunIIFall17MiniAODv2-PU2017.root
