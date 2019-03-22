@@ -437,7 +437,7 @@ datasets:
                  /TTJets_DiLept_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18NanoAODv4-Nano14Dec2018_102X_upgrade2018_realistic_v16-v1/NANOAODSIM
                  
         miniaod: /TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-        xs: 85.656
+        xs: 85.656 //powheg sample
         sumOfgenWeight: 623402174.0 #central nanoAOD
                    4782395097.687500 #central nanoAOD, PSweights sample
                    199762.000000 (?744733.000000) #entral nanoAOD, madgraph sample
