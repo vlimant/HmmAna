@@ -27,40 +27,42 @@ using namespace std ;
 class HiggsMuMuFit{
 public :
 
-  HiggsMuMuFit(TString inputFileList="foo.txt", TString outFileName="histo.root", TString isbkgstr="F", TString selection="cat_index==7", TString proc="ggH", int category=9);
+  HiggsMuMuFit(TString inputFileList="foo.txt", TString outFileName="histo.root", TString isbkgstr="F", vector<TString> selection={"cat_index==7"}, TString proc="ggH", int category=1);
   virtual ~HiggsMuMuFit();
   void     sigfit();
+  void     sigfit_DCB();
   void     bkgfit();
+  void     bkgfit_BWZReduxMBern();
   void     getpdf();
-  void     set(TString inputFileList="foo.txt", TString outFileName="histo.root", TString isbkgstr="F", TString selection="cat_index==7", TString proc="ggH", int category=9);
+  void     set(TString inputFileList, TString outFileName, TString isbkgstr, vector<TString> selection, TString proc, int category);
   TChain* loader(const string& inFile_name, const string& chain_name);
 private:
   string infile;
   TString outfile;
-  TString cut;
+  vector<TString> cuts;
   TString isbkg;
   TString procname;
-  int catindex;
+  int ncat;
 };
 
-HiggsMuMuFit::HiggsMuMuFit(TString inputFileList, TString outFileName, TString isbkgstr, TString selection, TString proc, int category)
+HiggsMuMuFit::HiggsMuMuFit(TString inputFileList, TString outFileName, TString isbkgstr, vector<TString> selection, TString proc, int category)
 {
   infile = inputFileList.Data();
   outfile = outFileName;
-  cut = selection;
+  cuts = selection;
   isbkg = isbkgstr;
   procname = proc;
-  catindex = category; 
+  ncat = category; 
 }
 
-void HiggsMuMuFit::set(TString inputFileList, TString outFileName, TString isbkgstr, TString selection, TString proc, int category)
+void HiggsMuMuFit::set(TString inputFileList, TString outFileName, TString isbkgstr, vector<TString> selection, TString proc, int category)
 {
   infile = inputFileList;
   outfile = outFileName;
-  cut = selection;
+  cuts = selection;
   isbkg = isbkgstr;
   procname = proc;
-  catindex = category;
+  ncat = category;
 }
 
 TChain* HiggsMuMuFit::loader(const string& inFile_name, const string& chain_name)
