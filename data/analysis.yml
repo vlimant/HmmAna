@@ -61,6 +61,8 @@ datasets:
         xs: 0.010571 #YR4, 0.009618 #Hmm old twiki #unit is pb
         nevents:
         sumOfgenWeight: 217554238.5 #central nanoAOD
+                        #2018
+                        216906552.0
         N_nanoAODfiles: 3
         pu_histogram_file: data/pileup/RunIIFall17MiniAODv2-PU2017.root
                            data/pileup/RunIIAutumn18DRPremix.root
