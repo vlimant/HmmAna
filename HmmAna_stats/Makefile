@@ -3,8 +3,8 @@ CXX      = g++
 CXXFLAGS= $(shell root-config --cflags)
 LIBS    = $(shell root-config --libs) 
 
-SOURCES = HiggsMuMuFit.cc 
-HEADERS = HiggsMuMuFit.h 
+SOURCES = Utils.cc HiggsMuMuFit.cc 
+HEADERS = Utils.h HiggsMuMuFit.h 
 OBJECTS = $(SOURCES:.cc=.o)
 
 EXECUTABLE = FitHiggsMuMu
