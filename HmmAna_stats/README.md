@@ -24,3 +24,7 @@ signal stength mu from the fit: mu
 lower error on mu from minos: errhi
 upper error on mu from minos: errlo
 err = 0.5*(errh+errlo)
+
+Note: currently the signal MC sample and signal shape is hard-coded: line 238  and line 253 of HiggsMuMuFit.cc (to be improved)
+line 238: TChain* data_chain_sig = loader("/eos/cms/store/user/nlu/Hmm/VBF/categorization/VBFHToMuMu_2018_NNscore.root", "cattree");
+line 253: RooAbsPdf* sigpdf = HiggsMuMuFit::SGauss( mdimu, catindex, 124.845, 121.643, 1.7824, 5.80949, 0.819765);
