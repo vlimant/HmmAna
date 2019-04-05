@@ -39,22 +39,6 @@ int main(int argc, char* argv[])
   TString mass_cut = "Higgs_mass > 110 && Higgs_mass< 150 &&";
  
   TString proc = isbkgstr;
-  //TString sel15 = mass_cut + " cat_index<4"; //ttH
-  //TString sel16 = mass_cut + " cat_index>3 && cat_index<7"; //VH-lep
-  /*
-  selection = mass_cut + " cat_index==7"; //VH-had? VBF?
-  category = 3;
-  proc = isbkgstr;
-  hmm.set(inputFileList, outFileName, isbkgstr, selection, proc, category);
-  hmm.getpdf();
-
-  selection = mass_cut + " cat_index==8"; //VBF? VH-had??
-  category = 4;
-  proc = isbkgstr;
-  hmm.set(inputFileList, outFileName, isbkgstr, selection, proc, category);
-  hmm.getpdf();
-  */
-  //if adding VH-lep categories etc mass_cut + " cat_index>6 &&" + 
   TString mass_cut1 =  mass_cut;
 
   //TString sel0 = mass_cut1 + " disc_simpleNN > 0.1"; //disc_advNN
@@ -62,100 +46,6 @@ int main(int argc, char* argv[])
 
   TString sel0 = mass_cut1 + " disc_advNN > 0.1";
   TString sel1 = mass_cut1 + " disc_advNN < 0.1 && disc_advNN>0.0"; 
-  
-  //2018
-  /* 
-  TString sel0 = mass_cut1 + " BDT_incl < -0.427776";
-
-  TString sel1 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > -0.427776 && BDT_incl < 0.0219585";
-  TString sel2 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > -0.427776 && BDT_incl < 0.0219585";
-  TString sel3 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > -0.427776 && BDT_incl < 0.0219585";
-
-  TString sel4 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.0219585 && BDT_incl < 0.225359";
-  TString sel5 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.0219585 && BDT_incl < 0.225359";
-  TString sel6 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.0219585 && BDT_incl < 0.225359";
-
-  TString sel7 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.225359 && BDT_incl < 0.372603";
-  TString sel8 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.225359 && BDT_incl < 0.372603";
-  TString sel9 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.225359 && BDT_incl < 0.372603";
-
-  TString sel10 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.372603 && BDT_incl < 0.613851";
-  TString sel11 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.372603 && BDT_incl < 0.613851";
-  TString sel12 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.372603 && BDT_incl < 0.613851";
-
-  TString sel13 = mass_cut1 + " BDT_incl > 0.613851 && BDT_incl < 0.717566";
-  TString sel14 = mass_cut1 + " BDT_incl > 0.717566";
-  
-  //2016
- 
-  TString sel0 = mass_cut1 + " BDT_incl < -0.41438";
-
-  TString sel1 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > -0.41438 && BDT_incl < 0.0516541";
-  TString sel2 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > -0.41438 && BDT_incl < 0.0516541";
-  TString sel3 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > -0.41438 && BDT_incl < 0.0516541";
-
-  TString sel4 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.0516541 && BDT_incl < 0.254417";
-  TString sel5 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.0516541 && BDT_incl < 0.254417";
-  TString sel6 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.0516541 && BDT_incl < 0.254417";
-
-  TString sel7 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.254417 && BDT_incl < 0.402352";
-  TString sel8 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.254417 && BDT_incl < 0.402352";
-  TString sel9 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.254417 && BDT_incl < 0.402352";
-
-  TString sel10 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.402352 && BDT_incl < 0.643802";
-  TString sel11 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.402352 && BDT_incl < 0.643802";
-  TString sel12 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.402352 && BDT_incl < 0.643802";
-
-  TString sel13 = mass_cut1 + " BDT_incl > 0.643802 && BDT_incl < 0.739798";
-  TString sel14 = mass_cut1 + " BDT_incl > 0.739798";
-   
-
- //2017:
-  
-  TString sel0 = mass_cut1 + " BDT_incl < -0.423045";
-
-  TString sel1 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > -0.423045 && BDT_incl < 0.0245217";
-  TString sel2 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > -0.423045 && BDT_incl < 0.0245217";
-  TString sel3 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > -0.423045 && BDT_incl < 0.0245217";
-
-  TString sel4 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.0245217 && BDT_incl < 0.225491";
-  TString sel5 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.0245217 && BDT_incl < 0.225491";
-  TString sel6 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.0245217 && BDT_incl < 0.225491";
-
-  TString sel7 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.225491 && BDT_incl < 0.373104";
-  TString sel8 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.225491 && BDT_incl < 0.373104";
-  TString sel9 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.225491 && BDT_incl < 0.373104";
-
-  TString sel10 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.373104 && BDT_incl < 0.612933";
-  TString sel11 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.373104 && BDT_incl < 0.612933";
-  TString sel12 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.373104 && BDT_incl < 0.612933";
-
-  TString sel13 = mass_cut1 + " BDT_incl > 0.612933 && BDT_incl < 0.716738";
-  TString sel14 = mass_cut1 + " BDT_incl > 0.716738";
-  
-  //old 2016 pas?? 
-  TString sel0 = mass_cut1 + " BDT_incl < -0.4";
-
-  TString sel1 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > -0.4 && BDT_incl < 0.05";
-  TString sel2 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > -0.4 && BDT_incl < 0.05";
-  TString sel3 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > -0.4 && BDT_incl < 0.05";
-
-  TString sel4 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.05 && BDT_incl < 0.25";
-  TString sel5 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.05 && BDT_incl < 0.25";
-  TString sel6 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.05 && BDT_incl < 0.25";
-
-  TString sel7 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.25 && BDT_incl < 0.40";
-  TString sel8 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.25 && BDT_incl < 0.40";
-  TString sel9 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.25 && BDT_incl < 0.40";
-
-  TString sel10 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.40 && BDT_incl < 0.65";
-  TString sel11 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.40 && BDT_incl < 0.65";
-  TString sel12 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.40 && BDT_incl < 0.65";
-
-  TString sel13 = mass_cut1 + " BDT_incl > 0.65 && BDT_incl < 0.73";
-  TString sel14 = mass_cut1 + " BDT_incl > 0.73";
-  */ 
-  //vector<TString> selection = {sel0, sel1, sel2, sel3, sel4, sel5, sel6, sel7, sel8, sel9, sel10, sel11, sel12, sel13, sel14};
   
   vector<TString> selection = {sel0,sel1};
 
