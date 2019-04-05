@@ -28,11 +28,11 @@ using namespace std ;
 class HiggsMuMuFit{
 public :
 
-  HiggsMuMuFit(TString inputFileList="foo.txt", TString outFileName="histo.root", TString isbkgstr="F", TString funcname="test", vector<TString> selection={"cat_index==7"}, TString proc="ggH", int category=1, TString useweight="F");
+  HiggsMuMuFit(TString inputFileList="foo.txt", TString outFileName="histo.root", TString isbkgstr="F", TString funcname="test", vector<TString> selection={"cat_index==7"}, TString proc="ggH", int category=1);
   virtual ~HiggsMuMuFit();
   void     sigfit();
   void     sigfit_DCB();
-  void     bkgfit();
+  void     bkgfit(bool isblind);
   void     sbfit();
   void     bkgfit_BWZReduxMBern();
   RooAbsPdf* BWZRedux(RooRealVar* mdimu, RooFormulaVar* mdimu_range, int catindex);
@@ -43,16 +43,23 @@ public :
   RooAbsPdf* BWZPol1(RooRealVar* mdimu, RooFormulaVar* mdimu_range, int catindex);
   RooAbsPdf* BWZPol2(RooRealVar* mdimu, RooFormulaVar* mdimu_range, int catindex);
   RooAbsPdf* SExp(RooRealVar* mdimu, RooFormulaVar* mdimu_range, int catindex);
-  RooAbsPdf* SGauss(RooRealVar* mdimu,int catindex);
+  RooAbsPdf* SGauss3(RooRealVar* mdimu,int catindex, RooDataSet* dataset);
+  RooAbsPdf* SGauss2(RooRealVar* mdimu,int catindex, RooDataSet* dataset);
   RooAbsPdf* SGauss(RooRealVar* mdimu,int catindex, double m1, double m2, double s1, double s2, double f1);
   RooAbsPdf* bkgfunc(RooRealVar*mdimu, RooFormulaVar* mdimu_range, int catindex, TString func_name);
+  double getFWHM(RooRealVar *mass, RooAbsPdf *pdf, double wmin, double wmax, double step);
+  void makeplot(RooRealVar* mdimu, RooAbsPdf* dimupdf, int catindex, RooDataSet* dataset);
+  RooDataSet* getDataSet(int catindex, RooRealVar* mdimu, RooRealVar* evWeight, bool isblind);
+  void     getData(bool isblind);
+  void     bias(); 
+  void     bias(int icat);
   void     getpdf();
-  void     set(TString inputFileList, TString outFileName, TString isbkgstr, TString funcname, vector<TString> selection, TString proc, int category, TString useweight);
+  void     set(TString inputFileList, TString outFileName, TString isbkgstr, TString funcname, vector<TString> selection, TString proc, int category);
   TChain* loader(const string& inFile_name, const string& chain_name);
   void InitTreeVars();
   void BookTreeBranches();
 
-  TFile* oFile;
+  //TFile* oFile;
   TTree* outtree;
   int t_category;
   double t_mu;
@@ -69,11 +76,10 @@ private:
   TString isbkg;
   vector<TString> funclist;
   TString procname;
-  TString usew;
   int ncat;
 };
 
-HiggsMuMuFit::HiggsMuMuFit(TString inputFileList, TString outFileName, TString isbkgstr, TString funcname, vector<TString> selection, TString proc, int category, TString useweight)
+HiggsMuMuFit::HiggsMuMuFit(TString inputFileList, TString outFileName, TString isbkgstr, TString funcname, vector<TString> selection, TString proc, int category)
 {
   infile = inputFileList.Data();
   outfile = outFileName;
@@ -82,13 +88,12 @@ HiggsMuMuFit::HiggsMuMuFit(TString inputFileList, TString outFileName, TString i
   funclist=Utils::SplitString(funcname,',');
   procname = proc;
   ncat = category; 
-  usew = useweight;
-  oFile = new TFile(outFileName+"/"+proc+"_result.root", "recreate");
+  //oFile = new TFile(outFileName+"/"+proc+"_result.root", "recreate");
   InitTreeVars();
   BookTreeBranches();
 }
 
-void HiggsMuMuFit::set(TString inputFileList, TString outFileName, TString isbkgstr, TString funcname, vector<TString> selection, TString proc, int category, TString useweight)
+void HiggsMuMuFit::set(TString inputFileList, TString outFileName, TString isbkgstr, TString funcname, vector<TString> selection, TString proc, int category)
 {
   infile = inputFileList;
   outfile = outFileName;
@@ -97,7 +102,6 @@ void HiggsMuMuFit::set(TString inputFileList, TString outFileName, TString isbkg
   funclist=Utils::SplitString(funcname,',');
   procname = proc;
   ncat = category;
-  usew = useweight;
 }
 
 void HiggsMuMuFit::InitTreeVars(){
@@ -146,11 +150,12 @@ TChain* HiggsMuMuFit::loader(const string& inFile_name, const string& chain_name
 HiggsMuMuFit::~HiggsMuMuFit()
 {
 
+/*
 oFile->cd();
 outtree->Write("", TObject::kOverwrite);
 oFile->Write();
 oFile->Close();
-
+*/
 }
 
 RooAbsPdf* HiggsMuMuFit::BWZRedux(RooRealVar* mdimu, RooFormulaVar* mdimu_range, int catindex){
@@ -203,10 +208,14 @@ RooAbsPdf* HiggsMuMuFit::BWZGamma(RooRealVar* mdimu, RooFormulaVar* mdimu_range,
 
 RooAbsPdf* HiggsMuMuFit::SExp(RooRealVar* mdimu, RooFormulaVar* mdimu_range, int catindex){
 
-    RooRealVar* b1 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_b1_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_b1_cat%d",catindex),0.01,-1.0,1.0) ;
-    RooRealVar* b2 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_b2_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_b2_cat%d",catindex),0.01,-1.0,1.0) ;
-    RooRealVar* b3 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_b3_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_b3_cat%d",catindex),0.01,-1.0,1.0) ;
-    RooAbsPdf* mdimupdf = new RooGenericPdf(TString::Format("pdf_"+procname+"cat%d_bkg",catindex),"TMath::Exp(-@2*@2*@0/100.)*@1+TMath::Exp(-@3*@3*@0/100.)*(1-@1)",RooArgList(*mdimu,*b1,*b2,*b3));
+    RooRealVar* b1 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_b1_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_b1_cat%d",catindex),5.0,-100.0,100.0);
+    RooRealVar* b2 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_b2_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_b2_cat%d",catindex),5.0,-100.0,100.0);
+    RooRealVar* b3 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_b3_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_b3_cat%d",catindex),5.0,-100.0,100.0);
+    RooRealVar* a1 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_a1_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_a1_cat%d",catindex),0.5,0.0,1.0);
+    RooRealVar* a2 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_a2_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_a2_cat%d",catindex),0.5,0.0,1.0);
+    //RooAbsPdf* mdimupdf = new RooGenericPdf(TString::Format("pdf_"+procname+"cat%d_bkg",catindex),"TMath::Exp(-@2*@0/100.)*@1+TMath::Exp(-@3*@0/100.)*(1-@1)",RooArgList(*mdimu,*b1,*b2,*b3));
+    //RooAbsPdf* mdimupdf = new RooGenericPdf(TString::Format("pdf_"+procname+"cat%d_bkg",catindex),"(@3)*TMath::Exp(-@1*@0/100.)+(1.0-@3)*TMath::Exp(-@2*@0/100.)",RooArgList(*mdimu,*b1,*b2,*a1));
+    RooAbsPdf* mdimupdf = new RooGenericPdf(TString::Format("pdf_"+procname+"cat%d_bkg",catindex),"(@4)*TMath::Exp(-@1*@0/100.)+(@5)*TMath::Exp(-@2*@0/100.)+(1.0-@4-@5)*TMath::Exp(-@3*@0/100.)",RooArgList(*mdimu,*b1,*b2,*b3,*a1,*a2));
 
   return mdimupdf;
 }
@@ -272,13 +281,13 @@ RooAbsPdf* HiggsMuMuFit::bkgfunc(RooRealVar*mdimu, RooFormulaVar* mdimu_range, i
 }
 
 RooAbsPdf* HiggsMuMuFit::SGauss(RooRealVar* mdimu,int catindex, double m1, double m2, double s1, double s2, double f1){
-    RooRealVar* mean1 = new RooRealVar(Form("mean1_"+procname+"cat%d",catindex),Form("mean1 of gaussians for "+procname+"cat%d", catindex), m1, m1, m1) ;
-    RooRealVar* mean2 = new RooRealVar(Form("mean2_"+procname+"cat%d",catindex),Form("mean2 of gaussians for "+procname+"cat%d", catindex), m2, m2, m2) ;
-    RooRealVar* sigma1 = new RooRealVar(Form("sigma1_"+procname+"cat%d",catindex),Form("sigma1 of gaussians for "+procname+"cat%d", catindex), s1, s1, s1) ;
-    RooRealVar* sigma2 = new RooRealVar(Form("sigma2_"+procname+"cat%d",catindex),Form("sigma2 of gaussians for "+procname+"cat%d", catindex), s2, s2, s2) ;
-    RooGaussian* sig1 = new RooGaussian(Form("sig1_"+procname+"cat%d",catindex),Form("Signal component 1 for "+procname+"cat%d", catindex),*mdimu, *mean1, *sigma1) ;
-    RooGaussian* sig2 = new RooGaussian(Form("sig2_"+procname+"cat%d",catindex),Form("Signal component 2 for "+procname+"cat%d", catindex),*mdimu, *mean2, *sigma2) ;
-    RooRealVar* sig1frac = new RooRealVar(Form("sig1frac_"+procname+"cat%d",catindex),Form("signal fraction of component 1 for "+procname+"cat%d", catindex),f1,f1,f1) ;   
+    RooRealVar* mean1 = new RooRealVar(Form("CMS_Hmm_"+procname+"_mean1_cat%d",catindex),Form("mean1 of gaussians for "+procname+"cat%d", catindex), m1, m1, m1) ;
+    RooRealVar* mean2 = new RooRealVar(Form("CMS_Hmm_"+procname+"_mean2_cat%d",catindex),Form("mean2 of gaussians for "+procname+"cat%d", catindex), m2, m2, m2) ;
+    RooRealVar* sigma1 = new RooRealVar(Form("CMS_Hmm_"+procname+"_sigma1_cat%d",catindex),Form("sigma1 of gaussians for "+procname+"cat%d", catindex), s1, s1, s1) ;
+    RooRealVar* sigma2 = new RooRealVar(Form("CMS_Hmm_"+procname+"_sigma2_cat%d",catindex),Form("sigma2 of gaussians for "+procname+"cat%d", catindex), s2, s2, s2) ;
+    RooGaussian* sig1 = new RooGaussian(Form("CMS_Hmm_"+procname+"_sig1_cat%d",catindex),Form("Signal component 1 for "+procname+"cat%d", catindex),*mdimu, *mean1, *sigma1) ;
+    RooGaussian* sig2 = new RooGaussian(Form("CMS_Hmm_"+procname+"_sig2_cat%d",catindex),Form("Signal component 2 for "+procname+"cat%d", catindex),*mdimu, *mean2, *sigma2) ;
+    RooRealVar* sig1frac = new RooRealVar(Form("CMS_Hmm_"+procname+"_sig1frac_cat%d",catindex),Form("signal fraction of component 1 for "+procname+"cat%d", catindex),f1,f1,f1) ;   
 
     mean1->setConstant(true);
     mean2->setConstant(true);
@@ -291,15 +300,15 @@ RooAbsPdf* HiggsMuMuFit::SGauss(RooRealVar* mdimu,int catindex, double m1, doubl
 
 }
 
-RooAbsPdf* HiggsMuMuFit::SGauss(RooRealVar* mdimu,int catindex){
+RooAbsPdf* HiggsMuMuFit::SGauss3(RooRealVar* mdimu,int catindex, RooDataSet* data){
 
-    RooRealVar* mean1 = new RooRealVar(Form("mean1_"+procname+"cat%d",catindex),Form("mean1 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
-    RooRealVar* mean2 = new RooRealVar(Form("mean2_"+procname+"cat%d",catindex),Form("mean2 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
-    RooRealVar* mean3 = new RooRealVar(Form("mean2_"+procname+"cat%d",catindex),Form("mean3 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
+    RooRealVar* mean1 = new RooRealVar(Form("CMS_Hmm_"+procname+"_mean1_cat%d",catindex),Form("mean1 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
+    RooRealVar* mean2 = new RooRealVar(Form("CMS_Hmm_"+procname+"_mean2_cat%d",catindex),Form("mean2 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
+    RooRealVar* mean3 = new RooRealVar(Form("CMS_Hmm_"+procname+"_mean3_cat%d",catindex),Form("mean3 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
 
-    RooRealVar* sigma1 = new RooRealVar(Form(procname+"cat%d_sigma1",catindex),Form("sigma1 of gaussians for "+procname+"cat%d", catindex),3, 0.0, 10) ;
-    RooRealVar* sigma2 = new RooRealVar(Form(procname+"cat%d_sigma2",catindex),Form("sigma2 of gaussians for "+procname+"cat%d", catindex),5, 0.0, 40) ;
-    RooRealVar* sigma3 = new RooRealVar(Form(procname+"cat%d_sigma3",catindex),Form("sigma3 of gaussians for "+procname+"cat%d", catindex),10, 0.0, 40) ;
+    RooRealVar* sigma1 = new RooRealVar(Form("CMS_Hmm_"+procname+"_sigma1_cat%d",catindex),Form("sigma1 of gaussians for "+procname+"cat%d", catindex),3, 0.0, 10) ;
+    RooRealVar* sigma2 = new RooRealVar(Form("CMS_Hmm_"+procname+"_sigma2_cat%d",catindex),Form("sigma2 of gaussians for "+procname+"cat%d", catindex),5, 0.0, 40) ;
+    RooRealVar* sigma3 = new RooRealVar(Form("CMS_Hmm_"+procname+"_sigma3_cat%d",catindex),Form("sigma3 of gaussians for "+procname+"cat%d", catindex),10, 0.0, 40) ;
 
     RooGaussian* sig1 = new RooGaussian(Form(procname+"cat%d_sig1",catindex),Form("Signal component 1 for "+procname+"cat%d", catindex),*mdimu, *mean1, *sigma1) ;
     RooGaussian* sig2 = new RooGaussian(Form(procname+"cat%d_sig2",catindex),Form("Signal component 2 for "+procname+"cat%d", catindex),*mdimu, *mean2, *sigma2) ;
@@ -307,7 +316,158 @@ RooAbsPdf* HiggsMuMuFit::SGauss(RooRealVar* mdimu,int catindex){
  
     RooRealVar* sig1frac = new RooRealVar(Form(procname+"cat%d_sig1frac",catindex),Form("signal fraction of component 1 for "+procname+"cat%d", catindex),0.8,0.,1.) ;
     RooRealVar* sig2frac = new RooRealVar(Form(procname+"cat%d_sig2frac",catindex),Form("signal fraction of component 2 for "+procname+"cat%d", catindex),0.1,0.,1.) ;
-    //RooAddPdf* dimupdf = new RooAddPdf(Form(procname+"cat%d_sig_pdf",catindex),Form(procname+"cat%d_sig_pdf",catindex),RooArgList(*sig1,*sig2,*sig3),RooArgList(*sig1frac,*sig2frac)) ;
-    RooAddPdf* dimupdf = new RooAddPdf(Form(procname+"cat%d_sig_pdf",catindex),Form(procname+"cat%d_sig_pdf",catindex),RooArgList(*sig1,*sig2),RooArgList(*sig1frac)) ;
+    RooAddPdf* dimupdf = new RooAddPdf(Form("pdf_"+procname+"cat%d_sig",catindex),Form("pdf_"+procname+"cat%d_sig",catindex),RooArgList(*sig1,*sig2, *sig3),RooArgList(*sig1frac,*sig2frac)) ;
+
+    RooNLLVar* nll = (RooNLLVar*)dimupdf->createNLL(*data);
+    nll->enableOffsetting(true);
+    int status_fit = Utils::minimizeTest(nll,1.0);
+    if((status_fit!=0) && (status_fit!=1)){
+       cout <<"fit to data does not converge for 3 Gauss, try again"<<endl;
+       status_fit = Utils::minimizeTest(nll,1.0);
+       if((status_fit!=0) && (status_fit!=1)){
+          cout <<"fit to data does not converge"<<endl;
+          return NULL;
+       }
+    }
+
+    sig1frac->setConstant(true);
+    sig2frac->setConstant(true);
+    sigma1->setConstant(true);
+    sigma2->setConstant(true);
+    sigma3->setConstant(true);
+    mean1->setConstant(true);
+    mean2->setConstant(true);
+    mean3->setConstant(true);
     return dimupdf; 
 }
+
+RooAbsPdf* HiggsMuMuFit::SGauss2(RooRealVar* mdimu,int catindex, RooDataSet* data){
+
+    RooRealVar* mean1 = new RooRealVar(Form("CMS_Hmm_"+procname+"_mean1_cat%d",catindex),Form("mean1 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
+    RooRealVar* mean2 = new RooRealVar(Form("CMS_Hmm_"+procname+"_mean2_cat%d",catindex),Form("mean2 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
+
+    RooRealVar* sigma1 = new RooRealVar(Form("CMS_Hmm_"+procname+"_sigma1_cat%d",catindex),Form("sigma1 of gaussians for "+procname+"cat%d", catindex),3, 0.0, 10) ;
+    RooRealVar* sigma2 = new RooRealVar(Form("CMS_Hmm_"+procname+"_sigma2_cat%d",catindex),Form("sigma2 of gaussians for "+procname+"cat%d", catindex),5, 0.0, 40) ;
+
+    RooGaussian* sig1 = new RooGaussian(Form(procname+"cat%d_sig1",catindex),Form("Signal component 1 for "+procname+"cat%d", catindex),*mdimu, *mean1, *sigma1) ;
+    RooGaussian* sig2 = new RooGaussian(Form(procname+"cat%d_sig2",catindex),Form("Signal component 2 for "+procname+"cat%d", catindex),*mdimu, *mean2, *sigma2) ;
+
+    RooRealVar* sig1frac = new RooRealVar(Form(procname+"cat%d_sig1frac",catindex),Form("signal fraction of component 1 for "+procname+"cat%d", catindex),0.8,0.,1.) ;
+    RooAddPdf* dimupdf = new RooAddPdf(Form("pdf_"+procname+"cat%d_sig",catindex),Form("pdf_"+procname+"cat%d_sig",catindex),RooArgList(*sig1,*sig2),RooArgList(*sig1frac)) ;
+
+    RooNLLVar* nll = (RooNLLVar*)dimupdf->createNLL(*data);
+    nll->enableOffsetting(true);
+    int status_fit = Utils::minimizeTest(nll,1.0);
+    if(status_fit!=0){
+       cout <<"fit to data does not converge for 2 Gauss, try again"<<endl;
+       status_fit = Utils::minimizeTest(nll,1.0);
+       if(status_fit!=0){
+          cout <<"fit to data does not converge"<<endl;
+          return NULL;
+       }
+    }
+
+    sig1frac->setConstant(true);
+    sigma1->setConstant(true);
+    sigma2->setConstant(true);
+    mean1->setConstant(true);
+    mean2->setConstant(true);
+
+    return dimupdf;
+}
+
+double HiggsMuMuFit::getFWHM(RooRealVar *mass, RooAbsPdf *pdf, double wmin=110., double wmax=130., double step=0.025) {
+//vector<double> getFWHM(RooRealVar *mass, RooAbsPdf *pdf, RooDataSet *data, double wmin=110., double wmax=130., double step=0.025) {
+
+  cout << "Computing FWHM...." << endl;
+  double nbins = (wmax-wmin)/step;
+  TH1F *h = new TH1F("h","h",int(floor(nbins+0.5)),wmin,wmax);
+  //if (data){
+  //  pdf->fillHistogram(h,RooArgList(*mass),data->sumEntries());
+  //}
+  //else {
+    pdf->fillHistogram(h,RooArgList(*mass));
+  //}
+
+  double hm = h->GetMaximum()*0.5;
+  double low = h->GetBinCenter(h->FindFirstBinAbove(hm));
+  double high = h->GetBinCenter(h->FindLastBinAbove(hm));
+
+  double val = high-low;
+  cout << "FWHM: [" << low << "-" << high << " = " << high-low <<"] Max = " << hm << endl;
+  /*
+  vector<double> result;
+  result.push_back(low);
+  result.push_back(high);
+  result.push_back(hm);
+  result.push_back(h->GetBinWidth(1));
+  */
+
+  delete h;
+  //return result;
+  return val;
+}
+
+void HiggsMuMuFit::makeplot(RooRealVar* mdimu, RooAbsPdf* dimupdf,int catindex, RooDataSet* data){
+
+    RooBinning tbins(110,150);
+    tbins.addUniform(80,110,150) ;
+    RooPlot* dtframe = mdimu->frame(Range(110,150),Title("m(#mu#mu) distribution"));
+    cout <<"p1"<<endl;
+    data->plotOn(dtframe,Binning(tbins));
+    cout <<"p2"<<endl;
+    RooArgSet* check = dimupdf->getComponents();
+    check->Print();
+    TIterator* iter = check->createIterator();
+    TObject* arg = NULL;
+    vector<string> nComp;
+    nComp.clear();
+    int icolor = 1;
+    while((arg=(TObject*)iter->Next())){
+        string str(arg->GetName());
+        icolor++;
+        cout <<"plot: "<<str<<endl;
+        nComp.push_back(str);
+        if(icolor==2) dimupdf->plotOn(dtframe,Components(str.data()),LineColor(icolor),Name(str.data()));
+        else{
+          if(icolor==10) dimupdf->plotOn(dtframe,Components(str.data()),LineColor(kOrange+7),Name(str.data()),LineStyle(kDashed));
+          else dimupdf->plotOn(dtframe,Components(str.data()),LineColor(icolor),Name(str.data()),LineStyle(kDashed));
+        }
+    }
+    /*
+ *     args = RooArgSet (parameters...);
+ *         dimupdf->paramOn(dtframe,RooFit.Parameters(args), Layout(0.55, 0.88, 0.88), Format("NEU",AutoPrecision(2)));
+ *             dtframe->getAttText(Form("pdf_"+procname+"cat%d_sig_paramBox",catindex))->SetTextColor(kBlack);
+ *                 dtframe->getAttFill(Form("pdf_"+procname+"cat%d_sig_paramBox",catindex))->SetFillStyle(0);
+ *                     dtframe->getAttText(Form("pdf_"+procname+"cat%d_sig_paramBox",catindex))->SetTextSize(0.03);
+ *                         */
+
+    TCanvas* c1 = new TCanvas("c1","c1");
+    dtframe->Draw();
+    c1->SaveAs(TString::Format(Form(outfile+"/plots/Hmm."+procname+"sig_13TeV.cat%d_m.png",catindex)));
+    gPad->SetLogy();
+    double maxv = dtframe->GetMaximum();
+    dtframe->SetMinimum(0.01*maxv);
+    dtframe->Draw();
+    c1->SaveAs(TString::Format(Form(outfile+"/plots/Hmm."+procname+"sig_13TeV.cat%d_m_log.png",catindex)));
+
+}
+
+RooDataSet* HiggsMuMuFit::getDataSet(int catindex, RooRealVar* mdimu, RooRealVar* evWeight, bool isblind){
+    RooArgSet obsAndWeight;
+    obsAndWeight.add(*mdimu);
+    obsAndWeight.add(*evWeight);
+
+    TChain* data_chain = loader(infile.c_str(), "cattree");
+    TString cut = cuts[catindex];
+    if(isblind) cut = cut + "&& (Higgs_mass>130 || Higgs_mass<120)";
+    cout <<"cut: "<<cut<<endl;
+    TTree* cutChain = data_chain->CopyTree(cut);
+    string dataset_ch_name(Form("Sig_"+procname+"_cat%d",catindex));
+    RooCmdArg wgt_arg = RooFit::WeightVar("evt_weight");
+    RooDataSet* data = new RooDataSet(dataset_ch_name.c_str(), dataset_ch_name.c_str(), RooArgSet(obsAndWeight), RooFit::Import(*cutChain), wgt_arg);
+    delete data_chain;
+    delete cutChain;
+    return data;
+}
+

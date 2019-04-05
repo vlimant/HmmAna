@@ -1,3 +1,10 @@
+/////////////////////////////////////////////////////////
+//// 
+//// Original Author : Nan Lu
+////                   Caltech
+//// Date Created    : Feb, 2019
+/////////////////////////////////////////////////////////
+
 #define HiggsMuMuFit_cxx
 #include "HiggsMuMuFit.h"
 #include <TH2.h>
@@ -27,11 +34,27 @@ int main(int argc, char* argv[])
   TString outFileName = argv[2];
   TString isbkgstr = argv[3];
   TString funcname = argv[4];
-  TString useweight = argv[5];
+  TString dopdf = argv[5];
 
   TString mass_cut = "Higgs_mass > 110 && Higgs_mass< 150 &&";
  
   TString proc = isbkgstr;
+  //TString sel15 = mass_cut + " cat_index<4"; //ttH
+  //TString sel16 = mass_cut + " cat_index>3 && cat_index<7"; //VH-lep
+  /*
+  selection = mass_cut + " cat_index==7"; //VH-had? VBF?
+  category = 3;
+  proc = isbkgstr;
+  hmm.set(inputFileList, outFileName, isbkgstr, selection, proc, category);
+  hmm.getpdf();
+
+  selection = mass_cut + " cat_index==8"; //VBF? VH-had??
+  category = 4;
+  proc = isbkgstr;
+  hmm.set(inputFileList, outFileName, isbkgstr, selection, proc, category);
+  hmm.getpdf();
+  */
+  //if adding VH-lep categories etc mass_cut + " cat_index>6 &&" + 
   TString mass_cut1 =  mass_cut;
 
   //TString sel0 = mass_cut1 + " disc_simpleNN > 0.1"; //disc_advNN
@@ -39,178 +62,204 @@ int main(int argc, char* argv[])
 
   TString sel0 = mass_cut1 + " disc_advNN > 0.1";
   TString sel1 = mass_cut1 + " disc_advNN < 0.1 && disc_advNN>0.0"; 
+  
+  //2018
+  /* 
+  TString sel0 = mass_cut1 + " BDT_incl < -0.427776";
 
+  TString sel1 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > -0.427776 && BDT_incl < 0.0219585";
+  TString sel2 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > -0.427776 && BDT_incl < 0.0219585";
+  TString sel3 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > -0.427776 && BDT_incl < 0.0219585";
+
+  TString sel4 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.0219585 && BDT_incl < 0.225359";
+  TString sel5 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.0219585 && BDT_incl < 0.225359";
+  TString sel6 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.0219585 && BDT_incl < 0.225359";
+
+  TString sel7 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.225359 && BDT_incl < 0.372603";
+  TString sel8 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.225359 && BDT_incl < 0.372603";
+  TString sel9 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.225359 && BDT_incl < 0.372603";
+
+  TString sel10 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.372603 && BDT_incl < 0.613851";
+  TString sel11 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.372603 && BDT_incl < 0.613851";
+  TString sel12 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.372603 && BDT_incl < 0.613851";
+
+  TString sel13 = mass_cut1 + " BDT_incl > 0.613851 && BDT_incl < 0.717566";
+  TString sel14 = mass_cut1 + " BDT_incl > 0.717566";
+  
+  //2016
+ 
+  TString sel0 = mass_cut1 + " BDT_incl < -0.41438";
+
+  TString sel1 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > -0.41438 && BDT_incl < 0.0516541";
+  TString sel2 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > -0.41438 && BDT_incl < 0.0516541";
+  TString sel3 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > -0.41438 && BDT_incl < 0.0516541";
+
+  TString sel4 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.0516541 && BDT_incl < 0.254417";
+  TString sel5 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.0516541 && BDT_incl < 0.254417";
+  TString sel6 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.0516541 && BDT_incl < 0.254417";
+
+  TString sel7 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.254417 && BDT_incl < 0.402352";
+  TString sel8 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.254417 && BDT_incl < 0.402352";
+  TString sel9 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.254417 && BDT_incl < 0.402352";
+
+  TString sel10 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.402352 && BDT_incl < 0.643802";
+  TString sel11 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.402352 && BDT_incl < 0.643802";
+  TString sel12 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.402352 && BDT_incl < 0.643802";
+
+  TString sel13 = mass_cut1 + " BDT_incl > 0.643802 && BDT_incl < 0.739798";
+  TString sel14 = mass_cut1 + " BDT_incl > 0.739798";
+   
+
+ //2017:
+  
+  TString sel0 = mass_cut1 + " BDT_incl < -0.423045";
+
+  TString sel1 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > -0.423045 && BDT_incl < 0.0245217";
+  TString sel2 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > -0.423045 && BDT_incl < 0.0245217";
+  TString sel3 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > -0.423045 && BDT_incl < 0.0245217";
+
+  TString sel4 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.0245217 && BDT_incl < 0.225491";
+  TString sel5 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.0245217 && BDT_incl < 0.225491";
+  TString sel6 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.0245217 && BDT_incl < 0.225491";
+
+  TString sel7 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.225491 && BDT_incl < 0.373104";
+  TString sel8 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.225491 && BDT_incl < 0.373104";
+  TString sel9 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.225491 && BDT_incl < 0.373104";
+
+  TString sel10 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.373104 && BDT_incl < 0.612933";
+  TString sel11 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.373104 && BDT_incl < 0.612933";
+  TString sel12 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.373104 && BDT_incl < 0.612933";
+
+  TString sel13 = mass_cut1 + " BDT_incl > 0.612933 && BDT_incl < 0.716738";
+  TString sel14 = mass_cut1 + " BDT_incl > 0.716738";
+  
+  //old 2016 pas?? 
+  TString sel0 = mass_cut1 + " BDT_incl < -0.4";
+
+  TString sel1 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > -0.4 && BDT_incl < 0.05";
+  TString sel2 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > -0.4 && BDT_incl < 0.05";
+  TString sel3 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > -0.4 && BDT_incl < 0.05";
+
+  TString sel4 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.05 && BDT_incl < 0.25";
+  TString sel5 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.05 && BDT_incl < 0.25";
+  TString sel6 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.05 && BDT_incl < 0.25";
+
+  TString sel7 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.25 && BDT_incl < 0.40";
+  TString sel8 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.25 && BDT_incl < 0.40";
+  TString sel9 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.25 && BDT_incl < 0.40";
+
+  TString sel10 = mass_cut1 + " fabs(max_reco_mu_eta)<0.9 && BDT_incl > 0.40 && BDT_incl < 0.65";
+  TString sel11 = mass_cut1 + " fabs(max_reco_mu_eta)>0.9 && fabs(max_reco_mu_eta)<1.9  && BDT_incl > 0.40 && BDT_incl < 0.65";
+  TString sel12 = mass_cut1 + " fabs(max_reco_mu_eta)>1.9 && BDT_incl > 0.40 && BDT_incl < 0.65";
+
+  TString sel13 = mass_cut1 + " BDT_incl > 0.65 && BDT_incl < 0.73";
+  TString sel14 = mass_cut1 + " BDT_incl > 0.73";
+  */ 
+  //vector<TString> selection = {sel0, sel1, sel2, sel3, sel4, sel5, sel6, sel7, sel8, sel9, sel10, sel11, sel12, sel13, sel14};
+  
   vector<TString> selection = {sel0,sel1};
 
   int category = selection.size();
   
-  HiggsMuMuFit hmm(inputFileList, outFileName, isbkgstr, funcname, selection, proc, category, useweight);
+  HiggsMuMuFit hmm(inputFileList, outFileName, isbkgstr, funcname, selection, proc, category);
   Utils::setDefaultMinimize();
-  hmm.getpdf();
+  if(dopdf.EqualTo("T")) hmm.getpdf();
+  else hmm.getData(false);
 
   return 0;
-}
-
-void HiggsMuMuFit::sigfit_DCB(){
-   //to be added
 }
 
 void HiggsMuMuFit::sigfit()
 { 
 
   cout <<"sigfit: sum of up to three Gaussian functions"<<endl;
-
+  //workspace to save pdfs, dataset, aditional variables
   RooWorkspace *w = new RooWorkspace("w_all","workspace") ;
-
-  //RooRealVar* catin= new RooRealVar("cat_index","cat_index",1,0,100) ;
-  //RooRealVar* max_reco_mu_eta = new RooRealVar("max_reco_mu_eta","max_reco_mu_eta",1,-100,100) ;
-  //RooRealVar* BDT_incl = new RooRealVar("BDT_incl","BDT_incl",0,-1,1) ;
-  
-  RooRealVar* mdimu = new RooRealVar("Higgs_mass","Higgs_mass",110,110,150) ;
+  //declare obs and weight vars
+  RooRealVar* mdimu = new RooRealVar("Higgs_mass","Higgs_mass",120,110,150) ;
   mdimu->setBins(800);
   mdimu->setRange("RF",110,150);
-  //RooRealVar* cut_based_ct = new RooRealVar("cat_index","cat_index",1,0,10) ;
+  RooRealVar* evWeight = new RooRealVar("evt_weight","evt_weight",1,-RooNumber::infinity(),RooNumber::infinity()) ;
 
- for(int catindex=0; catindex<ncat; catindex++){
-  
-  RooRealVar* mean1 = new RooRealVar(Form("mean1_"+procname+"cat%d",catindex),Form("mean1 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
-  RooRealVar* mean2 = new RooRealVar(Form("mean2_"+procname+"cat%d",catindex),Form("mean2 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
-  RooRealVar* mean3 = new RooRealVar(Form("mean3_"+procname+"cat%d",catindex),Form("mean3 of gaussians for "+procname+"cat%d", catindex),125, 110, 145) ;
+  for(int catindex=0; catindex<ncat; catindex++){
 
-  RooRealVar* sigma1 = new RooRealVar(Form("sigma1_"+procname+"cat%d",catindex),Form("sigma1 of gaussians for "+procname+"cat%d", catindex),3, 0.0, 10) ;
-  RooRealVar* sigma2 = new RooRealVar(Form("sigma2_"+procname+"cat%d",catindex),Form("sigma2 of gaussians for "+procname+"cat%d", catindex),5, 0.0, 40) ;
-  RooRealVar* sigma3 = new RooRealVar(Form("sigma3_"+procname+"cat%d",catindex),Form("sigma3 of gaussians for "+procname+"cat%d", catindex),10, 0.0, 40) ;
+    //load and save MC events into a RooDataSet
+    RooDataSet* data = getDataSet(catindex,mdimu,evWeight,false);
 
-  RooGaussian* sig1 = new RooGaussian(Form("sig1_"+procname+"cat%d",catindex),Form("Signal component 1 for "+procname+"cat%d", catindex),*mdimu, *mean1, *sigma1) ;
-  RooGaussian* sig2 = new RooGaussian(Form("sig2_"+procname+"cat%d",catindex),Form("Signal component 2 for "+procname+"cat%d", catindex),*mdimu, *mean2, *sigma2) ;
-  RooGaussian* sig3 = new RooGaussian(Form("sig3_"+procname+"cat%d",catindex),Form("Signal component 3 for "+procname+"cat%d", catindex),*mdimu, *mean3, *sigma3) ;
+    //get signal pdf
+    RooAbsPdf* dimupdf = SGauss3(mdimu,catindex,data);
+    if(dimupdf==NULL) dimupdf = SGauss2(mdimu,catindex,data);
+    if(dimupdf==NULL){
+        cout <<Form(procname+"cat%d",catindex)<<" failed, continue to next category. "<<endl;
+        continue;
+    }
 
-  RooRealVar* sig1frac = new RooRealVar(Form("sig1frac_"+procname+"cat%d",catindex),Form("signal fraction of component 1 for "+procname+"cat%d", catindex),0.8,0.,1.) ;
-  RooRealVar* sig2frac = new RooRealVar(Form("sig1frac_"+procname+"cat%d",catindex),Form("signal fraction of component 2 for "+procname+"cat%d", catindex),0.1,0.,1.) ;
-  RooAddPdf* dimupdf = new RooAddPdf(Form("sig_pdf_"+procname+"cat%d",catindex),Form(procname+"cat%d_sig_pdf",catindex),RooArgList(*sig1,*sig2),RooArgList(*sig1frac)) ;
-  
-  //RooAbsPdf* dimupdf = HiggsMuMuFit::SGauss( mdimu, catindex);
-  RooRealVar* nsig = new RooRealVar(Form(procname+"cat%d_nsig",catindex),Form("number of signal events in signalRange from fit "+procname+"cat%d", catindex),10000,0,100000000) ;
-  RooExtendPdf* sigpdf = new RooExtendPdf(Form(procname+"cat%d_sig_extpdf",catindex),Form("extended signal p.d.f "+procname+"cat%d", catindex),*dimupdf,*nsig,"RF") ;
+    //expected events from MC counting events
+    double sum = data->sumEntries();
+    cout <<"nsig_sum: "<<sum<<endl;
+    if(procname.Contains("ggH")){
+      sum = sum*1.100589035;
+      cout <<"scale to N3LO xs"<<endl;
+    }
+    cout <<"nsig_sum: "<<sum<<endl;
+    RooRealVar* nsig_sum = new RooRealVar(Form(procname+"cat%d_nsig_sum",catindex),Form("number of signal events in signalRange "+procname+"cat%d", catindex),sum) ;
+    nsig_sum->setConstant(true);
 
-  TChain* data_chain = loader(infile.c_str(), "cattree");
+    //pdf x event number from MC, import this ws
+    RooExtendPdf* sigpdf = new RooExtendPdf(Form(procname+"cat%d_sig_extpdf",catindex),Form("extended signal p.d.f "+procname+"cat%d", catindex),*dimupdf,*nsig_sum,"RF") ;
 
-  RooRealVar* evWeight = new RooRealVar("genWeight","genWeight",1,-100000,100000) ;
+    //Cal FWHM
+    double FWHMval = getFWHM(mdimu, dimupdf);
+    cout <<"FWHM: " <<FWHMval<<endl;
+    RooRealVar* FWHM = new RooRealVar(Form(procname+"cat%d_FWHM",catindex),Form("FWHM in signalRange "+procname+"cat%d", catindex),FWHMval) ;
+    FWHM->setConstant(true);
 
-  RooArgSet obsAndWeight;
-  obsAndWeight.add(*mdimu);
-  //obsAndWeight.add(*catin);
-  //obsAndWeight.add(*BDT_incl);
-  //obsAndWeight.add(*max_reco_mu_eta);
-  obsAndWeight.add(*evWeight);
-
-  TString cut = cuts[catindex];
-  cout <<"cut: "<<cut<<endl;
-  TTree* cutChain = data_chain->CopyTree(cut);
-  string dataset_ch_name(Form("Sig_"+procname+"_cat%d",catindex));
-  RooCmdArg wgt_arg = RooFit::WeightVar("genWeight");
-  RooDataSet* data = new RooDataSet(dataset_ch_name.c_str(), dataset_ch_name.c_str(), RooArgSet(obsAndWeight), RooFit::Import(*cutChain), wgt_arg);
-  double sum = data->sumEntries();
-  if(procname.Contains("ggH")){
-     sum = sum*1.100589035;
-     cout <<"scale to N3LO xs"<<endl;
-  }
-  RooRealVar* nsig_sum = new RooRealVar(Form(procname+"cat%d_nsig_sum",catindex),Form("number of signal events in signalRange "+procname+"cat%d", catindex),sum) ;
-  nsig_sum->setConstant(true);
-
-  //RooFitResult* r = sigpdf->fitTo(*data,RooFit::Strategy(1), RooFit::Extended(kTRUE), RooFit::Save(kTRUE));
-  //r->Print() ;
-
-  RooNLLVar* nll = (RooNLLVar*)sigpdf->createNLL(*data, Extended(kTRUE));
-  nll->enableOffsetting(true);
-  RooMinimizer minim(*nll);
-  minim.setStrategy(1);
-  minim.setPrintLevel(0);
-  int status = minim.minimize("Minuit2", "Migrad");
-  if(status!=0){
-      cout <<"fit to data does not converge, try again"<<endl;
-      RooMinimizer minim2(*nll);
-      minim2.setStrategy(1);
-      minim2.setPrintLevel(0);
-      int status2 = minim2.minimize("Minuit2", "Migrad"); 
-      if(status2!=0){ 
-        cout <<"fit to data does not converge, try again"<<endl;
-        RooMinimizer minim3(*nll);
-        minim3.setStrategy(1);
-        minim3.setPrintLevel(0);
-        int status3 = minim3.minimize("Minuit2", "Migrad");
-        /*
-        if(status3!=0){ 
-          cout <<"fit to data does not converge, reduce to two Gaussians, try again"<<endl;
-          sig2frac->setVal(0);
-          sig2frac->setConstant(true);
-          sigma2->setConstant(true);
-          mean2->setConstant(true);
-          RooMinimizer minim4(*nll);
-          minim4.setStrategy(1);
-          minim4.setPrintLevel(0);
-          int status4 = minim4.minimize("Minuit2", "Migrad");
-          if(status4!=0){
-            cout <<"fit to data does not converge, after four fits"<<endl;
-          } 
-        }
-        */
-      }
-  }
-
-  cout <<"nsig_sum: "<<sum<<endl;
-  nsig->Print();
-
-  RooBinning tbins(110,150);
-  tbins.addUniform(80,110,150) ;
-  RooPlot* dtframe = mdimu->frame(Range(110,150),Title("m(#mu#mu) distribution"));
-  data->plotOn(dtframe,Binning(tbins));
-  sigpdf->plotOn(dtframe);
-  sigpdf->plotOn(dtframe, Components(*sig1), LineColor(kRed), LineStyle(kDashed));
-  sigpdf->plotOn(dtframe, Components(*sig2), LineColor(kGreen), LineStyle(kDashed));
-  //sigpdf->plotOn(dtframe, Components(*sig3), LineColor(kOrange), LineStyle(kDashed));
-
-  //data->statOn(dtframe,Layout(0.60,0.65,0.50), Format("NEU",AutoPrecision(0))) ;
-  sigpdf->paramOn(dtframe,Layout(0.55, 0.88, 0.88), Format("NEU",AutoPrecision(2))) ;
-  dtframe->getAttText(Form(procname+"cat%d_sig_extpdf_paramBox",catindex))->SetTextColor(kBlack);
-  dtframe->getAttFill(Form(procname+"cat%d_sig_extpdf_paramBox",catindex))->SetFillStyle(0);
-  dtframe->getAttText(Form(procname+"cat%d_sig_extpdf_paramBox",catindex))->SetTextSize(0.03);
-
-  TCanvas* c1 = new TCanvas("c1","c1");
-  dtframe->Draw();
-  c1->SaveAs(TString::Format(Form(outfile+"/plots/Hmm."+procname+"sig_13TeV.cat%d_m.png",catindex)));
-
-  gPad->SetLogy();
-  double maxv = dtframe->GetMaximum();
-  dtframe->SetMinimum(0.01*maxv);
-  dtframe->Draw();
-  c1->SaveAs(TString::Format(Form(outfile+"/plots/Hmm."+procname+"sig_13TeV.cat%d_m_log.png",catindex)));
-
-  if((sig1frac->getVal()+sig2frac->getVal())>1.0){
-    if(sig1frac->getVal() > sig2frac->getVal()) sig2frac->setVal(0.);
-    else sig1frac->setVal(0.);
-  }
-  nsig->setConstant(true);
-  sig1frac->setConstant(true);
-  sig2frac->setConstant(true);
-  sigma1->setConstant(true);
-  sigma2->setConstant(true);
-  sigma3->setConstant(true);
-  mean1->setConstant(true);
-  mean2->setConstant(true);
-  mean3->setConstant(true);
-
-  w->import(*nsig_sum);
-  w->import(*sigpdf);
-  w->import(*data);
-
-  delete data_chain;
-  delete data;
-  delete sigpdf; 
+    //make plot (pdf and data)
+    makeplot(mdimu, dimupdf,catindex,data);
+    
+    //add infor into ws
+    w->import(*FWHM);
+    w->import(*sigpdf);
+    w->import(*data);
+ 
+    delete data;
+    delete sigpdf; 
   }
   w->Print() ;
   w->writeToFile(outfile+"/pdfs/Hmm.input"+procname+"sig_13TeV.root");
 }   
+
+void HiggsMuMuFit::bias(){
+  for(int i=0; i<ncat; i++) bias(i);
+}
+
+void HiggsMuMuFit::bias( int icat){
+  TFile *ggH_sf = TFile::Open("output_March12_2016/pdfs/Hmm.inputggHsig_13TeV.root");
+  RooWorkspace *w_ggHsig = (RooWorkspace*)ggH_sf->Get("w_all"); 
+  RooExtendPdf* ggHpdf = (RooExtendPdf*)w_ggHsig->pdf(Form("ggHcat%d_sig_extpdf",icat));
+
+  TFile *VBFH_sf = TFile::Open("output_March12_2016/pdfs/Hmm.inputVBFHsig_13TeV.root");
+  RooWorkspace *w_VBFHsig = (RooWorkspace*)VBFH_sf->Get("w_all");
+  RooExtendPdf* VBFHpdf = (RooExtendPdf*)w_VBFHsig->pdf(Form("VBFHcat%d_sig_extpdf",icat));
+
+  TFile *WH_sf = TFile::Open("output_March12_2016/pdfs/Hmm.inputWHsig_13TeV.root");
+  RooWorkspace *w_WHsig = (RooWorkspace*)WH_sf->Get("w_all");
+  RooExtendPdf* WHpdf = (RooExtendPdf*)w_WHsig->pdf(Form("WHcat%d_sig_extpdf",icat));
+
+  TFile *ZH_sf = TFile::Open("output_March12_2016/pdfs/Hmm.inputZHsig_13TeV.root");
+  RooWorkspace *w_ZHsig = (RooWorkspace*)ZH_sf->Get("w_all");
+  RooExtendPdf* ZHpdf = (RooExtendPdf*)w_ZHsig->pdf(Form("ZHcat%d_sig_extpdf",icat));
+ 
+  cout <<"bias study for cat"<<icat<<endl;
+
+  TFile *bkgf = TFile::Open("output_March12_2016/pdfs/Hmm.inputbkgbkg_13TeV.root");
+  RooWorkspace *w_bkg = (RooWorkspace*)bkgf->Get("w_all");
+  RooExtendPdf* bkgpdf = (RooExtendPdf*)w_bkg->pdf(Form("bkgcat%d_bkg_extpdf",icat));
+
+  RooRealVar* mu = new RooRealVar(Form("mu_"+procname+"cat%d",icat),"signal strength",1.,0.0,1000.0);
+  RooAbsPdf* model = new RooAddPdf(Form("sbmodel_"+procname+"cat%d", icat),"signal + bkg",RooArgList(*ggHpdf, *VBFHpdf, *WHpdf, *ZHpdf, *bkgpdf));
+
+}
 
 void HiggsMuMuFit::sbfit()
 {
@@ -232,19 +281,20 @@ void HiggsMuMuFit::sbfit()
   mdimu->setBins(800);
 
   RooFormulaVar* mdimu_range =  new RooFormulaVar("mdimu_range","(@0-110.0)/(40.0)",RooArgSet(*mdimu));
-  RooRealVar* evWeight = new RooRealVar("genWeight","genWeight",1,-100000,100000) ;
+  RooRealVar* evWeight = new RooRealVar("evt_weight","evt_weight",1,-100000,100000) ;
 
   TChain* data_chain = loader(infile.c_str(), "cattree");
   TChain* data_chain_sig = loader("/eos/cms/store/user/nlu/Hmm/VBF/categorization/VBFHToMuMu_2018_NNscore.root", "cattree");
   RooArgSet obsAndWeight;
   obsAndWeight.add(*mdimu);
-  if(usew.EqualTo("T")) obsAndWeight.add(*evWeight);
+  //if(usew.EqualTo("T")) 
+  obsAndWeight.add(*evWeight);
 
   for(int catindex=0; catindex<ncat; catindex++){
         TString cut = cuts[catindex];
         cout <<"cut: "<<cut<<endl;
-        RooCmdArg wgt_arg = usew ? RooFit::WeightVar("genWeight") : RooCmdArg::none() ;
-
+        //RooCmdArg wgt_arg = usew ? RooFit::WeightVar("evt_weight") : RooCmdArg::none() ;
+        RooCmdArg wgt_arg = RooFit::WeightVar("evt_weight");
         TTree* cutChain_sig = data_chain_sig->CopyTree(cut);
         string dataset_ch_name_sig(Form("sig_"+procname+"_cat%d",catindex));
         RooDataSet* datasig = new RooDataSet(dataset_ch_name_sig.c_str(), dataset_ch_name_sig.c_str(), RooArgSet(obsAndWeight), RooFit::Import(*cutChain_sig), wgt_arg);
@@ -270,7 +320,7 @@ void HiggsMuMuFit::sbfit()
 
         cout << "DEBUG: result of fit on full data " << endl ;
         RooNLLVar* nll_fix = (RooNLLVar*)model->createNLL(*data, Extended(kTRUE), Range("RF"));
-        int status_fix = Utils::minimizeMinosTest(nll_fix,mu,1.0); //Utils::minimizeTest(nll_fix,1.0);
+        int status_fix = Utils::minimizeMinosTest(nll_fix,mu,1.0); 
         if(status_fix!=0){
             cout <<"fit to data does not converge"<<endl;
             status_fix = Utils::minimizeMinosTest(nll_fix,mu,1.0);
@@ -346,7 +396,7 @@ void HiggsMuMuFit::sbfit()
     delete data_chain;
 }
 
-void HiggsMuMuFit::bkgfit()
+void HiggsMuMuFit::bkgfit(bool isblind)
 {
   if(funclist.size()!=ncat){
     cout <<"error "<<funclist.size()<<"vs"<<ncat<<endl;
@@ -366,12 +416,13 @@ void HiggsMuMuFit::bkgfit()
   mdimu->setBins(800);
   RooFormulaVar* mdimu_range =  new RooFormulaVar("mdimu_range","(@0-110.0)/(40.0)",RooArgSet(*mdimu));
   RooRealVar* evWeight = new RooRealVar("evt_weight","evt_weight",1,-100000,100000) ;
-   
+  
+  /* 
   TChain* data_chain = loader(infile.c_str(), "cattree");
   RooArgSet obsAndWeight;
   obsAndWeight.add(*mdimu);
   if(usew.EqualTo("T")) obsAndWeight.add(*evWeight);
-
+  */
   for(int catindex=0; catindex<ncat; catindex++){
 
         RooAbsPdf* mdimupdf = NULL;
@@ -410,38 +461,37 @@ void HiggsMuMuFit::bkgfit()
         RooRealVar* nbkg = new RooRealVar(Form("nbkg_"+procname+"cat%d",catindex),Form("number of background events in signalRange "+procname+"cat%d", catindex),500,0.0,RooNumber::infinity()) ;
         RooExtendPdf* bkgpdf = new RooExtendPdf(Form("extpdf_"+procname+"cat%d_bkg",catindex),Form("extended signal p.d.f "+procname+"cat%d", catindex),*mdimupdf,*nbkg,"RF") ;
 
-        TString cut = cuts[catindex];
-        cout <<"cut: "<<cut<<endl;
-        RooCmdArg wgt_arg = usew ? RooFit::WeightVar("evt_weight") : RooCmdArg::none() ;
+        RooDataSet* data = getDataSet(catindex,mdimu,evWeight,isblind);
 
-        TTree* cutChain = data_chain->CopyTree(cut);
-        TTree* cutChainblind = data_chain->CopyTree(cut+" && (Higgs_mass>130 || Higgs_mass<120)");
-        string dataset_ch_name(Form("data_"+procname+"_cat%d",catindex));
-        RooDataSet* data = new RooDataSet(dataset_ch_name.c_str(), dataset_ch_name.c_str(), RooArgSet(obsAndWeight), RooFit::Import(*cutChain), wgt_arg);
-        RooDataSet* datablind = new RooDataSet(dataset_ch_name.c_str(), dataset_ch_name.c_str(), RooArgSet(obsAndWeight), RooFit::Import(*cutChainblind), wgt_arg);
+        TString fitrange = "RF";
+        if(isblind){
+           fitrange = "R1,R2";
+           cout << "DEBUG: result of fit on sideband data " << endl ;
+        }
+        else cout << "DEBUG: result of fit on full data " << endl ;
 
-        cout << "DEBUG: result of fit on full data " << endl ;
-        RooNLLVar* nll_fix = (RooNLLVar*)bkgpdf->createNLL(*data, Extended(kTRUE), Range("RF"));
-        RooMinimizer minim_fix(*nll_fix);
-        minim_fix.setStrategy(1);
-        minim_fix.setPrintLevel(0);
-        int status_fix = minim_fix.minimize("Minuit2", "Migrad");
-        if(status_fix!=0) cout <<"fit to data does not converge"<<endl;
-
+        RooNLLVar* nll_fix = (RooNLLVar*)bkgpdf->createNLL(*data, Extended(kTRUE), Range(fitrange));
+        int status_fix = Utils::minimizeTest(nll_fix,1.0);
+        if(status_fix!=0){
+          cout <<"fit to data does not converge"<<endl;
+          status_fix = Utils::minimizeTest(nll_fix,1.0);
+          if(status_fix!=0){
+             cout <<"fit to data does not converge after a second trial, try again"<<endl;
+             status_fix = Utils::minimizeTest(nll_fix,1.0);
+             if(status_fix!=0){
+                 cout <<"fit to data does not converge after a third trial"<<endl;
+             }
+          } 
+        }
         cout <<"1. expected events: "<<bkgpdf->expectedEvents(*mdimu)<<endl;
-        //nbkg->setVal(bkgpdf->expectedEvents(*mdimu));
 
         RooBinning tbins(110,150);
         tbins.addUniform(80,110,150) ;
         RooPlot* dtframe = mdimu->frame(Range(110,150),Title("m(#mu#mu) distribution"));
-        if(!usew.EqualTo("T")) datablind->plotOn(dtframe,Binning(tbins),Range("R1,R2"),Layout(0.60,0.65,0.50), Format("NEU",AutoPrecision(2)));
-        else{
-           data->plotOn(dtframe,Binning(tbins),Range("R1,R2"),Layout(0.60,0.65,0.50), Format("NEU",AutoPrecision(2)));
-           cout <<"expected number of events: " <<data->sumEntries()<<endl;
-        }
-        bkgpdf->plotOn(dtframe,NormRange("R1,R2"),Range("RF"));
+        data->plotOn(dtframe,Binning(tbins),Range(fitrange),Layout(0.60,0.65,0.50), Format("NEU",AutoPrecision(2)));
+        bkgpdf->plotOn(dtframe,NormRange(fitrange),Range("RF"));
 
-        bkgpdf->paramOn(dtframe,Layout(0.55, 0.88, 0.88), Format("NEU",AutoPrecision(2))) ;
+        bkgpdf->paramOn(dtframe,Layout(0.4, 0.88, 0.88), Format("NEU",AutoPrecision(2))) ;
         dtframe->getAttText(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetTextColor(kBlack);
         dtframe->getAttFill(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetFillStyle(0);
         dtframe->getAttText(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetTextSize(0.03);
@@ -465,7 +515,6 @@ void HiggsMuMuFit::bkgfit()
     }
     w->Print() ;
     w->writeToFile(outfile+"/pdfs/Hmm.input"+procname+"bkg_13TeV.root");
-    delete data_chain;
 }
 
 void HiggsMuMuFit::bkgfit_BWZReduxMBern()
@@ -567,10 +616,31 @@ void HiggsMuMuFit::bkgfit_BWZReduxMBern()
 void HiggsMuMuFit::getpdf()
 {
   if(HiggsMuMuFit::isbkg.Contains("bkg")){
-      HiggsMuMuFit::bkgfit(); //bkgfit();
+      HiggsMuMuFit::bkgfit(false); //bkgfit();
   }
   else if(HiggsMuMuFit::isbkg.Contains("sb")){
      HiggsMuMuFit::sbfit(); 
   }
+  else if(HiggsMuMuFit::isbkg.Contains("bias")){
+     HiggsMuMuFit::bias();
+  }
   else HiggsMuMuFit::sigfit();
+}
+
+void HiggsMuMuFit::getData(bool isblind){
+  //workspace to save dataset
+  RooWorkspace *w = new RooWorkspace("w_all","workspace") ;
+  //declare obs and weight vars
+  RooRealVar* mdimu = new RooRealVar("Higgs_mass","Higgs_mass",120,110,150) ;
+  mdimu->setBins(800);
+  mdimu->setRange("RF",110,150);
+  RooRealVar* evWeight = new RooRealVar("evt_weight","evt_weight",1,-RooNumber::infinity(),RooNumber::infinity()) ;
+
+  for(int catindex=0; catindex<ncat; catindex++){
+     //load and save MC events into a RooDataSet
+     RooDataSet* data = getDataSet(catindex,mdimu,evWeight,isblind);
+     w->import(*data);
+  }
+  w->Print() ;
+  w->writeToFile(outfile+"/dataset/Hmm.input"+procname+"_13TeV.root");
 }
