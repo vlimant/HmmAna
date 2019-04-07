@@ -35,17 +35,14 @@ int main(int argc, char* argv[])
   TString isbkgstr = argv[3];
   TString funcname = argv[4];
   TString dopdf = argv[5];
+  TString DNN_cut = argv[6];
 
   TString mass_cut = "Higgs_mass > 110 && Higgs_mass< 150 &&";
  
   TString proc = isbkgstr;
-  TString mass_cut1 =  mass_cut;
 
-  //TString sel0 = mass_cut1 + " disc_simpleNN > 0.1"; //disc_advNN
-  //TString sel1 = mass_cut1 + " disc_simpleNN < 0.1 && disc_simpleNN>0.0"; 
-
-  TString sel0 = mass_cut1 + " disc_advNN > 0.1";
-  TString sel1 = mass_cut1 + " disc_advNN < 0.1 && disc_advNN>0.0"; 
+  TString sel0 = mass_cut + " disc_advNN > "+DNN_cut; //use disc_simpleNN or disc_advNN
+  TString sel1 = mass_cut + " disc_advNN < "+DNN_cut+" && disc_advNN>0.0"; 
   
   vector<TString> selection = {sel0,sel1};
 
@@ -286,7 +283,8 @@ void HiggsMuMuFit::sbfit()
     delete data_chain;
 }
 
-void HiggsMuMuFit::bkgfit(bool isblind)
+
+void HiggsMuMuFit::bkgfit(bool isblind, bool doyield)
 {
   if(funclist.size()!=ncat){
     cout <<"error "<<funclist.size()<<"vs"<<ncat<<endl;
@@ -307,12 +305,6 @@ void HiggsMuMuFit::bkgfit(bool isblind)
   RooFormulaVar* mdimu_range =  new RooFormulaVar("mdimu_range","(@0-110.0)/(40.0)",RooArgSet(*mdimu));
   RooRealVar* evWeight = new RooRealVar("evt_weight","evt_weight",1,-100000,100000) ;
   
-  /* 
-  TChain* data_chain = loader(infile.c_str(), "cattree");
-  RooArgSet obsAndWeight;
-  obsAndWeight.add(*mdimu);
-  if(usew.EqualTo("T")) obsAndWeight.add(*evWeight);
-  */
   for(int catindex=0; catindex<ncat; catindex++){
 
         RooAbsPdf* mdimupdf = NULL;
@@ -360,7 +352,9 @@ void HiggsMuMuFit::bkgfit(bool isblind)
         }
         else cout << "DEBUG: result of fit on full data " << endl ;
 
-        RooNLLVar* nll_fix = (RooNLLVar*)bkgpdf->createNLL(*data, Extended(kTRUE), Range(fitrange));
+        RooNLLVar* nll_fix = NULL;
+        if(doyield) nll_fix = (RooNLLVar*)bkgpdf->createNLL(*data, Extended(kTRUE), Range(fitrange));
+        else nll_fix = (RooNLLVar*)mdimupdf->createNLL(*data);
         int status_fix = Utils::minimizeTest(nll_fix,1.0);
         if(status_fix!=0){
           cout <<"fit to data does not converge"<<endl;
@@ -373,19 +367,30 @@ void HiggsMuMuFit::bkgfit(bool isblind)
              }
           } 
         }
-        cout <<"1. expected events: "<<bkgpdf->expectedEvents(*mdimu)<<endl;
+        if(doyield) cout <<"1. expected events: "<<bkgpdf->expectedEvents(*mdimu)<<endl;
 
         RooBinning tbins(110,150);
         tbins.addUniform(80,110,150) ;
         RooPlot* dtframe = mdimu->frame(Range(110,150),Title("m(#mu#mu) distribution"));
         data->plotOn(dtframe,Binning(tbins),Range(fitrange),Layout(0.60,0.65,0.50), Format("NEU",AutoPrecision(2)));
-        bkgpdf->plotOn(dtframe,NormRange(fitrange),Range("RF"));
-
-        bkgpdf->paramOn(dtframe,Layout(0.4, 0.88, 0.88), Format("NEU",AutoPrecision(2))) ;
-        dtframe->getAttText(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetTextColor(kBlack);
-        dtframe->getAttFill(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetFillStyle(0);
-        dtframe->getAttText(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetTextSize(0.03);
-        cout <<"2. expected events: "<<bkgpdf->expectedEvents(*mdimu)<<endl;
+        if(doyield){
+             bkgpdf->plotOn(dtframe,NormRange(fitrange),Range("RF"));
+             bkgpdf->paramOn(dtframe,Layout(0.4, 0.88, 0.88), Format("NEU",AutoPrecision(2))) ;
+             dtframe->getAttText(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetTextColor(kBlack);
+             dtframe->getAttFill(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetFillStyle(0);
+             dtframe->getAttText(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetTextSize(0.03);
+             cout <<"2. expected events: "<<bkgpdf->expectedEvents(*mdimu)<<endl; 
+        }
+        else{
+             mdimupdf->plotOn(dtframe,NormRange(fitrange),Range("RF"));
+             mdimupdf->paramOn(dtframe,Layout(0.4, 0.88, 0.88), Format("NEU",AutoPrecision(2))) ;
+             dtframe->getAttText(Form("pdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetTextColor(kBlack);
+             dtframe->getAttFill(Form("pdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetFillStyle(0);
+             dtframe->getAttText(Form("pdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetTextSize(0.03);
+             nbkg->setVal(data->sumEntries()); 
+             nbkg->setConstant();
+             cout <<"expected events from MC: "<<nbkg->getVal()<<endl;
+        }
 
         TCanvas* c1 = new TCanvas();
         dtframe->Draw();
@@ -407,106 +412,10 @@ void HiggsMuMuFit::bkgfit(bool isblind)
     w->writeToFile(outfile+"/pdfs/Hmm.input"+procname+"bkg_13TeV.root");
 }
 
-void HiggsMuMuFit::bkgfit_BWZReduxMBern()
-{
-  cout <<"bkgfit: BWZRedu x MBern"<<endl;
-
-  RooWorkspace *w = new RooWorkspace("w_all","workspace") ;
-
-  RooRealVar* mdimu = new RooRealVar("Higgs_mass","Higgs_mass",125,110,150) ;
-  mdimu->setRange("R1",110,120);
-  mdimu->setRange("R2",130,150);
-  mdimu->setRange("RF",110,150);
-  mdimu->setBins(800);
-  RooFormulaVar* mdimu_range =  new RooFormulaVar("mdimu_range","(@0-110.0)/(40.0)",RooArgSet(*mdimu));
-
- for(int catindex=0; catindex<ncat; catindex++){
-  RooRealVar* btwzr_a1 = new RooRealVar(TString::Format("CMS_dimu_"+procname+"_btwzr_a1_cat%d",catindex),TString::Format("CMS_dimu_"+procname+"_btwzr_a1_cat%d",catindex),0.1,-5,5) ;
-  RooRealVar* btwzr_a2 = new RooRealVar(TString::Format("CMS_dimu_"+procname+"_btwzr_a2_cat%d",catindex),TString::Format("CMS_dimu_"+procname+"_btwzr_a2_cat%d",catindex),0.1,-20,20) ;
-  RooRealVar* btwzr_a3 = new RooRealVar(TString::Format("CMS_dimu_"+procname+"_btwzr_a3_cat%d",catindex),TString::Format("CMS_dimu_"+procname+"_btwzr_a3_cat%d",catindex),0.1,-20,20) ;
-  RooRealVar* b1 = new RooRealVar(TString::Format("CMS_dimu_"+procname+"_b1_cat%d",catindex),TString::Format("CMS_dimu_"+procname+"_b1_cat%d",catindex),0.01,-1.0,1.0) ;
-  RooRealVar* b2 = new RooRealVar(TString::Format("CMS_dimu_"+procname+"_b2_cat%d",catindex),TString::Format("CMS_dimu_"+procname+"_b2_cat%d",catindex),0.01,-1.0,1.0) ;
-  RooRealVar* b3 = new RooRealVar(TString::Format("CMS_dimu_"+procname+"_b3_cat%d",catindex),TString::Format("CMS_dimu_"+procname+"_b3_cat%d",catindex),0.01,-1.0,1.0) ;
-  RooRealVar* b4 = new RooRealVar(TString::Format("CMS_dimu_"+procname+"_b4_cat%d",catindex),TString::Format("CMS_dimu_"+procname+"_b4_cat%d",catindex),0.01,-1.0,1.0) ;
-  RooAbsPdf* mdimupdf = new RooGenericPdf(TString::Format("pdf_"+procname+"cat%d_bkg",catindex),"TMath::Exp(@2*@0/100. +(@0/100.)*(@0/100.)*@3 )/(TMath::Power((@0-91.2),@1)+TMath::Power(2.5/2.,@1))",RooArgList(*mdimu,*btwzr_a1,*btwzr_a2,*btwzr_a3));
-
-  //RooAbsPdf* mdimupdf = new RooGenericPdf(TString::Format(procname+"cat%d_bkg_pdf",catindex),"TMath::Exp(@2*@0/100. +(@0/100.)*(@0/100.)*@3 )/(TMath::Power((@0-91.2),@1)+TMath::Power(2.5/2.,@1)) * (1+ @5*5*pow(@4,4)+20*@6*pow(@4,3)*(1-@4)+@7*30*@4*@4*(1-@4)*(1-@4) + @8 *20*@4*pow(1-@4,3)+(-@5-@6-@7-@8)*5*pow(1-@4,4))",RooArgList(*mdimu,*btwzr_a1,*btwzr_a2,*btwzr_a3,*mdimu_range,*b1,*b2,*b3,*b4));
-  //RooAbsPdf* mdimupdf = new RooGenericPdf(TString::Format(procname+"cat%d_bkg_pdf",catindex),"TMath::Exp(@2*@0/100. +(@0/100.)*(@0/100.)*@3 )/(TMath::Power((@0-91.2),@1)+TMath::Power(2.5/2.,@1)) * (1+ @5*@5*5*pow(@4,4)+20*@6*@6*pow(@4,3)*(1-@4)+@7*@7*30*@4*@4*(1-@4)*(1-@4) + @8*@8*20*@4*pow(1-@4,3)+(-@5*5-@6*6-@7*@7-@8*@8)*5*pow(1-@4,4))",RooArgList(*mdimu,*btwzr_a1,*btwzr_a2,*btwzr_a3,*mdimu_range,*b1,*b2,*b3,*b4)); 
- //RooAbsPdf* mdimupdf = new RooGenericPdf(TString::Format(procname+"cat%d_bkg_pdf",catindex),"TMath::Exp(@2*@0/100. +(@0/100.)*(@0/100.)*@3 )/(TMath::Power((@0-91.2),@1)+TMath::Power(2.5/2.,@1)) * ((1-@5*@5-@6*@6-@7*@7-@8*@8)*pow(@4,4)+@5*@5*4*pow(@4,3)*(1-@4)+@6*@6*6*@4*@4*(1-@4)*(1-@4)+@7*@7*4*@4*pow(1-@4,3)+@8*@8*pow(1-@4,4))",RooArgList(*mdimu,*btwzr_a1,*btwzr_a2,*btwzr_a3,*mdimu_range,*b1,*b2,*b3,*b4));
-
-  RooRealVar* nbkg = new RooRealVar(Form("nbkg_"+procname+"cat%d",catindex),Form("number of background events in signalRange "+procname+"cat%d", catindex),500,-RooNumber::infinity(),RooNumber::infinity()) ;
-  RooExtendPdf* bkgpdf = new RooExtendPdf(Form("extpdf_"+procname+"cat%d_bkg",catindex),Form("extended signal p.d.f "+procname+"cat%d", catindex),*mdimupdf,*nbkg,"RF") ;
-
-  //TFile *bkgFile = TFile::Open(infile.c_str());
-  cout <<"p2"<<endl;
-  //TTree* bkgTree = (TTree*)bkgFile->Get("cattree");
-  TChain* data_chain = loader(infile.c_str(), "cattree");
-
-  RooRealVar* evWeight = new RooRealVar("evt_weight","evt_weight",1,1,1) ;
-
-  bool weighted = false;
-  RooArgSet obsAndWeight;
-  obsAndWeight.add(*mdimu);
-  if(weighted) obsAndWeight.add(*evWeight);
-
-  TString cut = cuts[catindex];
-  cout <<"cut: "<<cut<<endl;
-  RooCmdArg wgt_arg = weighted ? RooFit::WeightVar("evt_weight") : RooCmdArg::none() ;
-
-  TTree* cutChain = data_chain->CopyTree(cut);
-  TTree* cutChainblind = data_chain->CopyTree(cut+" && (Higgs_mass>130 || Higgs_mass<120)");
-  string dataset_ch_name(Form("Sig"+procname+"_cat%d",catindex));
-  RooDataSet* data = new RooDataSet(dataset_ch_name.c_str(), dataset_ch_name.c_str(), RooArgSet(obsAndWeight), RooFit::Import(*cutChain), wgt_arg);
-  RooDataSet* datablind = new RooDataSet(dataset_ch_name.c_str(), dataset_ch_name.c_str(), RooArgSet(obsAndWeight), RooFit::Import(*cutChainblind), wgt_arg);
-  cout << "DEBUG: result of fit on sideband data " << endl ;
-  RooNLLVar* nll_fix = (RooNLLVar*)bkgpdf->createNLL(*data, Extended(kTRUE), Range("RF"));
-  RooMinimizer minim_fix(*nll_fix);
-  minim_fix.setStrategy(1);
-  minim_fix.setPrintLevel(0);
-  int status_fix = minim_fix.minimize("Minuit2", "Migrad");
-  if(status_fix!=0) cout <<"fit to data does not converge"<<endl;
-  //btwzr_a1->setConstant(true);
-  //btwzr_a2->setConstant(true);
-  //btwzr_a3->setConstant(true);
-  cout <<"1. expected events: "<<bkgpdf->expectedEvents(*mdimu)<<endl;
-  nbkg->setVal(bkgpdf->expectedEvents(*mdimu));
-
-  RooBinning tbins(110,150);
-  tbins.addUniform(80,110,150) ;
-  RooPlot* dtframe = mdimu->frame(Range(110,150),Title("m(#mu#mu) distribution"));
-  datablind->plotOn(dtframe,Binning(tbins),Range("R1,R2"),Layout(0.60,0.65,0.50), Format("NEU",AutoPrecision(2)));
-  bkgpdf->plotOn(dtframe,NormRange("R1,R2"),Range("RF"));
-
-  bkgpdf->paramOn(dtframe,Layout(0.55, 0.88, 0.88), Format("NEU",AutoPrecision(2))) ;
-  dtframe->getAttText(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetTextColor(kBlack);
-  dtframe->getAttFill(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetFillStyle(0);
-  dtframe->getAttText(Form("extpdf_"+procname+"cat%d_bkg_paramBox",catindex))->SetTextSize(0.03);
-  cout <<"2. expected events: "<<bkgpdf->expectedEvents(*mdimu)<<endl;
-
-  TCanvas* c1 = new TCanvas();
-  dtframe->Draw();
-  c1->SaveAs(TString::Format(Form(outfile+"/plots/Hmm."+procname+"bkg_13TeV.cat%d_m.png",catindex)));
-
-  gPad->SetLogy();
-  double maxv = dtframe->GetMaximum();
-  dtframe->SetMinimum(0.01*maxv);
-  dtframe->Draw();
-  c1->SaveAs(TString::Format(Form(outfile+"/plots/Hmm."+procname+"bkg_13TeV.cat%d_m_log.png",catindex)));
-
-  w->import(*bkgpdf, RecycleConflictNodes()) ;
-  w->import(*data) ;
-  delete data;
-  delete bkgpdf;
-
- }
-  w->Print() ;
-  w->writeToFile(outfile+"/pdfs/Hmm.input"+procname+"bkg_13TeV.root");
-}
-
 void HiggsMuMuFit::getpdf()
 {
   if(HiggsMuMuFit::isbkg.Contains("bkg")){
-      HiggsMuMuFit::bkgfit(false); //bkgfit();
+      HiggsMuMuFit::bkgfit(false,false); //doblind fit? do extended fit?
   }
   else if(HiggsMuMuFit::isbkg.Contains("sb")){
      HiggsMuMuFit::sbfit(); 
@@ -522,14 +431,19 @@ void HiggsMuMuFit::getData(bool isblind){
   RooWorkspace *w = new RooWorkspace("w_all","workspace") ;
   //declare obs and weight vars
   RooRealVar* mdimu = new RooRealVar("Higgs_mass","Higgs_mass",120,110,150) ;
-  mdimu->setBins(800);
+  mdimu->setBins(4000);
   mdimu->setRange("RF",110,150);
   RooRealVar* evWeight = new RooRealVar("evt_weight","evt_weight",1,-RooNumber::infinity(),RooNumber::infinity()) ;
 
   for(int catindex=0; catindex<ncat; catindex++){
      //load and save MC events into a RooDataSet
      RooDataSet* data = getDataSet(catindex,mdimu,evWeight,isblind);
+     RooDataHist* databinned = data->binnedClone();
+     cout <<catindex<<" data number from unbinned dataset: "<<data->sumEntries()<<endl;
+     cout <<catindex<<" data infor from unbinned dataset"<<endl;
+     databinned->Print("v");
      w->import(*data);
+     w->import(*databinned);
   }
   w->Print() ;
   w->writeToFile(outfile+"/dataset/Hmm.input"+procname+"_13TeV.root");

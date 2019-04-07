@@ -32,9 +32,8 @@ public :
   virtual ~HiggsMuMuFit();
   void     sigfit();
   void     sigfit_DCB();
-  void     bkgfit(bool isblind);
+  void     bkgfit(bool isblind, bool doyield);
   void     sbfit();
-  void     bkgfit_BWZReduxMBern();
   RooAbsPdf* BWZRedux(RooRealVar* mdimu, RooFormulaVar* mdimu_range, int catindex);
   RooAbsPdf* BWZReduxB4(RooRealVar* mdimu, RooFormulaVar* mdimu_range, int catindex);
   RooAbsPdf* BWZReduxB3(RooRealVar* mdimu, RooFormulaVar* mdimu_range, int catindex);
@@ -131,14 +130,14 @@ TChain* HiggsMuMuFit::loader(const string& inFile_name, const string& chain_name
     TString in_name(inFile_name);
     if(in_name.Contains("root")) {
         chain->Add(inFile_name.c_str());
-        cout << "total events: " << chain->GetEntries() << " in " << inFile_name.c_str() << endl;
+        cout << "single root file, total events: " << chain->GetEntries() << " in " << inFile_name.c_str() << endl;
         return chain;
     }
     fstream input(inFile_name.c_str(), fstream::in);
     string file_name;
     int ncounter = 0;
     while (input >> file_name){
-        // cout << "adding: " << file_name << endl;
+        cout << "adding: " << file_name << endl;
         chain->Add(file_name.c_str());
         ncounter ++;
     }
@@ -160,8 +159,8 @@ oFile->Close();
 
 RooAbsPdf* HiggsMuMuFit::BWZRedux(RooRealVar* mdimu, RooFormulaVar* mdimu_range, int catindex){
 
-    RooRealVar* btwzr_a1 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_btwzr_a1_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_btwzr_a1_cat%d",catindex),0.1,-5,5) ;
-    RooRealVar* btwzr_a2 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_btwzr_a2_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_btwzr_a2_cat%d",catindex),0.1,-20,20) ;
+    RooRealVar* btwzr_a1 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_btwzr_a1_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_btwzr_a1_cat%d",catindex),0.1,-20,20) ;
+    RooRealVar* btwzr_a2 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_btwzr_a2_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_btwzr_a2_cat%d",catindex),0.1,-100,100) ;
     RooRealVar* btwzr_a3 = new RooRealVar(TString::Format("CMS_Hmm_"+procname+"_btwzr_a3_cat%d",catindex),TString::Format("CMS_Hmm_"+procname+"_btwzr_a3_cat%d",catindex),0.1,-20,20) ;
     RooAbsPdf* mdimupdf = new RooGenericPdf(TString::Format("pdf_"+procname+"cat%d_bkg",catindex),"TMath::Exp(@2*@0/100. +(@0/100.)*(@0/100.)*@3 )/(TMath::Power((@0-91.2),@1)+TMath::Power(2.5/2.,@1))",RooArgList(*mdimu,*btwzr_a1,*btwzr_a2,*btwzr_a3));
 
