@@ -55,6 +55,7 @@ public :
   float extralep_eta = -9999.;
   float dRlepHiggs = -9999.;
   float dEtamm = -9999.;
+  int softJet5=9999;
   float dRmm = -9999.;
   float dPhimm = -9999.;  
   float MET_phi = -9999.;
@@ -256,6 +257,7 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   cattree->Branch("extralep_pt", &extralep_pt,"extralep_pt/F");
   cattree->Branch("extralep_eta", &extralep_eta,"extralep_eta/F");
   cattree->Branch("dRlepHiggs", &dRlepHiggs,"dRlepHiggs/F");
+  cattree->Branch("softJet5", &softJet5,"softJet5/I");
   cattree->Branch("dRmm", &dRmm,"dRmm/F");
   cattree->Branch("dEtamm", &dEtamm,"dEtamm/F");
   cattree->Branch("dPhimm", &dPhimm,"dPhimm/F");  

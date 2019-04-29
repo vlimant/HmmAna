@@ -144,6 +144,7 @@ public :
    vector<float>   *t_SubJet_tau2;
    vector<float>   *t_SubJet_tau3;
    vector<float>   *t_SubJet_tau4;
+   Int_t           t_SoftActivityJetNjets5;
    Int_t           t_nJet;
    vector<float>   *t_Jet_area;
    vector<float>   *t_Jet_btagCMVA;
@@ -165,6 +166,7 @@ public :
    vector<int>     *t_Jet_nElectrons;
    vector<int>     *t_Jet_nMuons;
    vector<int>     *t_Jet_puId;
+   
    Float_t         t_diJet_pt;
    Float_t         t_diJet_eta;
    Float_t         t_diJet_phi;
@@ -305,6 +307,7 @@ public :
    TBranch        *b_t_SubJet_tau2;   //!
    TBranch        *b_t_SubJet_tau3;   //!
    TBranch        *b_t_SubJet_tau4;   //!
+   TBranch        *b_t_SoftActivityJetNjets5;
    TBranch        *b_t_nJet;   //!
    TBranch        *b_t_Jet_area;   //!
    TBranch        *b_t_Jet_btagCMVA;   //!
@@ -624,6 +627,7 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_SubJet_tau2", &t_SubJet_tau2, &b_t_SubJet_tau2);
    fChain->SetBranchAddress("t_SubJet_tau3", &t_SubJet_tau3, &b_t_SubJet_tau3);
    fChain->SetBranchAddress("t_SubJet_tau4", &t_SubJet_tau4, &b_t_SubJet_tau4);
+   fChain->SetBranchAddress("t_SoftActivityJetNjets5", &t_SoftActivityJetNjets5, &b_t_SoftActivityJetNjets5);
    fChain->SetBranchAddress("t_nJet", &t_nJet, &b_t_nJet);
    fChain->SetBranchAddress("t_Jet_area", &t_Jet_area, &b_t_Jet_area);
    fChain->SetBranchAddress("t_Jet_btagCMVA", &t_Jet_btagCMVA, &b_t_Jet_btagCMVA);

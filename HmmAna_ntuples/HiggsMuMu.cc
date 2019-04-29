@@ -213,11 +213,11 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
           double binv = catyield->GetBinContent(10);
           binv = binv + t_genWeight;
 	  if(*isData=='F'){
-	    if(t_index_trigm_mu==t_mu1) lepSF = (*t_Mu_EffSF_TRIG)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu1]*(*t_Mu_EffSF_ISO)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu2]*(*t_Mu_EffSF_ISO)[t_mu2];
+	    if(t_index_trigm_mu==t_mu1) lepSF = /*(*t_Mu_EffSF_TRIG)[t_mu1]*/(*t_Mu_EffSF_ID)[t_mu1]*(*t_Mu_EffSF_ISO)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu2]*(*t_Mu_EffSF_ISO)[t_mu2];
 	    
-	    else if( t_index_trigm_mu==t_mu2) lepSF = (*t_Mu_EffSF_TRIG)[t_mu2]*(*t_Mu_EffSF_ID)[t_mu1]*(*t_Mu_EffSF_ISO)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu2]*(*t_Mu_EffSF_ISO)[t_mu2];
+	    else if( t_index_trigm_mu==t_mu2) lepSF = /*(*t_Mu_EffSF_TRIG)[t_mu2]*/(*t_Mu_EffSF_ID)[t_mu1]*(*t_Mu_EffSF_ISO)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu2]*(*t_Mu_EffSF_ISO)[t_mu2];
 	    
-	    lep_SF=lepSF;
+	    //lep_SF=lepSF;
 	    if(lepSF==0){
 
 	      if(t_index_trigm_mu==t_mu1) cout<<(*t_Mu_EffSF_TRIG)[t_mu1]<<","<<(*t_Mu_EffSF_ID)[t_mu1]<<","<<(*t_Mu_EffSF_ISO)[t_mu1]<<","<<(*t_Mu_EffSF_ID)[t_mu2]<<","<<(*t_Mu_EffSF_ISO)[t_mu2]<<endl;
@@ -468,6 +468,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 		h_Mjj_VBF->Fill(t_diJet_mass,evt_wt);
 		h_dijet_dEta_VBF->Fill((*t_Jet_eta)[0]-(*t_Jet_eta)[1],evt_wt);
 	      }
+	      softJet5=t_SoftActivityJetNjets5;
 	      dRmm = dR;
               dEtamm = dEta;
               dPhimm = dPhi;
@@ -484,7 +485,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	      eta_mmjj=mmjj.Eta();
 	      phi_mmjj=mmjj.Phi();
 	      dEta_jj=(*t_Jet_eta)[0]-(*t_Jet_eta)[1];
-	      Zep=(diMuon_eta-0.5*((*t_Jet_eta)[0]+(*t_Jet_eta)[1])/fabs((*t_Jet_eta)[0]-(*t_Jet_eta)[1]));
+	      Zep=(diMuon_eta-0.5*((*t_Jet_eta)[0]+(*t_Jet_eta)[1]));///fabs((*t_Jet_eta)[0]-(*t_Jet_eta)[1]));
 	      
 	      double dr[4];
 	      dr[0]=DeltaR((*t_Mu_eta)[t_mu2],(*t_Mu_phi)[t_mu2],(*t_Jet_eta)[0],(*t_Jet_phi)[0]);
