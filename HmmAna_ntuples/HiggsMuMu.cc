@@ -29,7 +29,9 @@ int main(int argc, char* argv[])
   double lumi_18 = 59.74*1000.;
   double lumi_16 = 35.9*1000.;
   proc_scale["ggH"]=0.009605*lumi/217554238.5;
-  proc_scale["VBFHToMuMu"]=0.000823*lumi/4022986.765625;
+  proc_scale["VBFHToMuMu_2017"]=0.000823*lumi/5913454.85352;
+  proc_scale["VBFHToMuMu_2018"]=0.000823*lumi_18/3858502.5;
+  proc_scale["VBFHToMuMu_2016"]=0.000823*lumi_16/3734816.75;
   proc_scale["ZH"]=0.000192*lumi/234623.306747;
   proc_scale["WplusH"]=0.000183*lumi/259992.317749;
   proc_scale["WminusH"]=0.000116*lumi/162196.811523;
