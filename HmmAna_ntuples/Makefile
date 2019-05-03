@@ -3,6 +3,8 @@ CXX      = g++
 CXXFLAGS= $(shell root-config --cflags)
 LIBS    = $(shell root-config --libs) 
 
+LIBS        += -lTMVA
+
 SOURCES = NtupleVariables.cc HiggsMuMu.cc 
 HEADERS = NtupleVariables.h HiggsMuMu.h 
 OBJECTS = $(SOURCES:.cc=.o)

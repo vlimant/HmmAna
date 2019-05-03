@@ -82,8 +82,22 @@ public :
   float subleadingJet_eta = -9999.;
   float dPhijj=-9999.;
   float cthetaCS = -9999.;
+  float BDT_incl = -9999.;
   std::vector<int>   *l1_index;
   std::vector<int>   *l2_index;
+
+  //BDT vars
+   float ll_mass =0.;
+   float MqqLog=0.;
+   float mumujj_pt=0.;
+   float DeltaEtaQQ=0.;
+   float softActivityEWK_njets5=0.;
+   float ll_zstar=0.;
+   float ll_pt=0.;
+   float theta2=0.;
+   float impulsoZ=0.;
+   float maxAbsEta=0.;
+   float qgl_2qAtanh=0.;
 
   //define histograms
   TH1D *catyield;
@@ -287,6 +301,18 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   cattree->Branch("subleadingJet_qgl",&subleadingJet_qgl,"subleadingJet_qgl/F");
   cattree->Branch("dPhijj", &dPhijj,"dPhijj/F");
   cattree->Branch("cthetaCS",&cthetaCS,"cthetaCS/F");
+  cattree->Branch("BDT_incl", &BDT_incl,"BDT_incl/F");
+  cattree->Branch("ll_mass", &ll_mass,"ll_mass/F");
+  cattree->Branch("MqqLog", &MqqLog,"MqqLog/F");
+  cattree->Branch("mumujj_pt", &mumujj_pt,"mumujj_pt/F");
+  cattree->Branch("DeltaEtaQQ", &DeltaEtaQQ,"DeltaEtaQQ/F"); 
+  cattree->Branch("softActivityEWK_njets5", &softActivityEWK_njets5,"softActivityEWK_njets5/F"); 
+  cattree->Branch("ll_zstar", &ll_zstar,"ll_zstar/F");
+  cattree->Branch("ll_pt", &ll_pt,"ll_pt/F");
+  cattree->Branch("theta2", &theta2,"theta2/F");
+  cattree->Branch("impulsoZ", &impulsoZ,"impulsoZ/F");
+  cattree->Branch("maxAbsEta", &maxAbsEta,"maxAbsEta/F");
+  cattree->Branch("qgl_2qAtanh", &qgl_2qAtanh,"qgl_2qAtanh/F");
   h_diMuon_mass_ggH = new TH1D("h_diMuon_mass_ggH","diMuon_mass_ggH",10,120,130);
   h_diMuon_mass_VHHad = new TH1D("h_diMuon_mass_VHHad","diMuon_mass_VHHad",10,120,130);
   h_diMuon_mass_ZHll = new TH1D("h_diMuon_mass_ZHll","diMuon_mass_ZHll",10,120,130);
@@ -477,8 +503,43 @@ void HiggsMuMu::clearTreeVectors(){
    dPhimm = -9999.;
    MET_phi = -9999.;
    MET_pt = -9999.;
+   dEta_jj = -9999.;
+   M_jj= -9999.;
+   pt_jj=-9999;
+   eta_jj=-9999;
+   phi_jj= -9999;
+   M_mmjj= -9999.;
+   pt_mmjj=-9999;
+   eta_mmjj=-9999;
+   phi_mmjj= -9999;
+   Zep = -9999.;
+   dRmin_mj = -9999.;
+   dRmax_mj = -9999.;
+   dRmin_mmj = -9999.;
+   dRmax_mmj= -9999.;
+   leadingJet_pt = -9999.;
+   subleadingJet_pt = -9999.;
+   leadingJet_eta = -9999.;
+   leadingJet_qgl = -9999.;
+   subleadingJet_qgl = -9999.;
+   subleadingJet_eta = -9999.;
+   dPhijj=-9999.;
+   cthetaCS = -9999.;
+   BDT_incl = -9999.;
    l1_index->clear();
    l2_index->clear();
+   //BDT vars
+   ll_mass =0.;
+   MqqLog=0.;
+   mumujj_pt=0.;
+   DeltaEtaQQ=0.;
+   softActivityEWK_njets5=0.;
+   ll_zstar=0.;
+   ll_pt=0.;
+   theta2=0.;
+   impulsoZ=0.;
+   maxAbsEta=0.;
+   qgl_2qAtanh=0.;
 }
 
 HiggsMuMu::HiggsMuMu(const TString &inputFileList, const char *outFileName, const char* dataset, const char *isData)

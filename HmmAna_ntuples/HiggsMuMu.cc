@@ -7,6 +7,9 @@
 #include <vector>
 #include <cstring>
 #include<string>
+#include "TMVA/Tools.h"
+#include "TMVA/Reader.h"
+#include "TMVA/MethodCuts.h"
 int main(int argc, char* argv[])
 {
 
@@ -23,6 +26,8 @@ int main(int argc, char* argv[])
 
   map<TString,double> proc_scale;
   double lumi = 41.529*1000.;
+  double lumi_18 = 59.74*1000.;
+  double lumi_16 = 35.9*1000.;
   proc_scale["ggH"]=0.009605*lumi/217554238.5;
   proc_scale["VBFHToMuMu"]=0.000823*lumi/4022986.765625;
   proc_scale["ZH"]=0.000192*lumi/234623.306747;
@@ -30,6 +35,9 @@ int main(int argc, char* argv[])
   proc_scale["WminusH"]=0.000116*lumi/162196.811523;
   proc_scale["ttH"]=0.000110*lumi/155014.531738;
   proc_scale["DYJetsToLL"]=6225.42*lumi/(3258462550016.0+492179082112.0);
+  proc_scale["DYJetsToLL_VBFfilter_2018"]=2.02*lumi_18/(3355073909.5);
+  proc_scale["DYJetsToLL_VBFfilter_2017"]=2.02*lumi/(1697931790.6);
+  proc_scale["DYJetsToLL_VBFfilter_2016"]=2.02*lumi_16/(2699711552.0);
   proc_scale["ttTosemileptonic"]=6.871e+02*lumi/11784986264.000000;
   proc_scale["ttTo2l2v"]=85.656*lumi/(623402174.0+4782395097.687500+199762.000000);
   proc_scale["TTTo2L"]=85.656*lumi/(623402174.0+4782395097.687500);
@@ -144,6 +152,25 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
    Long64_t nentries = fChain->GetEntriesFast();
    //Long64_t nentries = 2;
 
+
+   TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent" );
+
+   reader->AddVariable( "ll_mass", &ll_mass );
+   reader->AddVariable( "MqqLog", &MqqLog );
+   reader->AddVariable( "mumujj_pt", &mumujj_pt );
+   reader->AddVariable( "DeltaEtaQQ", &DeltaEtaQQ );
+   reader->AddVariable( "softActivityEWK_njets5",&softActivityEWK_njets5);
+   reader->AddVariable( "ll_zstar", &ll_zstar );
+   reader->AddVariable( "ll_pt", &ll_pt );
+   reader->AddVariable( "theta2", &theta2 );
+   reader->AddVariable( "impulsoZ", &impulsoZ );
+   reader->AddVariable( "maxAbsEta", &maxAbsEta );
+   reader->AddVariable( "qgl_2qAtanh", &qgl_2qAtanh );
+   TString methodName = "Classification_BDTG.variables__ll_mass__MqqLog__mumujj_pt__DeltaEtaQQ__softActivityEWK_njets5__ll_zstar__ll_pt__theta2__impulsoZ__maxAbsEta__qgl_2qAtanh";
+   TString weightfile = "/data/idutta/CMSSW_9_4_9/src/HmmAna/master/HmmAna_ntuples/Classification_BDTG.variables__ll_mass__MqqLog__mumujj_pt__DeltaEtaQQ__softActivityEWK_njets5__ll_zstar__ll_pt__theta2__impulsoZ__maxAbsEta__qgl_2qAtanh.xml";
+   reader->BookMVA( methodName, weightfile );
+   
+   
    Long64_t nbytes = 0, nb = 0;
    for (Long64_t jentry=0; jentry<nentries;jentry++) {
       Long64_t ientry = LoadTree(jentry);
@@ -446,11 +473,14 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
               cattree->Fill();
           }
           //VBF
-          else if(t_diJet_mass>400.){
+          else if(t_diJet_mass>400. && ((*t_Jet_qgl)[1]!=-1 && (*t_Jet_qgl)[0]!=-1)){
               cat_index = 7;
               double binv = catyield->GetBinContent(7);
               binv = binv + t_genWeight;
               catyield->SetBinContent(7,binv);
+	      ll_mass=diMuon_mass; //BDT var
+	      MqqLog=log(t_diJet_mass); //BDT_var
+	      
               if(*isData=='F')h_diMuon_mass_VBF->Fill(diMuon_mass,evt_wt);
 	      if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_VBF->Fill(diMuon_mass,evt_wt);
 	      else if(*isData=='F')h_diMuon_mass_110To140_VBF->Fill(diMuon_mass,evt_wt);
@@ -486,7 +516,31 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	      phi_mmjj=mmjj.Phi();
 	      dEta_jj=(*t_Jet_eta)[0]-(*t_Jet_eta)[1];
 	      Zep=(diMuon_eta-0.5*((*t_Jet_eta)[0]+(*t_Jet_eta)[1]));///fabs((*t_Jet_eta)[0]-(*t_Jet_eta)[1]));
+	      //====================BDT vars===============================
+	      mumujj_pt=log(pt_mmjj);
+	      DeltaEtaQQ=fabs((*t_Jet_eta)[0]-(*t_Jet_eta)[1]);
+	      softActivityEWK_njets5=t_SoftActivityJetNjets5; 
+	      ll_zstar=Zep/((*t_Jet_eta)[0]-(*t_Jet_eta)[1]);
+	      ll_pt=dimu.Pt();
 	      
+	      TVector3 dimuon, j2;
+	      dimuon.SetPtEtaPhi(dimu.Pt(),dimu.Eta(),dimu.Phi());
+	      //cout<<dimuon.Pt()<<", "<<dimuon.Eta()<<", "<<dimuon.Phi()<<endl;
+	      j2.SetPtEtaPhi((*t_Jet_pt)[1],(*t_Jet_eta)[1],(*t_Jet_phi)[1]);
+	      //cout<<j2.Pt()<<", "<<j2.Eta()<<", "<<j2.Phi()<<endl;
+	      //cout<<j2.Dot(dimuon)<<","<<j2.Mag()<<", "<<dimuon.Mag()<<","<<theta2<<endl; 
+	      theta2=j2.Dot(dimuon)/(j2.Mag()*dimuon.Mag());
+
+	      impulsoZ=log(fabs(mmjj.Pz()));
+	      if(fabs((*t_Jet_eta)[0])>fabs((*t_Jet_eta)[1]))
+		maxAbsEta=fabs((*t_Jet_eta)[0]);
+	      else maxAbsEta=fabs((*t_Jet_eta)[1]);
+	      //cout<<1.999995*((*t_Jet_qgl)[1]-0.5)<<", "<<(*t_Jet_qgl)[1]<<endl;
+	      qgl_2qAtanh=atanh(1.999995*((*t_Jet_qgl)[1]-0.5));
+
+	      BDT_incl = reader->EvaluateMVA( methodName );
+	      //==========================================================
+		
 	      double dr[4];
 	      dr[0]=DeltaR((*t_Mu_eta)[t_mu2],(*t_Mu_phi)[t_mu2],(*t_Jet_eta)[0],(*t_Jet_phi)[0]);
 	      dr[1] = DeltaR((*t_Mu_eta)[t_mu1],(*t_Mu_phi)[t_mu1],(*t_Jet_eta)[0],(*t_Jet_phi)[0]);
