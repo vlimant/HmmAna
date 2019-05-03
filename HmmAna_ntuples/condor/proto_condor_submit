@@ -1,13 +1,29 @@
-executable=/data/idutta/CMSSW_9_4_9/src/HmmAna_ntuples/condor/run_myprog.sh
+executable=/data/idutta/CMSSW_9_4_9/src/HmmAna/master/HmmAna_ntuples/condor/run_myprog.sh
 universe=vanilla
-Arguments=FILELIST ROOTOUT DATANAME ISDATA
+Arguments=FILELIST ROOTOUT DATANAME ISDATA OUTDIR
 Input =
 Output = condor_output/condor_logs/condor_JOBNAME.out
 Error  = condor_output/condor_logs/condor_JOBNAME.err
 Log    = condor_output/condor_logs/condor_JOBNAME.log
 Requirements=TARGET.OpSysAndVer=="CentOS7"
+
+
+#This is necessary to choose either rhel7 (slc7) or rhel6 (slc6) as needed
++RunAsOwner = True
++InteractiveUser = true
++SingularityImage = "/cvmfs/singularity.opensciencegrid.org/bbockelm/cms:rhel7"
++SingularityBindCVMFS = True
+run_as_owner = True
+
+#Don't request more than needed, otherwise your job will wait longer in queue
+RequestDisk = 4
+RequestMemory = 2000
+RequestCpus = 1
+
 notification=never
 should_transfer_files=YES
 when_to_transfer_output = ON_EXIT
+transfer_input_files=/data/idutta/CMSSW_9_4_9/src/HmmAna/master/HmmAna_ntuples/Classification_BDTG.variables__ll_mass__MqqLog__mumujj_pt__DeltaEtaQQ__softActivityEWK_njets5__ll_zstar__ll_pt__theta2__impulsoZ__maxAbsEta__qgl_2qAtanh.xml
 use_x509userproxy = true
+
 queue

@@ -1,15 +1,15 @@
 import os,sys,re,fileinput,string,shutil
 
 ##             Dataset        Name   
-datasets = [#["DY1J", "DY1J"]
-            #["DY0J","DY0J"]
-            #["DY2J","DY2J"]
+datasets = [["DYJetsToLL_VBFfilter_2017", "DYJetsToLL_VBFfilter_2017"]
+            #["DYJetsToLL_VBFfilter_2018","DYJetsToLL_VBFfilter_2018"]
+            #["DYJetsToLL_VBFfilter_2016","DYJetsToLL_VBFfilter_2016"]
             #["DYJetsToLL","DYJetsToLL"]
             #["ggH","ggH"]
             #["VBFHToMuMu","VBFHToMuMu"]
             #["ZZ","ZZ"]
             #["ttTosemileptonic","ttTosemileptonic"]
-            ["ZH","ZH"]
+            #["ZH","ZH"]
             #["ttH","ttH"]
             #["WminusH","WminusH"]
             #["WplusH","WplusH"]
@@ -31,30 +31,30 @@ readFiles = ""
 
 for data in datasets:
     jobidx = 0
-    if ( data[0]=="DY1J"):
-        dataname  = "DY_1J"
-        inputfname = "DY1J.txt"
+    if ( data[0]=="DYJetsToLL_VBFfilter_2017"):
+        dataname  = "DYJetsToLL_VBFfilter_2017"
+        inputfname = "DYJetsToLL_VBFfilter_2017.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
-        NSections = 5
+        NSections = 1
 
     
-    elif ( data[0]=="DY0J"):
-        dataname = "DY_0J"
-        inputfname = "DY0J.txt"
+    elif ( data[0]=="DYJetsToLL_VBFfilter_2018"):
+        dataname = "DYJetsToLL_VBFfilter_2018"
+        inputfname = "DYJetsToLL_VBFfilter_2018.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
-        NSections = 5    
+        NSections = 1    
 
-    elif ( data[0]=="DY2J"):
-        dataname = "DY_2J"
-        inputfname = "DY2J.txt"
+    elif ( data[0]=="DYJetsToLL_VBFfilter_2016"):
+        dataname = "DYJetsToLL_VBFfilter_2016"
+        inputfname = "DYJetsToLL_VBFfilter_2016.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
-        NSections = 5
+        NSections = 1
 
     elif ( data[0]=="DYJetsToLL"):
         dataname = "DYJetsToLL"
@@ -394,22 +394,24 @@ for data in datasets:
     print "Dataset ",  data[0], " NFilesTotal ", NFilesTotal
     NFilesDone  = 0
 
-    outDir="/mnt/hadoop/store/user/idutta/HmmAna/HistogramRootFiles/"+data[0]+"26Dec2018"
+    outDir="/mnt/hadoop/store/user/idutta/HmmAna/HistogramRootFiles/"+data[0]+"3May2019"
     print outDir
-    if not os.path.exists(outDir):
-        os.mkdir(outDir)
+    #if not os.path.exists(outDir):
+        #mkdirComm="scram unsetenv -sh;gfal-mkdir " +outDir
+        #os.system(mkdirComm)
+    outdir ="HmmAna/HistogramRootFiles/"+data[0]+"3May2019"
     while( NFilesDone < NFilesTotal ) :
         thisList = readFiles[NFilesDone : NFilesDone+NSections]
         print "NFilesDone ", NFilesDone, "len(thisList)", len(thisList)
 
         ##you may have to give full path i.e. CurrentDIR/condor_submit/runlist_...
-        inputRunListName = "/data/idutta/CMSSW_9_4_9/src/HmmAna/HmmAna_ntuples/condor/condor_submit/runList_"+data[0]+"_"+str(jobidx)+".txt"
+        inputRunListName = "/data/idutta/CMSSW_9_4_9/src/HmmAna/master/HmmAna_ntuples/condor/condor_submit/runList_"+data[0]+"_"+str(jobidx)+".txt"
         inputRunList = open(inputRunListName, "w")
         for line in thisList:
             inputRunList.write(line)
 
         condorSubmit = "condor_submit/submitCondor_"+data[0]+"_"+str(jobidx)
-        jobName      = "26Dec2018"+data[0]+"_job"+str(jobidx)
+        jobName      = "3May2019"+data[0]+"_job"+str(jobidx)
         outHistFile = data[0]+"_job"+str(jobidx)+".root"
         isData       ="F"
         shutil.copyfile("proto_condor_submit",condorSubmit)
@@ -419,6 +421,7 @@ for data in datasets:
             line=line.replace("ROOTOUT",outHistFile)
             line=line.replace("DATANAME",dataname)
             line=line.replace("ISDATA",isData)
+            line=line.replace("OUTDIR",outdir)
             print line.rstrip()
                         
         submitCommand = "condor_submit "+condorSubmit

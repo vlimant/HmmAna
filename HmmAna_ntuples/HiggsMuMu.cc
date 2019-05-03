@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
   if(*isData=='F') cout <<"process name: "<<procname<<" scale: "<<proc_scale[procname]<<endl;
   
   //  hmm.EventLoop(data, isData);
-  hmm.Categorization(data, isData, 100, 150,proc_scale[procname]);
+  hmm.Categorization(data, isData, 110, 150,proc_scale[procname]);
   //hmm.GenInfo(data, isData);
   return 0;
 }
