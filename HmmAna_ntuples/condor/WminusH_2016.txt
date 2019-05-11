@@ -1,0 +1,1 @@
+/mnt/hadoop/store/user/nlu/Hmm/ntuple/2016/Nano14Dec2018/MC/Prod_v1/nsoftjets/WMinusH_HToMuMu_M125_13TeV_powheg_pythia8_Y02022019_v1r_08May_v3/WMinusH_HToMuMu_M125_13TeV_powheg_pythia8_Y02022019_v1r__0.root
