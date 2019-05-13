@@ -1,0 +1,9 @@
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/ZZTo2L2Nu_13TeV_powheg_pythia8_19March19_v1/ZZTo2L2Nu_13TeV_powheg_pythia8__0.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/ZZTo2L2Nu_13TeV_powheg_pythia8_19March19_v1/ZZTo2L2Nu_13TeV_powheg_pythia8__1.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/ZZTo2L2Nu_13TeV_powheg_pythia8_19March19_v1/ZZTo2L2Nu_13TeV_powheg_pythia8__2.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/ZZTo2L2Nu_13TeV_powheg_pythia8_19March19_v1/ZZTo2L2Nu_13TeV_powheg_pythia8__3.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/ZZTo2L2Nu_13TeV_powheg_pythia8_19March19_v1/ZZTo2L2Nu_13TeV_powheg_pythia8__4.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/ZZTo2L2Nu_13TeV_powheg_pythia8_19March19_v1/ZZTo2L2Nu_13TeV_powheg_pythia8__5.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/ZZTo2L2Nu_13TeV_powheg_pythia8_19March19_v1/ZZTo2L2Nu_13TeV_powheg_pythia8__6.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/ZZTo2L2Nu_13TeV_powheg_pythia8_19March19_v1/ZZTo2L2Nu_13TeV_powheg_pythia8__7.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/ZZTo2L2Nu_13TeV_powheg_pythia8_19March19_v1/ZZTo2L2Nu_13TeV_powheg_pythia8__8.root

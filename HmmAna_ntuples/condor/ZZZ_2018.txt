@@ -1,0 +1,10 @@
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2018/Nano14Dec2018/MC/Prod_v2/nsoftjets/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_22Mar19_v1/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8__0.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2018/Nano14Dec2018/MC/Prod_v2/nsoftjets/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_22Mar19_v1/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8__1.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2018/Nano14Dec2018/MC/Prod_v2/nsoftjets/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_22Mar19_v1/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8__2.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2018/Nano14Dec2018/MC/Prod_v2/nsoftjets/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_22Mar19_v1/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8__3.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2018/Nano14Dec2018/MC/Prod_v2/nsoftjets/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_22Mar19_v1/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8__4.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2018/Nano14Dec2018/MC/Prod_v2/nsoftjets/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_22Mar19_v1/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8__5.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2018/Nano14Dec2018/MC/Prod_v2/nsoftjets/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_22Mar19_v1/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8__6.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2018/Nano14Dec2018/MC/Prod_v2/nsoftjets/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_22Mar19_v1/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8__7.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2018/Nano14Dec2018/MC/Prod_v2/nsoftjets/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_22Mar19_v1/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8__8.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2018/Nano14Dec2018/MC/Prod_v2/nsoftjets/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8_22Mar19_v1/ZZZ_TuneCP5_13TeV-amcatnlo-pythia8__9.root

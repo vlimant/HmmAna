@@ -149,6 +149,7 @@ public :
   TH1D *h_phi_mmjj_VBF;
   TH1D *h_leadingJet_qgl_VBF;
   TH1D *h_subleadingJet_qgl_VBF;
+  TH1D *h_softJet5_VBF;
   TH2D *h_2D_ptjj_dRmm;
   TH2D *h_2D_CS_dEtamm;
   TH2D *h_2D_Hpt_ptjj;
@@ -353,7 +354,7 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   oFile->cd("VBF");
   
   h_diMuon_mass_VBF = new TH1D("h_diMuon_mass_VBF","diMuon_mass_VBF",10,120,130);
-  h_diMuon_mass_110To140_VBF = new TH1D("h_diMuon_mass_110To140_VBF","diMuon_mass_VBF",15,110.,140.);
+  h_diMuon_mass_110To140_VBF = new TH1D("h_diMuon_mass_110To150_VBF","diMuon_mass_VBF",20,110.,150.);
   h_mu1mu2dR_VBF=new TH1D("mu1mu2dR_VBF","#Delta R between two leading muons",15,0.,4.);
   h_mu1mu2dPhi_VBF=new TH1D("mu1mu2dPhi_VBF","#Delta #phi for two leading muons",32,-3.2,3.2);
   h_mu1mu2dEta_VBF=new TH1D("mu1mu2dEta_VBF","#Delta #eta for two leading muons",80,-8.,8.);
@@ -382,6 +383,7 @@ void HiggsMuMu::BookHistogram(const char *outFileName) {
   h_phi_mmjj_VBF=new TH1D("di_muon_jet_phi_VBF","#phi for dimuon+dijet system",32,-3.2,3.2);
   h_leadingJet_qgl_VBF=new TH1D("jet1_qgl_VBF","QGL for leading jet",20,0.,1.);
   h_subleadingJet_qgl_VBF=new TH1D("jet2_qgl_VBF","QGL for subleading jet",20,0.,1.);
+  h_softJet5_VBF=new TH1D("softJet5_VBF","Number of soft EWK jets with pt > 5 GeV",20,0.,20.);
   h_2D_ptjj_dRmm=new TH2D("2D_ptjj_dRmm_VBF","P_{T} for dijet vs #Delta R between muons",100,0.0,1000.,15,0.,4.);
   h_2D_CS_dEtamm=new TH2D("2D_CS_dEtamm_VBF","cos(#theta^{*}) vs #Delta #eta for two leading muons",20,0.,1.,40,-4.,4.);
   h_2D_Hpt_ptjj=new TH2D("2D_diMuonpt_ptjj_VBF","P_{T} for dimuon system vs P_{T} for dijet",100,0.0,1000.,100,0.0,1000.);

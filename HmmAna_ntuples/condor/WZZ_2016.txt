@@ -1,0 +1,2 @@
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2016/Nano14Dec2018/MC/Prod_v1/nsoftjets/WZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Y02022019_v1r_08May_v3/WZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Y02022019_v1r__1.root
+/mnt/hadoop//store/user/nlu/Hmm/ntuple/2016/Nano14Dec2018/MC/Prod_v1/nsoftjets/WZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Y02022019_v1r_08May_v3/WZZ_TuneCUETP8M1_13TeV-amcatnlo-pythia8_Y02022019_v1r__2.root

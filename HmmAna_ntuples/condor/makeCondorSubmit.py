@@ -1,29 +1,74 @@
 import os,sys,re,fileinput,string,shutil
 
 ##             Dataset        Name   
-datasets = [["DYJetsToLL_VBFfilter_2017", "DYJetsToLL_VBFfilter_2017"]
+datasets = [#["DYJetsToLL_VBFfilter_2017", "DYJetsToLL_VBFfilter_2017"]
             #["DYJetsToLL_VBFfilter_2018","DYJetsToLL_VBFfilter_2018"]
             #["DYJetsToLL_VBFfilter_2016","DYJetsToLL_VBFfilter_2016"]
             #["DYJetsToLL","DYJetsToLL"]
-            #["ggH","ggH"]
-            #["VBFHToMuMu","VBFHToMuMu"]
-            #["ZZ","ZZ"]
-            #["ttTosemileptonic","ttTosemileptonic"]
-            #["ZH","ZH"]
-            #["ttH","ttH"]
-            #["WminusH","WminusH"]
-            #["WplusH","WplusH"]
-            #["ttTo2l2v","ttTo2l2v"]
-            #["WZTo1L1Nu2Q","WZTo1L1Nu2Q"]
-            #["WZTo3LNu","WZTo3LNu"]
-            #["WZTo2L2Q","WZTo2L2Q"]
-            #["WWTo2L2Nu","WWTo2L2Nu"]
-            #["WWTo2L2Nu_Up","WWTo2L2Nu_Up"]
-            #["WWToLNuQQ","WWToLNuQQ"]
-            #["WWW_4F","WWW_4F"]
-            #["WWZ_4F","WWZ_4F"]
-            #["TTZToLLNuNu","TTZToLLNuNu"]
-            #["TTWJetsToLNu","TTWJetsToLNu"]
+    #["ggH_2017","ggH_2017"]
+            #["ggH_2018","ggH_2018"]
+    #["ggH_2016","ggH_2016"]
+    #["VBFHToMuMu_2017","VBFHToMuMu_2017"]
+    #["VBFHToMuMu_2016","VBFHToMuMu_2016"]
+    #["VBFHToMuMu_2018","VBFHToMuMu_2018"]
+    #["ZZ","ZZ"]
+            #["ttsl_2018","ttsl_2018"]
+            #["ZH_2018","ZH_2018"]
+            #["ttH_2018","ttH_2018"]
+            #["WminusH_2018","WminusH_2018"]
+            #["WplusH_2018","WplusH_2018"]
+    #["ZH_2016","ZH_2016"]                                                                                                                                                                          
+            #["ttH_2016","ttH_2016"]                                                                                                                                                                       
+            #["WminusH_2016","WminusH_2016"]                                                                                                                                                               
+            #["WplusH_2016","WplusH_2016"]         
+    #["ttTo2l2v_2018","ttTo2l2v_2018"]
+    #["ttsl_2017","ttsl_2017"]   
+    #["ttTo2l2v_2016","ttTo2l2v_2016"]                                                                                                           
+    #["ttsl_2016","ttsl_2016"] 
+    #["ZH_2017","ZH_2017"]                                                                                               
+            #["ttH_2017","ttH_2017"]                                                                                                  
+            #["WminusH_2017","WminusH_2017"]
+            #["WplusH_2017","WplusH_2017"]                                                      
+            #["ttTo2l2v_2017","ttTo2l2v_2017"]
+    #["EWK_2016","EWK_2016"]
+    #["EWK_2017","EWK_2017"]
+    #["EWK_2018","EWK_2018"]
+            #["WZTo3LNu_2016","WZTo3LNu_2016"]
+            #["WZTo2L2Q_2016","WZTo2L2Q_2016"]
+            #["WWTo2L2Nu_2016","WWTo2L2Nu_2016"]
+            #["WWToLNuQQ_2016","WWToLNuQQ_2016"]
+            #["WWW_4F_2016","WWW_4F_2016"]
+            #["WZZ_2016","WZZ_2016"]
+    #["ZZZ_2016","ZZZ_2016"]
+    #["WZTo3LNu_2018","WZTo3LNu_2018"]
+            #["WZTo2L2Q_2018","WZTo2L2Q_2018"]
+            #["WWTo2L2Nu_2018","WWTo2L2Nu_2018"]
+            #["WWToLNuQQ_2018","WWToLNuQQ_2018"]
+            #["WWW_4F_2018","WWW_4F_2018"]
+            #["WZZ_2018","WZZ_2018"]
+    #["ZZZ_2018","ZZZ_2018"]
+    #["WZTo3LNu_2017","WZTo3LNu_2017"]
+            #["WZTo2L2Q_2017","WZTo2L2Q_2017"]
+            #["WWTo2L2Nu_2017","WWTo2L2Nu_2017"]
+            #["WWToLNuQQ_2017","WWToLNuQQ_2017"]
+            #["WWW_4F_2017","WWW_4F_2017"]
+            #["WZZ_2017","WZZ_2017"]
+    #["ZZZ_2017","ZZZ_2017"]
+    #["TTZToLLNuNu_2017","TTZToLLNuNu_2017"]
+            #["TTWJetsToLNu_2017","TTWJetsToLNu_2017"]
+    #["TTZToLLNuNu_2018","TTZToLLNuNu_2018"]
+            #["TTWJetsToLNu_2018","TTWJetsToLNu_2018"]
+    #["TTZToLLNuNu_2016","TTZToLLNuNu_2016"]
+            #["TTWJetsToLNu_2016","TTWJetsToLNu_2016"]
+    #["ZZTo4L_2016","ZZTo4L_2016"]
+    #["ZZTo2L2Q_2016","ZZTo2L2Q_2016"]
+    #["ZZTo2L2Nu_2016","ZZTo2L2Nu_2016"]
+    #["ZZTo4L_2017","ZZTo4L_2017"]
+    #["ZZTo2L2Q_2017","ZZTo2L2Q_2017"]
+    #["ZZTo2L2Nu_2017","ZZTo2L2Nu_2017"]
+    #["ZZTo4L_2018","ZZTo4L_2018"]
+    #["ZZTo2L2Q_2018","ZZTo2L2Q_2018"]
+    ["ZZTo2L2Nu_2018","ZZTo2L2Nu_2018"]
 ]
 
 NSections = 10
@@ -64,21 +109,51 @@ for data in datasets:
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
-    elif ( data[0]=="ggH"):
-        dataname = "Glu"
-        inputfname = "ggH.txt"
+    elif ( data[0]=="ggH_2018"):
+        dataname = "ggH_2018"
+        inputfname = "ggH_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+    elif ( data[0]=="ggH_2017"):
+        dataname = "ggH_2017"
+        inputfname = "ggH_2017.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
-    elif ( data[0]=="VBFHToMuMu"):
-        dataname = "VBFHToMuMu"
-        inputfname = "VBFHToMuMu.txt"
+    elif ( data[0]=="ggH_2016"):
+        dataname = "ggH_2016"
+        inputfname = "ggH_2016.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
+    elif ( data[0]=="VBFHToMuMu_2017"):
+        dataname = "VBFHToMuMu_2017"
+        inputfname = "VBFHToMuMu_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 1
+    
+    elif ( data[0]=="VBFHToMuMu_2016"):
+        dataname = "VBFHToMuMu_2016"
+        inputfname = "VBFHToMuMu_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 1
+    elif ( data[0]=="VBFHToMuMu_2018"):
+        dataname = "VBFHToMuMu_2018"
+        inputfname = "VBFHToMuMu_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 1
+
     elif ( data[0]=="WZ"):
         dataname = "WZ"
         inputfname = "WZ.txt"
@@ -86,26 +161,90 @@ for data in datasets:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
-    elif ( data[0]=="ZZ"):
-        dataname = "ZZ"
-        inputfname = "ZZ.txt"
+    elif ( data[0]=="ZZTo4L_2016"):
+        dataname = "ZZTo4L_2016"
+        inputfname = "ZZTo4L_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZZTo2L2Q_2016"):
+        dataname = "ZZTo2L2Q_2016"
+        inputfname = "ZZTo2L2Q_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZZTo2L2Nu_2016"):
+        dataname = "ZZTo2L2Nu_2016"
+        inputfname = "ZZTo2L2Nu_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZZTo4L_2018"):
+        dataname = "ZZTo4L_2018"
+        inputfname = "ZZTo4L_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZZTo2L2Q_2018"):
+        dataname = "ZZTo2L2Q_2018"
+        inputfname = "ZZTo2L2Q_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZZTo2L2Nu_2018"):
+        dataname = "ZZTo2L2Nu_2018"
+        inputfname = "ZZTo2L2Nu_2018.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
     
-    elif ( data[0]=="ttTosemileptonic"):
-        dataname = "ttTosemileptonic"
-        inputfname = "ttTosemileptonic.txt"
+    elif ( data[0]=="ZZTo4L_2017"):
+        dataname = "ZZTo4L_2017"
+        inputfname = "ZZTo4L_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZZTo2L2Q_2017"):
+        dataname = "ZZTo2L2Q_2017"
+        inputfname = "ZZTo2L2Q_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZZTo2L2Nu_2017"):
+        dataname = "ZZTo2L2Nu_2017"
+        inputfname = "ZZTo2L2Nu_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ttsl_2018"):
+        dataname = "ttsl_2018"
+        inputfname = "ttsl_2018.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
         
-    elif ( data[0]=="ZH"):
-        dataname = "ZH"
-        inputfname = "ZH.txt"
+    elif ( data[0]=="ZH_2018"):
+        dataname = "ZH_2018"
+        inputfname = "ZH_2018.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
@@ -113,62 +252,104 @@ for data in datasets:
 
 
 
-    elif ( data[0]=="ttH"):
-        dataname = "ttH"
-        inputfname = "ttH.txt"
+    elif ( data[0]=="ttH_2018"):
+        dataname = "ttH_2018"
+        inputfname = "ttH_2018.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
 
-    elif ( data[0]=="WminusH"):
-        dataname = "WminusH"
-        inputfname = "WminusH.txt"
+    elif ( data[0]=="WminusH_2018"):
+        dataname = "WminusH_2018"
+        inputfname = "WminusH_2018.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
 
-    elif ( data[0]=="WplusH"):
-        dataname = "WplusH"
-        inputfname = "WplusH.txt"
+    elif ( data[0]=="WplusH_2018"):
+        dataname = "WplusH_2018"
+        inputfname = "WplusH_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZH_2016"):
+        dataname = "ZH_2016"
+        inputfname = "ZH_2016.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
 
-    elif ( data[0]=="ttTo2l2v"):
-        dataname = "ttTo2l2v"
-        inputfname = "ttTo2l2v.txt"
+
+    elif ( data[0]=="ttH_2016"):
+        dataname = "ttH_2016"
+        inputfname = "ttH_2016.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
 
-    elif ( data[0]=="WZTo1L1Nu2Q"):
-        dataname = "WZTo1L1Nu2Q"
-        inputfname = "WZTo1L1Nu2Q.txt"
+    elif ( data[0]=="WminusH_2016"):
+        dataname = "WminusH_2016"
+        inputfname = "WminusH_2016.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
-    elif ( data[0]=="WZTo3LNu"):
-        dataname = "WZTo3LNu"
-        inputfname = "WZTo3LNu.txt"
+
+    elif ( data[0]=="WplusH_2016"):
+        dataname = "WplusH_2016"
+        inputfname = "WplusH_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ttTo2l2v_2018"):
+        dataname = "ttTo2l2v_2018"
+        inputfname = "ttTo2l2v_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ttsl_2017"):
+        dataname = "ttsl_2017"
+        inputfname = "ttsl_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ttTo2l2v_2016"):
+        dataname = "ttTo2l2v_2016"
+        inputfname = "ttTo2l2v_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ttsl_2016"):
+        dataname = "ttsl_2016"
+        inputfname = "ttsl_2016.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
         
-    elif ( data[0]=="WZTo2L2Q"):
-        dataname = "WZTo2L2Q"
-        inputfname = "WZTo2L2Q.txt"
+    elif ( data[0]=="ZH_2017"):
+        dataname = "ZH_2017"
+        inputfname = "ZH_2017.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
@@ -176,49 +357,248 @@ for data in datasets:
 
 
 
-    elif ( data[0]=="WWTo2L2Nu"):
-        dataname = "WWTo2L2Nu"
-        inputfname = "WWTo2L2Nu.txt"
+    elif ( data[0]=="ttH_2017"):
+        dataname = "ttH_2017"
+        inputfname = "ttH_2017.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
 
-    elif ( data[0]=="WWTo2L2Nu_Up"):
-        dataname = "WWTo2L2Nu_Up"
-        inputfname = "WWTo2L2Nu_Up.txt"
-        with open(inputfname) as inputfile:
-            readFiles = inputfile.readlines()
-            print "len(readFiles)", len(readFiles)
-        NSections = 10
-
-    elif ( data[0]=="WWToLNuQQ"):
-        dataname = "WWToLNuQQ"
-        inputfname = "WWToLNuQQ.txt"
+    elif ( data[0]=="WminusH_2017"):
+        dataname = "WminusH_2017"
+        inputfname = "WminusH_2017.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
 
-    elif ( data[0]=="WWW_4F"):
-        dataname = "WWW_4F"
-        inputfname = "WWW_4F.txt"
+    elif ( data[0]=="WplusH_2017"):
+        dataname = "WplusH_2017"
+        inputfname = "WplusH_2017.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
 
-    elif ( data[0]=="WWZ_4F"):
-        dataname = "WWZ_4F"
-        inputfname = "WWZ_4F.txt"
+    elif ( data[0]=="ttTo2l2v_2017"):
+        dataname = "ttTo2l2v_2017"
+        inputfname = "ttTo2l2v_2017.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
+    elif ( data[0]=="EWK_2017"):
+        dataname = "EWK_2017"
+        inputfname = "EWK_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="EWK_2018"):
+        dataname = "EWK_2018"
+        inputfname = "EWK_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="EWK_2016"):
+        dataname = "EWK_2016"
+        inputfname = "EWK_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+    elif ( data[0]=="WZTo3LNu_2016"):
+        dataname = "WZTo3LNu_2016"
+        inputfname = "WZTo3LNu_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+        
+    elif ( data[0]=="WZTo2L2Q_2016"):
+        dataname = "WZTo2L2Q_2016"
+        inputfname = "WZTo2L2Q_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+
+    elif ( data[0]=="WWTo2L2Nu_2016"):
+        dataname = "WWTo2L2Nu_2016"
+        inputfname = "WWTo2L2Nu_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="WWToLNuQQ_2016"):
+        dataname = "WWToLNuQQ_2016"
+        inputfname = "WWToLNuQQ_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+    elif ( data[0]=="WWW_4F_2016"):
+        dataname = "WWW_4F_2016"
+        inputfname = "WWW_4F_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+    elif ( data[0]=="WZZ_2016"):
+        dataname = "WZZ_2016"
+        inputfname = "WZZ_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZZZ_2016"):
+        dataname = "ZZZ_2016"
+        inputfname = "ZZZ_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="WZTo3LNu_2017"):
+        dataname = "WZTo3LNu_2017"
+        inputfname = "WZTo3LNu_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+        
+    elif ( data[0]=="WZTo2L2Q_2017"):
+        dataname = "WZTo2L2Q_2017"
+        inputfname = "WZTo2L2Q_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+
+    elif ( data[0]=="WWTo2L2Nu_2017"):
+        dataname = "WWTo2L2Nu_2017"
+        inputfname = "WWTo2L2Nu_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="WWToLNuQQ_2017"):
+        dataname = "WWToLNuQQ_2017"
+        inputfname = "WWToLNuQQ_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+    elif ( data[0]=="WWW_4F_2017"):
+        dataname = "WWW_4F_2017"
+        inputfname = "WWW_4F_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+    elif ( data[0]=="WZZ_2017"):
+        dataname = "WZZ_2017"
+        inputfname = "WZZ_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZZZ_2017"):
+        dataname = "ZZZ_2017"
+        inputfname = "ZZZ_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="WZTo3LNu_2018"):
+        dataname = "WZTo3LNu_2018"
+        inputfname = "WZTo3LNu_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+        
+    elif ( data[0]=="WZTo2L2Q_2018"):
+        dataname = "WZTo2L2Q_2018"
+        inputfname = "WZTo2L2Q_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+
+    elif ( data[0]=="WWTo2L2Nu_2018"):
+        dataname = "WWTo2L2Nu_2018"
+        inputfname = "WWTo2L2Nu_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="WWToLNuQQ_2018"):
+        dataname = "WWToLNuQQ_2018"
+        inputfname = "WWToLNuQQ_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+    elif ( data[0]=="WWW_4F_2018"):
+        dataname = "WWW_4F_2018"
+        inputfname = "WWW_4F_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+    elif ( data[0]=="WZZ_2018"):
+        dataname = "WZZ_2018"
+        inputfname = "WZZ_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="ZZZ_2018"):
+        dataname = "ZZZ_2018"
+        inputfname = "ZZZ_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
 
     elif ( data[0]=="ttJets_DiLept"):
         dataname = "ttJets_DiLept"
@@ -228,18 +608,52 @@ for data in datasets:
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
-    elif ( data[0]=="TTZToLLNuNu"):
-        dataname = "TTZToLLNuNu"
-        inputfname = "TTZToLLNuNu.txt"
+    elif ( data[0]=="TTZToLLNuNu_2017"):
+        dataname = "TTZToLLNuNu_2017"
+        inputfname = "TTZToLLNuNu_2017.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
 
-    elif ( data[0]=="TTWJetsToLNu"):
-        dataname = "TTWJetsToLNu"
-        inputfname = "TTWJetsToLNu.txt"
+    elif ( data[0]=="TTWJetsToLNu_2017"):
+        dataname = "TTWJetsToLNu_2017"
+        inputfname = "TTWJetsToLNu_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+    elif ( data[0]=="TTZToLLNuNu_2018"):
+        dataname = "TTZToLLNuNu_2018"
+        inputfname = "TTZToLLNuNu_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+    elif ( data[0]=="TTWJetsToLNu_2018"):
+        dataname = "TTWJetsToLNu_2018"
+        inputfname = "TTWJetsToLNu_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+        
+    elif ( data[0]=="TTZToLLNuNu_2016"):
+        dataname = "TTZToLLNuNu_2016"
+        inputfname = "TTZToLLNuNu_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
+
+    elif ( data[0]=="TTWJetsToLNu_2016"):
+        dataname = "TTWJetsToLNu_2016"
+        inputfname = "TTWJetsToLNu_2016.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
