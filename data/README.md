@@ -13,7 +13,7 @@ Data:
 
 2018 nanoAOD:
 
-MC: nanoAODlist_2018_MC.txt
+MC: https://github.com/irenedutta23/HmmAna/blob/master/data/nanoAODlist_2018_MC.txt
 files are in directory: /mnt/hadoop/store/mc/RunIIAutumn18NanoAODv4
 
 Data: 
