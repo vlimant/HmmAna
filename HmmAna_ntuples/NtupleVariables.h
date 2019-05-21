@@ -160,6 +160,7 @@ public :
    vector<float>   *t_Jet_neHEF;
    vector<float>   *t_Jet_phi;
    vector<float>   *t_Jet_pt;
+   vector<float>   *t_Jet_rawFactor;
    vector<float>   *t_Jet_qgl;
    vector<int>     *t_Jet_jetId;
    vector<int>     *t_Jet_nConstituents;
@@ -323,6 +324,7 @@ public :
    TBranch        *b_t_Jet_neHEF;   //!
    TBranch        *b_t_Jet_phi;   //!
    TBranch        *b_t_Jet_pt;   //!
+   TBranch        *b_t_Jet_rawFactor; //!
    TBranch        *b_t_Jet_qgl;   //!
    TBranch        *b_t_Jet_jetId;   //!
    TBranch        *b_t_Jet_nConstituents;   //!
@@ -490,6 +492,7 @@ void NtupleVariables::Init(TTree *tree)
    t_Jet_neHEF = 0;
    t_Jet_phi = 0;
    t_Jet_pt = 0;
+   t_Jet_rawFactor = 0;
    t_Jet_qgl = 0;
    t_Jet_jetId = 0;
    t_Jet_nConstituents = 0;
@@ -643,6 +646,7 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_Jet_neHEF", &t_Jet_neHEF, &b_t_Jet_neHEF);
    fChain->SetBranchAddress("t_Jet_phi", &t_Jet_phi, &b_t_Jet_phi);
    fChain->SetBranchAddress("t_Jet_pt", &t_Jet_pt, &b_t_Jet_pt);
+   fChain->SetBranchAddress("t_Jet_rawFactor", &t_Jet_rawFactor, &b_t_Jet_rawFactor);
    fChain->SetBranchAddress("t_Jet_qgl", &t_Jet_qgl, &b_t_Jet_qgl);
    fChain->SetBranchAddress("t_Jet_jetId", &t_Jet_jetId, &b_t_Jet_jetId);
    fChain->SetBranchAddress("t_Jet_nConstituents", &t_Jet_nConstituents, &b_t_Jet_nConstituents);
