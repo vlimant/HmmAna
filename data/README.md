@@ -1,6 +1,6 @@
 2017 nanoAOD:
 
-MC: nanoAODlist_2017_MC.txt 
+MC: https://github.com/irenedutta23/HmmAna/blob/master/data/nanoAODlist_2017_MC.txt
 files are in directory: /mnt/hadoop/store/mc/RunIIFall17NanoAODv4
 
 Data:
