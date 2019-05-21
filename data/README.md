@@ -1,5 +1,7 @@
 2017 nanoAOD:
-MC: in directory /mnt/hadoop/store/mc/RunIIFall17NanoAODv4
+
+MC: nanoAODlist_2017_MC.txt 
+files are in directory: /mnt/hadoop/store/mc/RunIIFall17NanoAODv4
 
 Data:
 
@@ -10,7 +12,10 @@ Data:
 /mnt/hadoop/store/data/Run2017F/SingleMuon/NANOAOD/Nano14Dec2018-v1
 
 2018 nanoAOD:
-MC: /mnt/hadoop/store/mc/RunIIAutumn18NanoAODv4
+
+MC: nanoAODlist_2018_MC.txt
+files are in directory: /mnt/hadoop/store/mc/RunIIAutumn18NanoAODv4
+
 Data: 
 /mnt/hadoop/store/data/Run2018A/SingleMuon/NANOAOD/Nano14Dec2018-v1  
 /mnt/hadoop/store/data/Run2018B/SingleMuon/NANOAOD/Nano14Dec2018-v1  
