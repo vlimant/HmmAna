@@ -160,7 +160,6 @@ public :
    vector<float>   *t_Jet_neHEF;
    vector<float>   *t_Jet_phi;
    vector<float>   *t_Jet_pt;
-   vector<float>   *t_Jet_rawFactor;
    vector<float>   *t_Jet_qgl;
    vector<int>     *t_Jet_jetId;
    vector<int>     *t_Jet_nConstituents;
@@ -203,6 +202,10 @@ public :
    Float_t         t_PV_z;
    Int_t           t_PV_npvs;
    Int_t           t_PV_npvsGood;
+   vector<float>   *t_GenJet_eta;
+   vector<float>   *t_GenJet_mass;
+   vector<float>   *t_GenJet_phi;
+   vector<float>   *t_GenJet_pt;
    vector<float>   *t_GenPart_eta;
    vector<float>   *t_GenPart_mass;
    vector<float>   *t_GenPart_phi;
@@ -324,7 +327,6 @@ public :
    TBranch        *b_t_Jet_neHEF;   //!
    TBranch        *b_t_Jet_phi;   //!
    TBranch        *b_t_Jet_pt;   //!
-   TBranch        *b_t_Jet_rawFactor; //!
    TBranch        *b_t_Jet_qgl;   //!
    TBranch        *b_t_Jet_jetId;   //!
    TBranch        *b_t_Jet_nConstituents;   //!
@@ -365,6 +367,10 @@ public :
    TBranch        *b_t_PV_z;   //!
    TBranch        *b_t_PV_npvs;   //!
    TBranch        *b_t_PV_npvsGood;   //!
+   TBranch        *b_t_GenJet_eta;   //!                                                                                                                                                                  
+   TBranch        *b_t_GenJet_mass;   //!                                                                                                                                                                 
+   TBranch        *b_t_GenJet_phi;   //!                                                                                                                                            
+   TBranch        *b_t_GenJet_pt;   //!
    TBranch        *b_t_GenPart_eta;   //!
    TBranch        *b_t_GenPart_mass;   //!
    TBranch        *b_t_GenPart_phi;   //!
@@ -492,7 +498,6 @@ void NtupleVariables::Init(TTree *tree)
    t_Jet_neHEF = 0;
    t_Jet_phi = 0;
    t_Jet_pt = 0;
-   t_Jet_rawFactor = 0;
    t_Jet_qgl = 0;
    t_Jet_jetId = 0;
    t_Jet_nConstituents = 0;
@@ -522,6 +527,10 @@ void NtupleVariables::Init(TTree *tree)
    t_bJet_SF = 0;
    t_bJet_SFup = 0;
    t_bJet_SFdown = 0;
+   t_GenJet_eta = 0;
+   t_GenJet_mass = 0;
+   t_GenJet_phi = 0;
+   t_GenJet_pt = 0;
    t_GenPart_eta = 0;
    t_GenPart_mass = 0;
    t_GenPart_phi = 0;
@@ -646,7 +655,6 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_Jet_neHEF", &t_Jet_neHEF, &b_t_Jet_neHEF);
    fChain->SetBranchAddress("t_Jet_phi", &t_Jet_phi, &b_t_Jet_phi);
    fChain->SetBranchAddress("t_Jet_pt", &t_Jet_pt, &b_t_Jet_pt);
-   fChain->SetBranchAddress("t_Jet_rawFactor", &t_Jet_rawFactor, &b_t_Jet_rawFactor);
    fChain->SetBranchAddress("t_Jet_qgl", &t_Jet_qgl, &b_t_Jet_qgl);
    fChain->SetBranchAddress("t_Jet_jetId", &t_Jet_jetId, &b_t_Jet_jetId);
    fChain->SetBranchAddress("t_Jet_nConstituents", &t_Jet_nConstituents, &b_t_Jet_nConstituents);
@@ -688,6 +696,10 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_PV_z", &t_PV_z, &b_t_PV_z);
    fChain->SetBranchAddress("t_PV_npvs", &t_PV_npvs, &b_t_PV_npvs);
    fChain->SetBranchAddress("t_PV_npvsGood", &t_PV_npvsGood, &b_t_PV_npvsGood);
+   fChain->SetBranchAddress("t_GenJet_eta", &t_GenJet_eta, &b_t_GenJet_eta);
+   fChain->SetBranchAddress("t_GenJet_mass", &t_GenJet_mass, &b_t_GenJet_mass);
+   fChain->SetBranchAddress("t_GenJet_phi", &t_GenJet_phi, &b_t_GenJet_phi);
+   fChain->SetBranchAddress("t_GenJet_pt", &t_GenJet_pt, &b_t_GenJet_pt);
    fChain->SetBranchAddress("t_GenPart_eta", &t_GenPart_eta, &b_t_GenPart_eta);
    fChain->SetBranchAddress("t_GenPart_mass", &t_GenPart_mass, &b_t_GenPart_mass);
    fChain->SetBranchAddress("t_GenPart_phi", &t_GenPart_phi, &b_t_GenPart_phi);
