@@ -259,14 +259,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	}
 
       }
-      if(genJet_idx.size()>=2){
-	TLorentzVector di_gJ, gJ1,gJ2;
-	gJ1.SetPtEtaPhiM((*t_GenJet_pt)[genJet_idx[0]],(*t_GenJet_eta)[genJet_idx[0]],(*t_GenJet_phi)[genJet_idx[0]],(*t_GenJet_mass)[genJet_idx[0]]);
-	gJ2.SetPtEtaPhiM((*t_GenJet_pt)[genJet_idx[1]],(*t_GenJet_eta)[genJet_idx[1]],(*t_GenJet_phi)[genJet_idx[1]],(*t_GenJet_mass)[genJet_idx[1]]);
-	di_gJ=gJ1+gJ2;
-	//cout<<"GenJet dimass : "<<di_gJ.M()<<endl;
-	if(di_gJ.M()<350.){continue;}
-      }
+      
       double evt_wt;
       //cout<<"Scale : "<<scale<<endl;
       if(*isData=='T'){evt_wt=1.;}
@@ -563,6 +556,16 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
           }
           //VBF
           else if(t_diJet_mass>400. && ((*t_Jet_qgl)[1]!=-1 && (*t_Jet_qgl)[0]!=-1)){
+	    if(genJet_idx.size()>=2){
+	      TLorentzVector di_gJ, gJ1,gJ2;
+	      gJ1.SetPtEtaPhiM((*t_GenJet_pt)[genJet_idx[0]],(*t_GenJet_eta)[genJet_idx[0]],(*t_GenJet_phi)[genJet_idx[0]],(*t_GenJet_mass)[genJet_idx[0]]);
+	      gJ2.SetPtEtaPhiM((*t_GenJet_pt)[genJet_idx[1]],(*t_GenJet_eta)[genJet_idx[1]],(*t_GenJet_phi)[genJet_idx[1]],(*t_GenJet_mass)[genJet_idx[1]]);
+	      di_gJ=gJ1+gJ2;
+	      //cout<<"GenJet dimass : "<<di_gJ.M()<<endl;
+	      if(di_gJ.M()>350. && (procname == s1 || procname == s2 || procname == s3)){continue;}
+	      //cout<<"GenJet dimass : "<<di_gJ.M()<<endl;
+	    }
+	    
               cat_index = 7;
               double binv = catyield->GetBinContent(7);
               binv = binv + t_genWeight;
