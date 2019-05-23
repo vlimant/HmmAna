@@ -1,1 +1,1 @@
-/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/ZZZ_4F_TuneCP5_13TeV-amcatnlo-pythia8_09May_v1/ZZZ_4F_TuneCP5_13TeV-amcatnlo-pythia8__0.root
+/mnt/hadoop/store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v2/ZZZ_4F_TuneCP5_13TeV-amcatnlo-pythia8_21May_v1_EEM/ZZZ_4F_TuneCP5_13TeV-amcatnlo-pythia8__0.root

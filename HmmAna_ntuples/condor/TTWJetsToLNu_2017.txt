@@ -1,5 +1,5 @@
-/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_19March19_v1/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8__0.root
-/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_19March19_v1/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8__1.root
-/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_19March19_v1/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8__2.root
-/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_19March19_v1/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8__3.root
-/mnt/hadoop//store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v1/nsoftjets/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_19March19_v1/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8__4.root
+/mnt/hadoop/store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v2/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_21May_v1_EEM/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8__0.root
+/mnt/hadoop/store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v2/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_21May_v1_EEM/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8__1.root
+/mnt/hadoop/store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v2/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_21May_v1_EEM/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8__2.root
+/mnt/hadoop/store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v2/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_21May_v1_EEM/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8__3.root
+/mnt/hadoop/store/user/nlu/Hmm/ntuple/2017/Nano14Dec2018/MC/Prod_v2/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_21May_v1_EEM/TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8__4.root

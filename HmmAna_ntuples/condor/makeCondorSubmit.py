@@ -5,6 +5,10 @@ datasets = [#["DYJetsToLL_VBFfilter_2017", "DYJetsToLL_VBFfilter_2017"]
             #["DYJetsToLL_VBFfilter_2018","DYJetsToLL_VBFfilter_2018"]
             #["DYJetsToLL_VBFfilter_2016","DYJetsToLL_VBFfilter_2016"]
             #["DYJetsToLL","DYJetsToLL"]
+    #["DYJetsToLL_M105To160_incl_2017", "DYJetsToLL_M105To160_incl_2017"]
+    #["DYJetsToLL_2017", "DYJetsToLL_2017"]                                                                                                                                     
+    #["DYJetsToLL_2018","DYJetsToLL_2018"]                                                                                                                                     
+    #["DYJetsToLL_2016","DYJetsToLL_2016"] 
     #["ggH_2017","ggH_2017"]
             #["ggH_2018","ggH_2018"]
     #["ggH_2016","ggH_2016"]
@@ -24,12 +28,16 @@ datasets = [#["DYJetsToLL_VBFfilter_2017", "DYJetsToLL_VBFfilter_2017"]
     #["ttTo2l2v_2018","ttTo2l2v_2018"]
     #["ttsl_2017","ttsl_2017"]   
     #["ttTo2l2v_2016","ttTo2l2v_2016"]                                                                                                           
+    
     #["ttsl_2016","ttsl_2016"] 
     #["ZH_2017","ZH_2017"]                                                                                               
             #["ttH_2017","ttH_2017"]                                                                                                  
             #["WminusH_2017","WminusH_2017"]
             #["WplusH_2017","WplusH_2017"]                                                      
-            #["ttTo2l2v_2017","ttTo2l2v_2017"]
+    #["ttTo2l2v_2017","ttTo2l2v_2017"]
+    #["ttJets_DiLept_2017","ttJets_DiLept_2017"]
+    #["ttJets_DiLept_2016","ttJets_DiLept_2016"]
+    #["ttJets_DiLept_2018","ttJets_DiLept_2018"]
     #["EWK_2016","EWK_2016"]
     #["EWK_2017","EWK_2017"]
     #["EWK_2018","EWK_2018"]
@@ -51,11 +59,12 @@ datasets = [#["DYJetsToLL_VBFfilter_2017", "DYJetsToLL_VBFfilter_2017"]
             #["WZTo2L2Q_2017","WZTo2L2Q_2017"]
             #["WWTo2L2Nu_2017","WWTo2L2Nu_2017"]
             #["WWToLNuQQ_2017","WWToLNuQQ_2017"]
-            #["WWW_4F_2017","WWW_4F_2017"]
-            #["WZZ_2017","WZZ_2017"]
+    #["WWW_4F_2017","WWW_4F_2017"]
+    #["WWZ_4F_2017","WWZ_4F_2017"] 
+       #["WZZ_2017","WZZ_2017"]
     #["ZZZ_2017","ZZZ_2017"]
     #["TTZToLLNuNu_2017","TTZToLLNuNu_2017"]
-            #["TTWJetsToLNu_2017","TTWJetsToLNu_2017"]
+    #["TTWJetsToLNu_2017","TTWJetsToLNu_2017"]
     #["TTZToLLNuNu_2018","TTZToLLNuNu_2018"]
             #["TTWJetsToLNu_2018","TTWJetsToLNu_2018"]
     #["TTZToLLNuNu_2016","TTZToLLNuNu_2016"]
@@ -65,10 +74,10 @@ datasets = [#["DYJetsToLL_VBFfilter_2017", "DYJetsToLL_VBFfilter_2017"]
     #["ZZTo2L2Nu_2016","ZZTo2L2Nu_2016"]
     #["ZZTo4L_2017","ZZTo4L_2017"]
     #["ZZTo2L2Q_2017","ZZTo2L2Q_2017"]
-    #["ZZTo2L2Nu_2017","ZZTo2L2Nu_2017"]
+    ["ZZTo2L2Nu_2017","ZZTo2L2Nu_2017"]
     #["ZZTo4L_2018","ZZTo4L_2018"]
     #["ZZTo2L2Q_2018","ZZTo2L2Q_2018"]
-    ["ZZTo2L2Nu_2018","ZZTo2L2Nu_2018"]
+    #["ZZTo2L2Nu_2018","ZZTo2L2Nu_2018"]
 ]
 
 NSections = 10
@@ -96,6 +105,39 @@ for data in datasets:
     elif ( data[0]=="DYJetsToLL_VBFfilter_2016"):
         dataname = "DYJetsToLL_VBFfilter_2016"
         inputfname = "DYJetsToLL_VBFfilter_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 1
+
+    elif ( data[0]=="DYJetsToLL_M105To160_incl_2017"):
+        dataname = "DYJetsToLL_M105To160_incl_2017"
+        inputfname = "DYJetsToLL_M105To160_incl_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 1
+
+    elif ( data[0]=="DYJetsToLL_2017"):
+        dataname  = "DYJetsToLL_2017"
+        inputfname = "DYJetsToLL_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 1
+
+    
+    elif ( data[0]=="DYJetsToLL_2018"):
+        dataname = "DYJetsToLL_2018"
+        inputfname = "DYJetsToLL_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 1    
+
+    elif ( data[0]=="DYJetsToLL_2016"):
+        dataname = "DYJetsToLL_2016"
+        inputfname = "DYJetsToLL_2016.txt"
         with open(inputfname) as inputfile:
             readFiles = inputfile.readlines()
             print "len(readFiles)", len(readFiles)
@@ -346,7 +388,28 @@ for data in datasets:
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
-        
+    elif ( data[0]=="ttJets_DiLept_2016"):
+        dataname = "ttJets_DiLept_2016"
+        inputfname = "ttJets_DiLept_2016.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+    elif ( data[0]=="ttJets_DiLept_2017"):
+        dataname = "ttJets_DiLept_2017"
+        inputfname = "ttJets_DiLept_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+    elif ( data[0]=="ttJets_DiLept_2018"):
+        dataname = "ttJets_DiLept_2018"
+        inputfname = "ttJets_DiLept_2018.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
+
     elif ( data[0]=="ZH_2017"):
         dataname = "ZH_2017"
         inputfname = "ZH_2017.txt"
@@ -522,6 +585,13 @@ for data in datasets:
             print "len(readFiles)", len(readFiles)
         NSections = 10
 
+    elif ( data[0]=="WWZ_4F_2017"):
+        dataname = "WWZ_4F_2017"
+        inputfname = "WWZ_4F_2017.txt"
+        with open(inputfname) as inputfile:
+            readFiles = inputfile.readlines()
+            print "len(readFiles)", len(readFiles)
+        NSections = 10
 
     elif ( data[0]=="WZZ_2017"):
         dataname = "WZZ_2017"

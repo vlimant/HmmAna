@@ -47,6 +47,9 @@ int main(int argc, char* argv[])
   proc_scale["DYJetsToLL_VBFfilter_2018"]=2.02*lumi_18/(3355073909.5);
   proc_scale["DYJetsToLL_VBFfilter_2017"]=2.02*lumi/(1697931790.6);
   proc_scale["DYJetsToLL_VBFfilter_2016"]=2.02*lumi_16/(2699711552.0);
+  proc_scale["DYJetsToLL_M105To160_incl_2018"]=46.9479*lumi_18/(3355073909.5);
+  proc_scale["DYJetsToLL_M105To160_incl_2017"]=46.9479*lumi/(7139863856.25);
+  proc_scale["DYJetsToLL_M105To160_incl_2016"]=46.9479*lumi_16/(2699711552.0);
   proc_scale["ttTosemileptonic"]=6.871e+02*lumi/11784986264.000000;
   proc_scale["ttsl_2018"]=6.871e+02*lumi_18/29967356136.0;
   proc_scale["ttTo2l2v_2018"]=87.31*lumi_18/4600510308.0;
@@ -122,7 +125,7 @@ int main(int argc, char* argv[])
   if(*isData=='F') cout <<"process name: "<<procname<<" scale: "<<proc_scale[procname]<<endl;
   
   //  hmm.EventLoop(data, isData);
-  hmm.Categorization(data, isData, 110, 150,proc_scale[procname]);
+  hmm.Categorization(data, isData, 110, 150,proc_scale[procname],procname);
   //hmm.GenInfo(data, isData);
   return 0;
 }
@@ -200,7 +203,7 @@ void HiggsMuMu::GenInfo(const char *data,const char *isData)
   }
 }
 
-void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, float mhi, double scale)
+void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, float mhi, double scale,TString procname)
 {  if (fChain == 0) return;
    cout <<"mass window: "<<mlo<<" - "<<mhi<<endl;
    //TH1F *catyield = new TH1F("h_category_yield","h_category_yield",10,0,10);
@@ -235,6 +238,35 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
       if (ientry < 0) break;
       nb = fChain->GetEntry(jentry);   nbytes += nb;
       clearTreeVectors();
+      vector <int > genJet_idx;
+      genJet_idx.clear();
+      //cout<<procname<<endl;
+      TString s1 = "DYJetsToLL_M105To160_incl_2017" ;
+      TString s2 = "DYJetsToLL_M105To160_incl_2016" ;
+      TString s3 = "DYJetsToLL_M105To160_incl_2018" ;
+      if (procname == s1 || procname == s2 || procname == s3){
+	//cout<<"Entering!!!!\n";
+	if(t_GenJet_pt->size() >= 2){
+	  for(int i=0; i<t_GenJet_pt->size(); i++){
+	    for(int k=0; k<t_GenPart_pt->size(); k++){
+	      bool foundGenLep=false;
+	      if(abs(t_GenPart_pdgId->at(k))>=11 && abs(t_GenPart_pdgId->at(k))<=16){
+		if(DeltaR((*t_GenJet_eta)[i],(*t_GenJet_phi)[i],(*t_GenPart_eta)[k],(*t_GenPart_phi)[k])<0.3){foundGenLep=true;break;}
+	      }
+	      if(!foundGenLep)genJet_idx.push_back(i);
+	    }
+	  }
+	}
+
+      }
+      if(genJet_idx.size()>=2){
+	TLorentzVector di_gJ, gJ1,gJ2;
+	gJ1.SetPtEtaPhiM((*t_GenJet_pt)[genJet_idx[0]],(*t_GenJet_eta)[genJet_idx[0]],(*t_GenJet_phi)[genJet_idx[0]],(*t_GenJet_mass)[genJet_idx[0]]);
+	gJ2.SetPtEtaPhiM((*t_GenJet_pt)[genJet_idx[1]],(*t_GenJet_eta)[genJet_idx[1]],(*t_GenJet_phi)[genJet_idx[1]],(*t_GenJet_mass)[genJet_idx[1]]);
+	di_gJ=gJ1+gJ2;
+	//cout<<"GenJet dimass : "<<di_gJ.M()<<endl;
+	if(di_gJ.M()<350.){continue;}
+      }
       double evt_wt;
       //cout<<"Scale : "<<scale<<endl;
       if(*isData=='T'){evt_wt=1.;}
