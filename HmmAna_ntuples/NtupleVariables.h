@@ -52,6 +52,12 @@ public :
    UInt_t          t_luminosityBlock;
    ULong64_t       t_event;
    Float_t         t_genWeight;
+   Float_t         t_puWeight;
+   Float_t         t_puWeightUp;
+   Float_t         t_puWeightDown;
+   Float_t         t_PrefireWeight;
+   Float_t         t_PrefireWeight_Up;
+   Float_t         t_PrefireWeight_Down;
    UInt_t          t_mu1;
    UInt_t          t_mu2;
    UInt_t          t_index_trigm_mu;
@@ -222,6 +228,12 @@ public :
    TBranch        *b_t_mu1;   //!
    TBranch        *b_t_mu2;   //!
    TBranch        *b_t_index_trigm_mu;
+   TBranch        *b_t_puWeight;
+   TBranch        *b_t_puWeightUp;
+   TBranch        *b_t_puWeightDown;
+   TBranch        *b_t_PrefireWeight;
+   TBranch        *b_t_PrefireWeight_Up;
+   TBranch        *b_t_PrefireWeight_Down;
    TBranch        *b_t_El_charge;   //!
    TBranch        *b_t_El_pt;   //!
    TBranch        *b_t_El_phi;   //!
@@ -551,6 +563,12 @@ void NtupleVariables::Init(TTree *tree)
    fChain->SetBranchAddress("t_mu1", &t_mu1, &b_t_mu1);
    fChain->SetBranchAddress("t_mu2", &t_mu2, &b_t_mu2);
    fChain->SetBranchAddress("t_index_trigm_mu", &t_index_trigm_mu, &b_t_index_trigm_mu);
+   fChain->SetBranchAddress("t_puWeight",&t_puWeight,&b_t_puWeight);
+   fChain->SetBranchAddress("t_puWeightUp",&t_puWeightUp,&b_t_puWeightUp);
+   fChain->SetBranchAddress("t_puWeightDown",&t_puWeightDown,&b_t_puWeightDown);
+   fChain->SetBranchAddress("t_PrefireWeight",&t_PrefireWeight,&b_t_PrefireWeight);
+   fChain->SetBranchAddress("t_PrefireWeight_Up",&t_PrefireWeight_Up,&b_t_PrefireWeight_Up);
+   fChain->SetBranchAddress("t_PrefireWeight_Down",&t_PrefireWeight_Down,&b_t_PrefireWeight_Down);
    fChain->SetBranchAddress("t_El_charge", &t_El_charge, &b_t_El_charge);
    fChain->SetBranchAddress("t_El_pt", &t_El_pt, &b_t_El_pt);
    fChain->SetBranchAddress("t_El_phi", &t_El_phi, &b_t_El_phi);

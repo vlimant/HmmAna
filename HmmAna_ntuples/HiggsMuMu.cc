@@ -126,6 +126,7 @@ int main(int argc, char* argv[])
   
   //  hmm.EventLoop(data, isData);
   hmm.Categorization(data, isData, 110, 150,proc_scale[procname],procname);
+  //hmm.Categorization(data, isData, 76, 106,proc_scale[procname],procname); 
   //hmm.GenInfo(data, isData);
   return 0;
 }
@@ -260,9 +261,9 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 
       }
       
-      double evt_wt;
+      double evt_wt,evt_wt_Up,evt_wt_Down;
       //cout<<"Scale : "<<scale<<endl;
-      if(*isData=='T'){evt_wt=1.;}
+      if(*isData=='T'){evt_wt=1.;evt_wt_Up=1.;evt_wt_Down=1.;}
       else evt_wt=t_genWeight*scale;
       int index_mu1 =0, index_mu2=1;
       vector<int> el;
@@ -318,8 +319,9 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
       double dPhi= DeltaPhi((*t_Mu_phi)[t_mu2],(*t_Mu_phi)[t_mu1]);
       //SR: 120-130, sideband: 110-120, 130-150
       double lepSF;
-      if(diMuon_mass>mlo && diMuon_mass<mhi){
-          double binv = catyield->GetBinContent(10);
+      //if(diMuon_mass>mlo && diMuon_mass<mhi){
+      if((diMuon_mass>mlo && diMuon_mass<mhi) || (diMuon_mass>76. && diMuon_mass<106.)){  
+	double binv = catyield->GetBinContent(10);
           binv = binv + t_genWeight;
 	  if(*isData=='F'){
 	    if(t_index_trigm_mu==t_mu1) lepSF = /*(*t_Mu_EffSF_TRIG)[t_mu1]*/(*t_Mu_EffSF_ID)[t_mu1]*(*t_Mu_EffSF_ISO)[t_mu1]*(*t_Mu_EffSF_ID)[t_mu2]*(*t_Mu_EffSF_ISO)[t_mu2];
@@ -332,7 +334,15 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	      if(t_index_trigm_mu==t_mu1) cout<<(*t_Mu_EffSF_TRIG)[t_mu1]<<","<<(*t_Mu_EffSF_ID)[t_mu1]<<","<<(*t_Mu_EffSF_ISO)[t_mu1]<<","<<(*t_Mu_EffSF_ID)[t_mu2]<<","<<(*t_Mu_EffSF_ISO)[t_mu2]<<endl;
 	      else if( t_index_trigm_mu==t_mu2) cout<<(*t_Mu_EffSF_TRIG)[t_mu2]<<","<<(*t_Mu_EffSF_ID)[t_mu1]<<","<<(*t_Mu_EffSF_ISO)[t_mu1]<<","<<(*t_Mu_EffSF_ID)[t_mu2]<<","<<(*t_Mu_EffSF_ISO)[t_mu2]<<endl;
 	    }
+	    
 	    evt_wt*=lepSF;
+	    //cout<<evt_wt<<" , "<<t_puWeight<<" , "<<t_puWeightUp<<" , "<<t_puWeightDown<<" , "<<t_PrefireWeight<<" , "<<t_PrefireWeight_Up<<" , "<<t_PrefireWeight_Down<<endl;
+	    
+	    evt_wt*=t_puWeight;
+	    evt_wt*=t_PrefireWeight;
+	    
+	    evt_wt_Up=evt_wt*t_puWeightUp*t_PrefireWeight_Up;
+	    evt_wt_Down=evt_wt*t_puWeightDown*t_PrefireWeight_Down;
 	    }
           catyield->SetBinContent(10,binv);
           h_diMuon_mass_cat->Fill(diMuon_mass,evt_wt);
@@ -340,7 +350,9 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
           event = t_event;
           lumi = t_luminosityBlock;
           genWeight = evt_wt;
-          Higgs_mass = diMuon_mass;
+          genWeight_Up = evt_wt_Up;
+	  genWeight_Down = evt_wt_Down;
+	  Higgs_mass = diMuon_mass;
           Higgs_pt = diMuon_pt;
           Higgs_eta = diMuon_eta; 
           //ttH
@@ -572,23 +584,108 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
               catyield->SetBinContent(7,binv);
 	      ll_mass=diMuon_mass; //BDT var
 	      MqqLog=log(t_diJet_mass); //BDT_var
-	      
-              if(*isData=='F')h_diMuon_mass_VBF->Fill(diMuon_mass,evt_wt);
-	      if(diMuon_mass<120. || diMuon_mass>130.)h_diMuon_mass_110To140_VBF->Fill(diMuon_mass,evt_wt);
-	      else if(*isData=='F')h_diMuon_mass_110To140_VBF->Fill(diMuon_mass,evt_wt);
-	      if(diMuon_mass<120. || diMuon_mass>130.){
-		h_diMuon_pt_VBF->Fill(diMuon_pt,evt_wt);
-		h_diMuon_eta_VBF->Fill(diMuon_eta,evt_wt);
-		h_diMuon_phi_VBF->Fill(diMuon_phi,evt_wt);
-		h_mu1mu2dR_VBF->Fill(dR,evt_wt);
-		h_mu1mu2dPhi_VBF->Fill(dPhi,evt_wt);
-		h_mu1mu2dEta_VBF->Fill(dEta,evt_wt);
-		h_softJet5_VBF->Fill(t_SoftActivityJetNjets5,evt_wt);
-		h_dijet_pt_VBF->Fill(t_diJet_pt,evt_wt);
-		h_dijet_eta_VBF->Fill(t_diJet_eta,evt_wt);
-		h_dijet_phi_VBF->Fill(t_diJet_phi,evt_wt);
-		h_Mjj_VBF->Fill(t_diJet_mass,evt_wt);
-		h_dijet_dEta_VBF->Fill((*t_Jet_eta)[0]-(*t_Jet_eta)[1],evt_wt);
+	      if(diMuon_mass>108.){
+		if(*isData=='F'){
+		  h_diMuon_mass_VBF->Fill(diMuon_mass,evt_wt);
+		  h_diMuon_mass_Up_VBF->Fill(diMuon_mass,evt_wt_Up);
+		  h_diMuon_mass_Down_VBF->Fill(diMuon_mass,evt_wt_Down);
+		}
+		if(diMuon_mass<120. || diMuon_mass>130.){
+		  h_diMuon_mass_110To140_VBF->Fill(diMuon_mass,evt_wt);
+		  h_diMuon_mass_110To140_Up_VBF->Fill(diMuon_mass,evt_wt_Up);
+		  h_diMuon_mass_110To140_Down_VBF->Fill(diMuon_mass,evt_wt_Down);
+		}
+		else if(*isData=='F'){
+		  h_diMuon_mass_110To140_VBF->Fill(diMuon_mass,evt_wt);
+		  h_diMuon_mass_110To140_Up_VBF->Fill(diMuon_mass,evt_wt_Up);
+		  h_diMuon_mass_110To140_Down_VBF->Fill(diMuon_mass,evt_wt_Down);
+		}
+		if(diMuon_mass<120. || diMuon_mass>130.){
+		  h_diMuon_pt_VBF->Fill(diMuon_pt,evt_wt);
+		  h_diMuon_eta_VBF->Fill(diMuon_eta,evt_wt);
+		  h_diMuon_phi_VBF->Fill(diMuon_phi,evt_wt);
+		  h_mu1mu2dR_VBF->Fill(dR,evt_wt);
+		  h_mu1mu2dPhi_VBF->Fill(dPhi,evt_wt);
+		  h_mu1mu2dEta_VBF->Fill(dEta,evt_wt);
+		  h_softJet5_VBF->Fill(t_SoftActivityJetNjets5,evt_wt);
+		  h_dijet_pt_VBF->Fill(t_diJet_pt,evt_wt);
+		  h_dijet_eta_VBF->Fill(t_diJet_eta,evt_wt);
+		  h_dijet_phi_VBF->Fill(t_diJet_phi,evt_wt);
+		  h_Mjj_VBF->Fill(t_diJet_mass,evt_wt);
+		  h_dijet_dEta_VBF->Fill((*t_Jet_eta)[0]-(*t_Jet_eta)[1],evt_wt);
+		  
+		  h_diMuon_pt_Up_VBF->Fill(diMuon_pt,evt_wt_Up);
+		  h_diMuon_eta_Up_VBF->Fill(diMuon_eta,evt_wt_Up);
+		  h_diMuon_phi_Up_VBF->Fill(diMuon_phi,evt_wt_Up);
+		  h_mu1mu2dR_Up_VBF->Fill(dR,evt_wt_Up);
+		  h_mu1mu2dPhi_Up_VBF->Fill(dPhi,evt_wt_Up);
+		  h_mu1mu2dEta_Up_VBF->Fill(dEta,evt_wt_Up);
+		  h_softJet5_Up_VBF->Fill(t_SoftActivityJetNjets5,evt_wt_Up);
+		  h_dijet_pt_Up_VBF->Fill(t_diJet_pt,evt_wt_Up);
+		  h_dijet_eta_Up_VBF->Fill(t_diJet_eta,evt_wt_Up);
+		  h_dijet_phi_Up_VBF->Fill(t_diJet_phi,evt_wt_Up);
+		  h_Mjj_Up_VBF->Fill(t_diJet_mass,evt_wt_Up);
+		  h_dijet_dEta_Up_VBF->Fill((*t_Jet_eta)[0]-(*t_Jet_eta)[1],evt_wt_Up);
+
+		  h_diMuon_pt_Down_VBF->Fill(diMuon_pt,evt_wt_Down);
+		  h_diMuon_eta_Down_VBF->Fill(diMuon_eta,evt_wt_Down);
+		  h_diMuon_phi_Down_VBF->Fill(diMuon_phi,evt_wt_Down);
+		  h_mu1mu2dR_Down_VBF->Fill(dR,evt_wt_Down);
+		  h_mu1mu2dPhi_Down_VBF->Fill(dPhi,evt_wt_Down);
+		  h_mu1mu2dEta_Down_VBF->Fill(dEta,evt_wt_Down);
+		  h_softJet5_Down_VBF->Fill(t_SoftActivityJetNjets5,evt_wt_Down);
+		  h_dijet_pt_Down_VBF->Fill(t_diJet_pt,evt_wt_Down);
+		  h_dijet_eta_Down_VBF->Fill(t_diJet_eta,evt_wt_Down);
+		  h_dijet_phi_Down_VBF->Fill(t_diJet_phi,evt_wt_Down);
+		  h_Mjj_Down_VBF->Fill(t_diJet_mass,evt_wt_Down);
+		  h_dijet_dEta_Down_VBF->Fill((*t_Jet_eta)[0]-(*t_Jet_eta)[1],evt_wt_Down);
+		}
+	      }
+	      else{
+		h_diMuon_mass_Z->Fill(diMuon_mass,evt_wt);
+		h_diMuon_pt_Z->Fill(diMuon_pt,evt_wt);
+		h_diMuon_eta_Z->Fill(diMuon_eta,evt_wt);
+		h_diMuon_phi_Z->Fill(diMuon_phi,evt_wt);
+		h_mu1mu2dR_Z->Fill(dR,evt_wt);
+		h_mu1mu2dPhi_Z->Fill(dPhi,evt_wt);
+		h_mu1mu2dEta_Z->Fill(dEta,evt_wt);
+		h_softJet5_Z->Fill(t_SoftActivityJetNjets5,evt_wt);
+		h_dijet_pt_Z->Fill(t_diJet_pt,evt_wt);
+		h_dijet_eta_Z->Fill(t_diJet_eta,evt_wt);
+		h_dijet_phi_Z->Fill(t_diJet_phi,evt_wt);
+		h_Mjj_Z->Fill(t_diJet_mass,evt_wt);
+		h_dijet_dEta_Z->Fill((*t_Jet_eta)[0]-(*t_Jet_eta)[1],evt_wt);
+
+		
+		h_diMuon_mass_Up_Z->Fill(diMuon_mass,evt_wt_Up);
+		h_diMuon_pt_Up_Z->Fill(diMuon_pt,evt_wt_Up);
+		h_diMuon_eta_Up_Z->Fill(diMuon_eta,evt_wt_Up);
+		h_diMuon_phi_Up_Z->Fill(diMuon_phi,evt_wt_Up);
+		h_mu1mu2dR_Up_Z->Fill(dR,evt_wt_Up);
+		h_mu1mu2dPhi_Up_Z->Fill(dPhi,evt_wt_Up);
+		h_mu1mu2dEta_Up_Z->Fill(dEta,evt_wt_Up);
+		h_softJet5_Up_Z->Fill(t_SoftActivityJetNjets5,evt_wt_Up);
+		h_dijet_pt_Up_Z->Fill(t_diJet_pt,evt_wt_Up);
+		h_dijet_eta_Up_Z->Fill(t_diJet_eta,evt_wt_Up);
+		h_dijet_phi_Up_Z->Fill(t_diJet_phi,evt_wt_Up);
+		h_Mjj_Up_Z->Fill(t_diJet_mass,evt_wt_Up);
+		h_dijet_dEta_Up_Z->Fill((*t_Jet_eta)[0]-(*t_Jet_eta)[1],evt_wt_Up);
+		
+
+		
+		h_diMuon_mass_Down_Z->Fill(diMuon_mass,evt_wt_Down);
+		h_diMuon_pt_Down_Z->Fill(diMuon_pt,evt_wt_Down);
+		h_diMuon_eta_Down_Z->Fill(diMuon_eta,evt_wt_Down);
+		h_diMuon_phi_Down_Z->Fill(diMuon_phi,evt_wt_Down);
+		h_mu1mu2dR_Down_Z->Fill(dR,evt_wt_Down);
+		h_mu1mu2dPhi_Down_Z->Fill(dPhi,evt_wt_Down);
+		h_mu1mu2dEta_Down_Z->Fill(dEta,evt_wt_Down);
+		h_softJet5_Down_Z->Fill(t_SoftActivityJetNjets5,evt_wt_Down);
+		h_dijet_pt_Down_Z->Fill(t_diJet_pt,evt_wt_Down);
+		h_dijet_eta_Down_Z->Fill(t_diJet_eta,evt_wt_Down);
+		h_dijet_phi_Down_Z->Fill(t_diJet_phi,evt_wt_Down);
+		h_Mjj_Down_Z->Fill(t_diJet_mass,evt_wt_Down);
+		h_dijet_dEta_Down_Z->Fill((*t_Jet_eta)[0]-(*t_Jet_eta)[1],evt_wt_Down);
 	      }
 	      softJet5=t_SoftActivityJetNjets5;
 	      dRmm = dR;
@@ -676,7 +773,7 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	      cthetaCS=2*(mu2.E()*mu1.Pz()-mu1.E()*mu2.Pz())/(diMuon_mass*sqrt(pow(diMuon_mass,2)+pow(diMuon_pt,2)));
 	      //cout<<event<<" "<<cthetaCS<<" "<<Zep<<endl;
 	      cattree->Fill();
-	      if(diMuon_mass<120. || diMuon_mass>130.){
+	      if((diMuon_mass<120. || diMuon_mass>130.) && diMuon_mass >108.){
 		h_dijet_dPhijj_VBF->Fill(dPhijj,evt_wt);
 		h_jet1_pt_VBF->Fill(leadingJet_pt,evt_wt);
 		h_jet2_pt_VBF->Fill(subleadingJet_pt,evt_wt);
@@ -702,6 +799,99 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 		h_2D_j2eta_dEtajj->Fill(subleadingJet_eta,dEta_jj,evt_wt);
 		h_2D_etammjj_etajj->Fill(eta_mmjj,eta_jj,evt_wt);
 		h_2D_j1pt_ptjj->Fill(leadingJet_pt,pt_jj,evt_wt);
+		
+		h_dijet_dPhijj_Up_VBF->Fill(dPhijj,evt_wt_Up);
+		h_jet1_pt_Up_VBF->Fill(leadingJet_pt,evt_wt_Up);
+		h_jet2_pt_Up_VBF->Fill(subleadingJet_pt,evt_wt_Up);
+		h_jet1_eta_Up_VBF->Fill(leadingJet_eta,evt_wt_Up);
+		h_jet2_eta_Up_VBF->Fill(subleadingJet_eta,evt_wt_Up);
+		h_cthetaCS_Up_VBF->Fill(cthetaCS,evt_wt_Up);
+		h_dRmin_mj_Up_VBF->Fill(dRmin_mj,evt_wt_Up);
+		h_dRmax_mj_Up_VBF->Fill(dRmax_mj,evt_wt_Up);
+		h_dRmin_mmj_Up_VBF->Fill(dRmin_mmj,evt_wt_Up);
+                h_dRmax_mmj_Up_VBF->Fill(dRmax_mmj,evt_wt_Up);
+		h_Zep_Up_VBF->Fill(Zep,evt_wt_Up);
+		h_M_mmjj_Up_VBF->Fill(M_mmjj,evt_wt_Up);
+		h_pt_mmjj_Up_VBF->Fill(pt_mmjj,evt_wt_Up);
+		h_eta_mmjj_Up_VBF->Fill(eta_mmjj,evt_wt_Up);
+		h_phi_mmjj_Up_VBF->Fill(phi_mmjj,evt_wt_Up);
+		h_leadingJet_qgl_Up_VBF->Fill(leadingJet_qgl,evt_wt_Up);
+		h_subleadingJet_qgl_Up_VBF->Fill(subleadingJet_qgl,evt_wt_Up);
+
+		
+		h_dijet_dPhijj_Down_VBF->Fill(dPhijj,evt_wt_Down);
+		h_jet1_pt_Down_VBF->Fill(leadingJet_pt,evt_wt_Down);
+		h_jet2_pt_Down_VBF->Fill(subleadingJet_pt,evt_wt_Down);
+		h_jet1_eta_Down_VBF->Fill(leadingJet_eta,evt_wt_Down);
+		h_jet2_eta_Down_VBF->Fill(subleadingJet_eta,evt_wt_Down);
+		h_cthetaCS_Down_VBF->Fill(cthetaCS,evt_wt_Down);
+		h_dRmin_mj_Down_VBF->Fill(dRmin_mj,evt_wt_Down);
+		h_dRmax_mj_Down_VBF->Fill(dRmax_mj,evt_wt_Down);
+		h_dRmin_mmj_Down_VBF->Fill(dRmin_mmj,evt_wt_Down);
+                h_dRmax_mmj_Down_VBF->Fill(dRmax_mmj,evt_wt_Down);
+		h_Zep_Down_VBF->Fill(Zep,evt_wt_Down);
+		h_M_mmjj_Down_VBF->Fill(M_mmjj,evt_wt_Down);
+		h_pt_mmjj_Down_VBF->Fill(pt_mmjj,evt_wt_Down);
+		h_eta_mmjj_Down_VBF->Fill(eta_mmjj,evt_wt_Down);
+		h_phi_mmjj_Down_VBF->Fill(phi_mmjj,evt_wt_Down);
+		h_leadingJet_qgl_Down_VBF->Fill(leadingJet_qgl,evt_wt_Down);
+		h_subleadingJet_qgl_Down_VBF->Fill(subleadingJet_qgl,evt_wt_Down);
+	      }
+	      else{
+		h_dijet_dPhijj_Z->Fill(dPhijj,evt_wt);
+		h_jet1_pt_Z->Fill(leadingJet_pt,evt_wt);
+		h_jet2_pt_Z->Fill(subleadingJet_pt,evt_wt);
+		h_jet1_eta_Z->Fill(leadingJet_eta,evt_wt);
+		h_jet2_eta_Z->Fill(subleadingJet_eta,evt_wt);
+		h_cthetaCS_Z->Fill(cthetaCS,evt_wt);
+		h_dRmin_mj_Z->Fill(dRmin_mj,evt_wt);
+		h_dRmax_mj_Z->Fill(dRmax_mj,evt_wt);
+		h_dRmin_mmj_Z->Fill(dRmin_mmj,evt_wt);
+                h_dRmax_mmj_Z->Fill(dRmax_mmj,evt_wt);
+		h_Zep_Z->Fill(Zep,evt_wt);
+		h_M_mmjj_Z->Fill(M_mmjj,evt_wt);
+		h_pt_mmjj_Z->Fill(pt_mmjj,evt_wt);
+		h_eta_mmjj_Z->Fill(eta_mmjj,evt_wt);
+		h_phi_mmjj_Z->Fill(phi_mmjj,evt_wt);
+		h_leadingJet_qgl_Z->Fill(leadingJet_qgl,evt_wt);
+		h_subleadingJet_qgl_Z->Fill(subleadingJet_qgl,evt_wt);
+
+
+		h_dijet_dPhijj_Up_Z->Fill(dPhijj,evt_wt_Up);
+		h_jet1_pt_Up_Z->Fill(leadingJet_pt,evt_wt_Up);
+		h_jet2_pt_Up_Z->Fill(subleadingJet_pt,evt_wt_Up);
+		h_jet1_eta_Up_Z->Fill(leadingJet_eta,evt_wt_Up);
+		h_jet2_eta_Up_Z->Fill(subleadingJet_eta,evt_wt_Up);
+		h_cthetaCS_Up_Z->Fill(cthetaCS,evt_wt_Up);
+		h_dRmin_mj_Up_Z->Fill(dRmin_mj,evt_wt_Up);
+		h_dRmax_mj_Up_Z->Fill(dRmax_mj,evt_wt_Up);
+		h_dRmin_mmj_Up_Z->Fill(dRmin_mmj,evt_wt_Up);
+                h_dRmax_mmj_Up_Z->Fill(dRmax_mmj,evt_wt_Up);
+		h_Zep_Up_Z->Fill(Zep,evt_wt_Up);
+		h_M_mmjj_Up_Z->Fill(M_mmjj,evt_wt_Up);
+		h_pt_mmjj_Up_Z->Fill(pt_mmjj,evt_wt_Up);
+		h_eta_mmjj_Up_Z->Fill(eta_mmjj,evt_wt_Up);
+		h_phi_mmjj_Up_Z->Fill(phi_mmjj,evt_wt_Up);
+		h_leadingJet_qgl_Up_Z->Fill(leadingJet_qgl,evt_wt_Up);
+		h_subleadingJet_qgl_Up_Z->Fill(subleadingJet_qgl,evt_wt_Up);
+		
+		h_dijet_dPhijj_Down_Z->Fill(dPhijj,evt_wt_Down);
+		h_jet1_pt_Down_Z->Fill(leadingJet_pt,evt_wt_Down);
+		h_jet2_pt_Down_Z->Fill(subleadingJet_pt,evt_wt_Down);
+		h_jet1_eta_Down_Z->Fill(leadingJet_eta,evt_wt_Down);
+		h_jet2_eta_Down_Z->Fill(subleadingJet_eta,evt_wt_Down);
+		h_cthetaCS_Down_Z->Fill(cthetaCS,evt_wt_Down);
+		h_dRmin_mj_Down_Z->Fill(dRmin_mj,evt_wt_Down);
+		h_dRmax_mj_Down_Z->Fill(dRmax_mj,evt_wt_Down);
+		h_dRmin_mmj_Down_Z->Fill(dRmin_mmj,evt_wt_Down);
+                h_dRmax_mmj_Down_Z->Fill(dRmax_mmj,evt_wt_Down);
+		h_Zep_Down_Z->Fill(Zep,evt_wt_Down);
+		h_M_mmjj_Down_Z->Fill(M_mmjj,evt_wt_Down);
+		h_pt_mmjj_Down_Z->Fill(pt_mmjj,evt_wt_Down);
+		h_eta_mmjj_Down_Z->Fill(eta_mmjj,evt_wt_Down);
+		h_phi_mmjj_Down_Z->Fill(phi_mmjj,evt_wt_Down);
+		h_leadingJet_qgl_Down_Z->Fill(leadingJet_qgl,evt_wt_Down);
+		h_subleadingJet_qgl_Down_Z->Fill(subleadingJet_qgl,evt_wt_Down);
 	      }
 	  }
 	  
