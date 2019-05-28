@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
   proc_scale["ttH_2016"]=0.000110*lumi_16/258860.732483;
   proc_scale["DYJetsToLL"]=6225.42*lumi/(3258462550016.0+492179082112.0);
   proc_scale["DYJetsToLL_VBFfilter_2018"]=2.02*lumi_18/(3355073909.5);
-  proc_scale["DYJetsToLL_VBFfilter_2017"]=2.02*lumi/(1697931790.6);
+  proc_scale["DYJetsToLL_VBFfilter_2017"]=2.02*lumi/(2259008890.6);
   proc_scale["DYJetsToLL_VBFfilter_2016"]=2.02*lumi_16/(2699711552.0);
   proc_scale["DYJetsToLL_M105To160_incl_2018"]=46.9479*lumi_18/(3355073909.5);
   proc_scale["DYJetsToLL_M105To160_incl_2017"]=46.9479*lumi/(7139863856.25);
@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
   proc_scale["ttJets_DiLept_2017"]=85.656*lumi/28349068.0;
   proc_scale["ttJets_DiLept_2016"]=85.656*lumi_16/24622652.0;
   proc_scale["EWK_2016"]=1.608*lumi_16/1596200.0;
-  proc_scale["EWK_2017"]=1.608*lumi/3678099.0;
+  proc_scale["EWK_2017"]=1.608*lumi/3676958.2182;//3678099.0;
   proc_scale["EWK_2018"]=1.608*lumi_18/1978878.0;
   proc_scale["ggH_2018"]=0.009605*lumi_18/216906552.0;
   proc_scale["ggH_2017"]=0.009605*lumi/381714429.875;
@@ -249,18 +249,22 @@ void HiggsMuMu::Categorization(const char *data,const char *isData, float mlo, f
 	//cout<<"Entering!!!!\n";
 	if(t_GenJet_pt->size() >= 2){
 	  for(int i=0; i<t_GenJet_pt->size(); i++){
+	    bool foundGenLep=false;
 	    for(int k=0; k<t_GenPart_pt->size(); k++){
-	      bool foundGenLep=false;
+	      
 	      if(abs(t_GenPart_pdgId->at(k))>=11 && abs(t_GenPart_pdgId->at(k))<=16){
 		if(DeltaR((*t_GenJet_eta)[i],(*t_GenJet_phi)[i],(*t_GenPart_eta)[k],(*t_GenPart_phi)[k])<0.3){foundGenLep=true;break;}
 	      }
-	      if(!foundGenLep)genJet_idx.push_back(i);
+	      
 	    }
+	    if(!foundGenLep)genJet_idx.push_back(i);
 	  }
 	}
 
       }
-      
+      //cout<<"genJet size: "<<genJet_idx.size()<<endl;
+      //for(int k =0;k<genJet_idx.size();k++)cout<<(*t_GenJet_pt)[genJet_idx[k]]<<endl;
+      //cout<<"===========================================================\n";
       double evt_wt,evt_wt_Up,evt_wt_Down;
       //cout<<"Scale : "<<scale<<endl;
       if(*isData=='T'){evt_wt=1.;evt_wt_Up=1.;evt_wt_Down=1.;}
